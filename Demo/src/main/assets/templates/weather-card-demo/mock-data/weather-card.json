@@ -1,0 +1,127 @@
+{
+  "curTem": "33°",
+  "curLoc": "海淀区",
+  "maxTem": "36°",
+  "minTem": "29°",
+  "curWeatherDesc": "多云",
+  "temTip": "这天气太TM热了",
+  "weatherData24": [
+    {
+      "time": "10时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "11时",
+      "img": "local:ic_cloudy",
+      "degree": "32°"
+    },
+    {
+      "time": "12时",
+      "img": "local:ic_cloudy",
+      "degree": "33°"
+    },
+    {
+      "time": "13时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "14时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "15时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "16时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "17时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    },
+    {
+      "time": "18时",
+      "img": "local:ic_cloudy",
+      "degree": "29°"
+    }
+  ],
+  "weatherDataWeek": [
+    {
+      "week": "星期一",
+      "img": "local:ic_cloudy",
+      "degreeMin": "29°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.6",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期二",
+      "img": "local:ic_sunny",
+      "degreeMin": "31°",
+      "degreeMax": "35°",
+      "curDegreeMinPercent": "0.4",
+      "curDegreeMaxPercent": "0.8",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期三",
+      "img": "local:ic_fog",
+      "degreeMin": "26°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.1",
+      "curDegreeMaxPercent": "0.7",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期四",
+      "img": "local:ic_rainstorm",
+      "degreeMin": "25°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.8",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期五",
+      "img": "local:ic_shower",
+      "degreeMin": "24°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.9",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期六",
+      "img": "local:ic_sunny",
+      "degreeMin": "24°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.7",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    },
+    {
+      "week": "星期日",
+      "img": "local:ic_cloudy",
+      "degreeMin": "24°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.1",
+      "curDegreeMaxPercent": "0.6",
+      "strokeColor": "gray",
+      "trailColor": "#FFD700"
+    }
+  ]
+}

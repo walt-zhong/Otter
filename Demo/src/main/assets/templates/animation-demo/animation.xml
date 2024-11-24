@@ -1,0 +1,49 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+
+        <Column
+            paddingStart = "20px"
+            paddingEnd = "20px"
+            paddingBottom="20px"
+            alignItems="center"
+            background="#ffff00"
+            borderColor="#ff0000"
+            borderWidth="10"
+            height="wrap_content"
+            id="cl_container"
+            justifyContent="center"
+            leftBottomRadius="10"
+            leftTopRadius="30"
+            rightBottomRadius="20"
+            rightTopRadius="20"
+            width="match_parent">
+
+            <Animation
+                id = "ani_loading"
+                radius="15px"
+                background="blue"
+                width = "100px"
+                height="100px"
+                repeatCount = "infinite"
+                repeatMode="restart"
+                autoPlay = "true"
+                animationSrc = "https://files.alicdn.com/tpsservice/d32faa78264b12792655ba7ef47235d3.zip"
+            />
+
+            <Spacer width="match_parent" height = "10px"/>
+
+            <Animation
+                id = "ani_loading1"
+                radius="15px"
+                background="transparent"
+                width = "50px"
+                height="50px"
+                repeatCount = "infinite"
+                repeatMode="restart"
+                autoPlay = "true"
+                animationSrc = "assets:animation/lottie-sunny"
+            />
+        </Column>
+    </Layout>
+</Otter>

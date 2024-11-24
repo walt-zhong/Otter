@@ -1,0 +1,33 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+
+        <Column
+            paddingStart = "20px"
+            paddingEnd = "20px"
+            paddingBottom="20px"
+            alignItems="center"
+            background="#ffff00"
+            borderColor="#ff0000"
+            borderWidth="10"
+            height="200px"
+            id="cl_container"
+            justifyContent="center"
+            leftBottomRadius="10"
+            leftTopRadius="30"
+            rightBottomRadius="20"
+            rightTopRadius="20"
+            width="match_parent">
+
+            <Progress
+                width = "200px"
+                height="7px"
+                trailColor = "red"
+                strokeColor="blue"
+                valueMin="$start"
+                valueMax="$end"
+                animateEnable = "false"
+            />
+        </Column>
+    </Layout>
+</Otter>

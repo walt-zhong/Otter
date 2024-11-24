@@ -1,0 +1,55 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+        <Column alignItems="center" background="White" borderColor="#ff0000" borderWidth="2"
+            height="wrap_content" id="cl_container" leftBottomRadius="10" leftTopRadius="10"
+            paddingBottom="20px" paddingEnd="10px" paddingStart="10px" paddingTop="20px"
+            rightBottomRadius="10" rightTopRadius="10" width="match_parent">
+            <Text background="Cyan" height="200px" id="text_tip" onClick="fun{changeAttr,showToast,updateStyle}"
+                padding="20px" radius="20px" text="$textTip"
+                textAlign="center" textColor="#ffffff" textSize="8px" width="300px" />
+            <Spacer background="TRANSPARENT" height="20px" width="match_parent" />
+
+            <Text background="Red" height="200px" id="text_tip1" onClick="fun{changeAttr,showToast,updateStyle}"
+                padding="10px" radius="20px" text="Hello"
+                textAlign="start" textColor="#ffffff" textSize="10px" width="300px" />
+            <Spacer height="20px" width="match_parent" />
+
+            <Text background="Green" height="200px" id="text_tip2" onClick="fun{changeAttr,showToast,updateStyle}"
+                padding="10px" radius="20px" text="I Am Otter!!!"
+                textAlign="end" textColor="#ff0000" textSize="5px" width="300px" />
+            <Spacer height="20px" width="match_parent" />
+        </Column>
+
+
+                <Row background="Green" borderColor="#ff0000" borderWidth="2" height="200px" id="row1"
+                    justifyContent="center" padding="10px" radius="20px" width="match_parent"  paddingEnd="10px" paddingStart="10px">
+                    <Text background="blue" height="match_parent" id="text_tip2" radius="20px" text="Hello,Otter"
+                        textAlign="start" textColor="#ffffff" textSize="7px" width="100px" />
+                    <Spacer background="TRANSPARENT" height="match_parent" width="10px" />
+                    <Text background="MAGENTA" height="match_parent" id="text_tip2" radius="20px"
+                        text="Go,zhongxj" textAlign="center" textColor="#ffffff" textSize="5px"
+                        width="100px" />
+                    <Spacer height="match_parent" width="10px" />
+                    <Text background="Yellow" height="match_parent" id="text_tip3" radius="20px"
+                        text="Go,XCY" textAlign="end" textColor="#000000" textSize="5px"
+                        width="100px" />
+                </Row>
+    </Layout>
+
+    <Events>
+
+        <Event funId="changeAttr">
+            {"class":"view","params":{"fun":"changeAttributes","key":"setText","id":"text1","value":"$textTip"}}
+        </Event>
+
+        <Event funId="showToast">
+            {"class":"util","params":{"fun":"showToast","info":"$toastMsg"}}
+        </Event>
+
+        <Event funId="updateStyle">{ "class": "view", "params": { "fun": "changeAttributes",
+            "id": "text_tip", "key": "setTextStyle", "value": { "attributes": [ { "textSize":
+            "14px","textColor": "#CCCCCC","text": "我改变了！！！！！" } ] } } }
+        </Event>
+    </Events>
+</Otter>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SenseDyne</string>
+    <string name="str_layout">布局测试模板</string>
+    <string name="str_text">布局文字容器模板</string>
+    <string name="str_vertical_list_btn_text">垂直列表模板</string>
+    <string name="str_progress_btn_text">进度条模板</string>
+    <string name="str_weather_card_btn_text">天气卡片模板</string>
+    <string name="str_btn_animation_text">动画模板</string>
+    <string name="str_btn_scaffold_text">脚手架模板</string>
+    <string name="str_btn_tablayout_text">TabLayout示例</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

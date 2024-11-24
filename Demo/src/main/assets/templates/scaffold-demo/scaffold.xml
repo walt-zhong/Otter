@@ -1,0 +1,51 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+
+        <Column
+            paddingStart = "20px"
+            paddingEnd = "20px"
+            paddingTop = "20px"
+            paddingBottom="20px"
+            alignItems="center"
+            background="#ffff00"
+            borderColor="#ff0000"
+            borderWidth="10"
+            height="match_parent"
+            id="cl_container"
+            justifyContent="center"
+            leftBottomRadius="10"
+            leftTopRadius="30"
+            rightBottomRadius="20"
+            rightTopRadius="20"
+            width="match_parent">
+<!--            <Scaffold-->
+<!--                id = "scaffold"-->
+<!--                width = "match_parent"-->
+<!--                height = "match_parent"-->
+<!--                topAction="@page/top_action.xml"-->
+<!--                bottomNav = "@page/bottom_nav.xml"-->
+<!--            >-->
+<!--                <Page id = "home" path = "@page/home.xml"/>-->
+<!--                <Page id = "type" path = "@page/type.xml"/>-->
+<!--                <Page id = "find" path = "@page/find.xml"/>-->
+<!--                <Page id = "mine" path = "@page/mine.xml"/>-->
+<!--            </Scaffold>-->
+
+<!--            <TabPager tabData = "[关注,推荐,科技,奥运,热点,健身]">-->
+<!--                <Page id = "A" path="@page/A.xml"/>-->
+<!--                <Page id = "B" path="@page/B.xml"/>-->
+<!--                <Page id = "C" path="@page/C.xml"/>-->
+<!--                <Page id = "D" path="@page/D.xml"/>-->
+<!--                <Page id = "E" path="@page/E.xml"/>-->
+<!--                <Page id = "F" path="@page/F.xml"/>-->
+<!--            </TabPager>-->
+
+
+        </Column>
+    </Layout>
+
+    <Events>
+        <Event funId="showToast">{"class":"util","params":{"fun":"showToast","info":"$toastMsg"}}</Event>
+    </Events>
+</Otter>

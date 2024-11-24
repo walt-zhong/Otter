@@ -1,0 +1,165 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+        <Column alignItems="center" height="match_parent" id="cl1" justifyContent="center"
+            paddingEnd="20px" paddingStart="20px" width="match_parent">
+            <Column alignItems="flex-start"
+                background="linear-gradient(to top,  gray 0%,#eeeeee 100%)" height="wrap_content"
+                id="cl2" justifyContent="flex-start" padding="20px" radius="20px"
+                width="match_parent">
+                <!--显示地点和温度-->
+                <Row alignItems="flex-start" height="wrap_content" id="rw1"
+                    justifyContent="space-between" width="match_parent">
+                    <Column alignItems="flex-start" height="wrap_content" id="cl_tem_loc"
+                        justifyContent="flex-start" width="wrap_content">
+                        <Row alignItems="center" height="wrap_content" id="rw2"
+                            justifyContent="center" width="wrap_content">
+                            <Text height="30px" id="tv_cur_loc" onClick="fun{goMap,resetStyle}"
+                                text="$curLoc" textColor="#ffffff" textSize="10px" width="80px" />
+
+                            <Image height="16px" id="img1" onClick="fun{goMap}" src="local:ic_nav"
+                                width="16px" />
+                        </Row>
+                        <Spacer height="20px" width="match_parent" />
+                        <Text height="60px" id="tx_cur_tem" includeFontPadding="false"
+                            onClick="fun{updateStyle,showTemTip}" text="$curTem" textAlign="center"
+                            textColor="#ffffff" textSize="18px" width="80px" />
+                    </Column>
+                    <!--显示最高，最低温度，天气情况-->
+                    <Column alignItems="flex-end" height="wrap_content" id="rw2"
+                        justifyContent="end" width="wrap_content">
+                        <Column alignItems="flex-end" height="wrap_content" id="rw_cloudy_container"
+                            justifyContent="center" width="match_parent">
+                            <Image height="32px" id="img1" onClick="fun{goMap}"
+                                src="local:ic_cloudy" width="32px" />
+                            <Spacer height="5px" width="match_parent" />
+                            <Text height="20px" id="tv_cloud" onClick="fun{goMap}"
+                                text="$curWeatherDesc" textAlign="start" textColor="#ffffff"
+                                textSize="7px" width="38px" />
+                        </Column>
+                        <Spacer height="5px" width="match_parent" />
+                        <!--显示最高，最低温度-->
+                        <Row alignItems="flex-start" height="100px" id="rw_min_max_tem"
+                            justifyContent="start" width="match_parent">
+                            <Text height="40px" id="tv_tem_max" onClick="fun{goMap}" text="最高"
+                                textAlign="start" textColor="#ffffff" textSize="7px" width="18px" />
+
+                            <Text height="40px" id="tv_tem_min" onClick="fun{goMap}"
+                                paddingStart="5px" text="$maxTem" textAlign="start"
+                                textColor="#ffffff" textSize="14px" width="60px" />
+                            <Spacer height="match_parent" width="10px" />
+
+                            <Text height="40px" id="tv_tem_max" onClick="fun{goMap}" text="最低"
+                                textAlign="start" textColor="#ffffff" textSize="7px" width="18px" />
+
+                            <Text height="40px" id="tv_tem_min" onClick="fun{goMap}"
+                                paddingStart="5px" text="$minTem" textAlign="start"
+                                textColor="#ffffff" textSize="14px" width="60px" />
+
+                        </Row>
+                    </Column>
+                </Row>
+
+                <Spacer background="#D3D3D3" height="0.5px" width="match_parent" />
+                <Spacer height="10px" width="match_parent" />
+
+                <Row alignItems="center" height="wrap_content" id="rw_tem"
+                    justifyContent="flex-start" width="match_parent">
+                    <Image height="24px" id="img1" onClick="fun{goMap}" src="local:ic_warning"
+                        width="24px" />
+                    <Spacer height="match_parent" width="10px" />
+                    <Text height="20px" id="tv_high_tip" onClick="fun{goMap}" text="高温"
+                        textAlign="start" textColor="#ffffff" textSize="6px" width="38px" />
+                </Row>
+
+                <Spacer height="10px" width="match_parent" />
+                <Spacer background="#D3D3D3" height="0.5px" width="match_parent" />
+                <Spacer height="10px" width="match_parent" />
+
+                <OTList data="$weatherData24" height="100px" id="sd_list_horizontal"
+                    itemPadding="16px" listDirection="horizontal" width="match_parent">
+                    <!--     Item表示列表每项数据的视图布局   -->
+                    <Item>
+                        <Column alignItems="center" height="wrap_content" id="cl_weather_24"
+                            justifyContent="center" onClick="$fun{showToast}" width="wrap_content">
+                            <!--        文字控件-->
+                            <Text height="20px" id="tv_text_time" text="$time" textAlign="center"
+                                textColor="#D3D3D3" textSize="6px" width="60px" />
+                            <Spacer height="10px" width="match_parent" />
+                            <!--        图片控件-->
+                            <Image height="32px" id="iv_cloudy" src="$img" width="32px" />
+                            <Spacer height="10px" width="match_parent" />
+
+                            <!--        文字控件-->
+                            <Text height="20px" id="tv_text_temp" text="$degree" textAlign="center"
+                                textColor="white" textSize="8px" width="60px" />
+
+                        </Column>
+                    </Item>
+                </OTList>
+                <Spacer height="10px" width="match_parent" />
+                <Spacer background="#D3D3D3" height="0.5px" width="match_parent" />
+                <Spacer height="10px" width="match_parent" />
+
+                <OTList data="$weatherDataWeek" height="100px" id="sd_list_vertical"
+                    itemPadding="16px" listDirection="vertical" width="match_parent">
+                    <!--     Item表示列表每项数据的视图布局   -->
+                    <Item>
+                        <Row alignItems="center" height="wrap_content" id="cl_weather_24"
+                            justifyContent="center" onClick="$fun{showToastMsg}" width="wrap_content">
+                            <!--        文字控件-->
+                            <Text height="20px" id="tv_text_week" text="$week" textAlign="center"
+                                textColor="#D3D3D3" textSize="6px" width="60px" />
+                            <Spacer height="10px" width="match_parent" />
+                            <!--        图片控件-->
+<!--                            <Image height="24px" id="iv_weather" src="$img" width="24px" />-->
+                            <Animation
+                                id = "ani_loading1"
+                                radius="15px"
+                                background="transparent"
+                                width = "24px"
+                                height="24px"
+                                repeatCount = "infinite"
+                                repeatMode="restart"
+                                autoPlay = "true"
+                                animationSrc = "assets:animation/lottie-sunny"
+                            />
+                            <Spacer height="10px" width="match_parent" />
+
+                            <!--        文字控件-->
+                            <Text height="20px" id="tv_text_min_degree" text="$degreeMin"
+                                textAlign="center" textColor="white" textSize="8px" width="60px" />
+                            <Progress animateEnable="false" height="7px" strokeColor="$strokeColor"
+                                trailColor="$trailColor" valueMax="$curDegreeMaxPercent"
+                                valueMin="$curDegreeMinPercent" width="80px" />
+                            <Text height="20px" id="tv_text_min_degree" text="$degreeMax"
+                                textAlign="center" textColor="white" textSize="8px" width="60px" />
+
+                        </Row>
+                    </Item>
+                </OTList>
+            </Column>
+        </Column>
+    </Layout>
+
+    <Events>
+        <Event funId="goMap">
+            {"class":"util","params":{"fun":"showToast","info":"打开地图导航"}}
+        </Event>
+        <Event funId="showTemTip">
+            {"class":"util","params":{"fun":"showToast", "info":" $temTip != null ? $temTip : '热死了'"}}
+        </Event>
+        <Event funId="showToastMsg">
+            {"class":"util","params":{"fun":"showToast","info":"$week != null ? $week : '热到没度数'"}}
+        </Event>
+        <Event funId="updateStyle">{ "class": "view", "params": { "fun": "changeAttributes",
+            "id": "tx_cur_tem", "key": "setTextStyle", "value": { "attributes": [ { "textSize":
+            "20px","textColor": "red" } ] } } }
+        </Event>
+
+        <Event funId="resetStyle">{ "class": "view", "params": { "fun": "changeAttributes",
+            "id": "tx_cur_tem", "key": "setTextStyle", "value": { "attributes": [ { "textSize":
+            "18px","textColor": "white" } ] } } }
+        </Event>
+    </Events>
+</Otter>

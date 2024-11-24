@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dynamic.otter.render.view.components.tabpager.TabGradientTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tv"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:textSize="18sp"
+>
+
+</com.dynamic.otter.render.view.components.tabpager.TabGradientTextView>

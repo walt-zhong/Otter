@@ -1,0 +1,87 @@
+<Otter>
+    <!--竖直列表容器,Layout节点用于标识布局文件-->
+    <Layout>
+        <Column
+            alignItems="center"
+            background="#ffff00"
+            borderColor="#ff0000"
+            borderWidth="5px"
+            height="wrap_content"
+            id="cl_container"
+            justifyContent="center"
+            leftBottomRadius="10px"
+            leftTopRadius="30px"
+            rightBottomRadius="20px"
+            rightTopRadius="20px"
+            width="match_parent">
+            <!--    垂直列表-->
+            <OTList data="$data"
+                height="200px"
+                id="cl_vertical"
+                listDirection="vertical"
+                itemPadding="16px"
+                width="match_parent">
+                <!--     Item表示列表每项数据的视图布局   -->
+                <Item>
+                    <Column
+                        radius="15px"
+                        background="green"
+                        height="wrap_content"
+                        justifyContent="center"
+                        id="row_container"
+                        onClick="$fun{showToast}"
+                        width="match_parent"
+                        alignItems="center">
+                        <Row
+                            radius="15px"
+                            background="green"
+                            height="wrap_content"
+                            justifyContent="center"
+                            id="row_container"
+                            onClick="$fun{showToast}"
+                            width="match_parent"
+                            alignItems="center">
+                            <!--        图片控件-->
+                            <Image radius="15px" height="100px" id="iv" src="$img" width="100px" />
+                            <!--        文字控件-->
+                            <Text height="80px" id="tv_text" text="$title" textColor="#0000ff" background="#00ffff"
+                                width="100px"
+                            />
+                            <Image radius="15px" height="100px" id="iv1" src="$img" width="100px" />
+                        </Row>
+<!--                        <Spacer width="match_parent" height = "16px"/>-->
+
+                    </Column>
+                </Item>
+            </OTList>
+
+            <Text
+                height="80px"
+                id="tv_text1"
+                text="$str"
+                textColor="#00ffff"
+                textSize="13px"
+                background="blue"
+                width="100px"
+            />
+
+            <Image radius="15px" height="200px" id="iv" src="local:test" width="200px" />
+        </Column>
+    </Layout>
+
+    <Events>
+
+        <Event funId="changeAttr">
+            {"class":"view","params":{"fun":"changeAttributes","key":"setText","id":"text1","value":"$textTip"}}
+        </Event>
+
+        <Event funId="showToast">
+            {"class":"util","params":{"fun":"showToast","info":"$toastMsg"}}
+        </Event>
+
+        <Event funId="updateStyle">{ "class": "view", "params": { "fun": "changeAttributes",
+            "id": "text_tip", "key": "setTextStyle", "value": { "attributes": [ { "textSize":
+            "14px","textColor": "#CCCCCC","text": "我改变了！！！！！" } ] } } }
+        </Event>
+    </Events>
+</Otter>
