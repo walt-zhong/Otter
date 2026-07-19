@@ -14,99 +14,84 @@ import javax.xml.parsers.DocumentBuilderFactory
 class OTEngine {
     internal lateinit var context: Context
 
-    // TODO:涉及到多个页面模板路由时，需要使用map缓存起来每个模板的rootView
+    // TODO: 多页面模板路由时，用 map 缓存每个模板的 rootView
     var rootView: View? = null
-    internal val render by lazy {
-        RenderImpl()
-    }
+
+    internal val render by lazy { RenderImpl() }
 
     fun init(context: Context): OTEngine {
         this.context = context
         return this
     }
 
-    fun buildTemplate(bizId: String, templateId: String,templatePath:String): TemplateContext {
-        val template = OTTemplate(context, bizId, templateId,templatePath)
-        val templateContext = TemplateContext.create(template)
-        return templateContext
+    fun buildTemplate(bizId: String, templateId: String, templatePath: String): TemplateContext {
+        val template = OTTemplate(context, bizId, templateId, templatePath)
+        return TemplateContext.create(template)
     }
 
     fun createAndroidView(templateContext: TemplateContext): View? {
-        val tContext: TemplateContext = templateContext
-        // 获取工厂对象
-        val factory = DocumentBuilderFactory.newInstance()
-        // 通过DOM工厂获取DOMBuilder对象
-        val builder = factory.newDocumentBuilder()
-        // 解析XML输入流，得到Document对象，表示一个XML文档
-        val document = builder.parse(
-            tContext.context.resources.assets.open(templateContext.sdTemplate.templatePath)
-        )
-
-        // 获取文档中的次节点以及节点
+        val document = parseTemplateDocument(templateContext)
         val documentElement = document.documentElement
-        // 解析UI节点，属性
-        val vLayoutNodeList = documentElement.getElementsByTagName(TemplateKey.LAYOUT_ROOT_NAME)
-        // 解析事件
-        val vEventNodeList = documentElement.getElementsByTagName(TemplateKey.EVENTS_ROOT_NAME)
-        // 创建虚拟对象节点
-        val vNode = VDomNode.create(vLayoutNodeList)
-        // 解析事件
-        DataBinding.instance.parseEvents(vEventNodeList)
-        // 计算布局信息，TODO：这里的布局信息目前没有做缓存，后面优化可以添加引擎
 
-        // 设置展示的视图窗口大小,默认为屏幕的宽高
-        val vSDViewPortSize = OTViewPortSize(
-            ScreenUtils.getScreenWidthPx(context),
-            ScreenUtils.getScreenHeightPx(context)
-        )
+        val layoutNodes = documentElement.getElementsByTagName(TemplateKey.LAYOUT_ROOT_NAME)
+        val eventNodes = documentElement.getElementsByTagName(TemplateKey.EVENTS_ROOT_NAME)
 
-        val rootView = createAndroidViewByVNode(vNode, vSDViewPortSize, templateContext)
-        return rootView
+        val vDomNode = VDomNode.create(layoutNodes)
+        DataBinding.instance.parseEvents(eventNodes)
+
+        // TODO: 布局结果可按模板缓存，当前每次全量计算
+        val viewPortSize = defaultViewPortSize()
+        return createAndroidViewByVNode(vDomNode, viewPortSize, templateContext)
     }
 
+    private fun parseTemplateDocument(templateContext: TemplateContext) =
+        DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(
+                templateContext.context.resources.assets.open(
+                    templateContext.template.templatePath
+                )
+            )
+
+    private fun defaultViewPortSize() = OTViewPortSize(
+        ScreenUtils.getScreenWidthPx(context),
+        ScreenUtils.getScreenHeightPx(context)
+    )
+
     private fun createAndroidViewByVNode(
-        vNode: VDomNode,
-        vSDViewPortSize: OTViewPortSize,
+        vDomNode: VDomNode,
+        viewPortSize: OTViewPortSize,
         templateContext: TemplateContext
     ): View {
-        val sdNode = createNodeTree(vNode, vSDViewPortSize)
-        templateContext.rootNode = sdNode
-        templateContext.vDomNode = vNode
-        val rootView = render.createAndroidViewTree(templateContext)
-        return rootView
+        val rootNode = createNodeTree(vDomNode, viewPortSize)
+        templateContext.rootNode = rootNode
+        templateContext.vDomNode = vDomNode
+        return render.createAndroidViewTree(templateContext)
     }
 
     fun createNodeTree(
-        vNode: VDomNode,
-        vSDViewPortSize: OTViewPortSize
-    ): OTNode {
-        val sdNode = render.prepare(vNode, vSDViewPortSize)
-        return sdNode
-    }
-
+        vDomNode: VDomNode,
+        viewPortSize: OTViewPortSize
+    ): OTNode = render.prepare(vDomNode, viewPortSize)
 
     data class OTViewPortSize(var width: Float?, var height: Float?) {
         override fun toString(): String {
-            return "SDViewPortSize(width=$width, height=$height)"
+            return "OTViewPortSize(width=$width, height=$height)"
         }
     }
 
     data class OTTemplate(
         val context: Context,
-        var bizId: String, // 业务ID
-        val templateId: String, // 模板ID
-        val templatePath:String
+        var bizId: String,
+        val templateId: String,
+        val templatePath: String
     ) {
-        // 模板的版本号，后续实现动态更新的关键
+        // 模板版本号，后续用于动态更新
         var templateVersion: String = ""
-
         var isLocal: Boolean = false
     }
 
     companion object {
-        val instance by lazy {
-            OTEngine()
-        }
+        val instance by lazy { OTEngine() }
     }
-
 }

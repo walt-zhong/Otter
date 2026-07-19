@@ -30,7 +30,7 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
     private fun initView() {
     }
 
-    private fun playSDNetAnimation(
+    private fun playNetAnimation(
         url: String,
         loopCount: Int = LottieDrawable.INFINITE,
         loopMode: Int = LottieDrawable.RESTART
@@ -54,7 +54,7 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
         })
     }
 
-    private fun playSDAssetsAnimation(
+    private fun playAssetsAnimation(
         url: String,
         loopCount: Int = LottieDrawable.INFINITE,
         loopMode: Int = LottieDrawable.RESTART
@@ -99,15 +99,15 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
                 }
             }
             if (autoPlay) {
-                playSdAnimation()
+                playAnimationFromBoundUrl()
             }
         }
     }
 
-    private fun playSdAnimation() {
+    private fun playAnimationFromBoundUrl() {
         url?.let {
             if (OTHelper.isNetSrc(it)) {
-                playSDNetAnimation(
+                playNetAnimation(
                     it,
                     aniRepeatCount,
                     aniRepeatCount,
@@ -116,7 +116,7 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
 
             if (OTHelper.isAssetsSrc(it)) {
                 initLottieLocalResourceDir(it, this)
-                playSDAssetsAnimation(
+                playAssetsAnimation(
                     OTHelper.getAssetsSrc(it),
                     aniRepeatCount,
                     aniRepeatMode

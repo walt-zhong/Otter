@@ -5,9 +5,9 @@ import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.attr.ColumnAttr
 import com.dynamic.otter.render.view.attr.ImageAttr
+import com.dynamic.otter.render.view.attr.OTListAttr
 import com.dynamic.otter.render.view.attr.ProgressAttr
 import com.dynamic.otter.render.view.attr.RowAttr
-import com.dynamic.otter.render.view.attr.OTListAttr
 import com.dynamic.otter.render.view.attr.SpacerAttr
 import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
@@ -20,14 +20,15 @@ class VDomNode(
     var attr: ViewAttr?
 ) {
     var children: MutableList<VDomNode>? = mutableListOf()
+
     override fun toString(): String {
         return "VDomNode(id='$id', nodeName='$nodeName', children=$children), attr={$attr}"
     }
 
     companion object {
         fun create(nodeList: NodeList): VDomNode {
-            val layoutNode = nodeList.item(0) // Layout节点下只允许有一个孩子
-            return createVirtualNode(layoutNode)
+            // Layout root is expected to have a single element child
+            return createVirtualNode(nodeList.item(0))
         }
 
         private fun createVirtualNode(layoutNode: Node): VDomNode {
@@ -59,11 +60,11 @@ class VDomNode(
                 TemplateKey.SPACER -> SpacerAttr.create(attributes)
                 TemplateKey.OT_LIST -> OTListAttr.create(attributes)
                 TemplateKey.PROGRESS -> ProgressAttr.create(attributes)
-                TemplateKey.ANIMATION->AnimationViewAttr.create(attributes)
+                TemplateKey.ANIMATION -> AnimationViewAttr.create(attributes)
                 else -> null
             }
 
-            val virtualNode = initVirtualNode(id, nodeName, attr)
+            val virtualNode = VDomNode(id, nodeName, attr)
             initChildrenVirtual(node, virtualNode)
             return virtualNode
         }
@@ -78,44 +79,26 @@ class VDomNode(
 
             val childNodes = layoutNode.childNodes
             for (i in 0 until childNodes.length) {
-                if (childNodes.item(i).nodeType == Node.TEXT_NODE) {
-                    continue
-                }
-                if (childNodes.item(i).nodeType == Node.COMMENT_NODE) {
+                val child = childNodes.item(i)
+                if (child.nodeType == Node.TEXT_NODE || child.nodeType == Node.COMMENT_NODE) {
                     continue
                 }
 
-                if (childNodes.item(i).nodeName == TemplateKey.LAYOUT_ITEM) {
-                    // TODO：解析Item作为list view的item布局
-                    val itemChildList = childNodes.item(i).childNodes
+                if (child.nodeName == TemplateKey.LAYOUT_ITEM) {
+                    // Item subtree is the list item template, stored by list container id
+                    val itemChildList = child.childNodes
                     for (m in 0 until itemChildList.length) {
                         val itemNode = itemChildList.item(m)
                         if (itemNode.nodeType == Node.ELEMENT_NODE) {
-                            if (itemNode.nodeType == Node.TEXT_NODE) {
-                                continue
-                            }
-                            if (itemNode.nodeType == Node.COMMENT_NODE) {
-                                continue
-                            }
-
-                            val vNode = createVirtualNode(itemNode)
-                            ListContainerData.listItemVNodeMap[vDomNode.id] = vNode
+                            val itemVDom = createVirtualNode(itemNode)
+                            ListContainerData.listItemVNodeMap[vDomNode.id] = itemVDom
                         }
                     }
                     continue
                 }
 
-                val child = createVirtualNode(childNodes.item(i))
-                vDomNode.children?.add(child)
+                vDomNode.children?.add(createVirtualNode(child))
             }
-        }
-
-        private fun initVirtualNode(
-            id: String,
-            nodeName: String,
-            attr: ViewAttr?
-        ): VDomNode {
-            return VDomNode(id, nodeName, attr)
         }
     }
 }

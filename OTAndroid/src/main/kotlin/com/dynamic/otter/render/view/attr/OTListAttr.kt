@@ -10,18 +10,18 @@ class OTListAttr : ViewAttr() {
     var listDirection: String? = null
     var itemPadding:String? = null
     override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        val columnListAttr = super.parseAttrs(attrsMap) as OTListAttr
+        val listAttr = super.parseAttrs(attrsMap) as OTListAttr
         for (i in 0 until attrsMap.length) {
             val attrName = attrsMap.item(i).nodeName
             val attrValue = attrsMap.item(i).nodeValue.extractExpValue()
             when (attrName) {
-                TemplateKey.ATTR_DATA -> columnListAttr.data = attrValue
-                TemplateKey.ATTR_LIST_DIRECTION -> columnListAttr.listDirection = attrValue
-                TemplateKey.ATTR_ITEM_PADDING->columnListAttr.itemPadding = attrValue
+                TemplateKey.ATTR_DATA -> listAttr.data = attrValue
+                TemplateKey.ATTR_LIST_DIRECTION -> listAttr.listDirection = attrValue
+                TemplateKey.ATTR_ITEM_PADDING -> listAttr.itemPadding = attrValue
             }
         }
-        flexbox = OTFlexBox.create(columnListAttr)
-        return columnListAttr
+        flexbox = OTFlexBox.create(listAttr)
+        return listAttr
     }
 
     companion object {

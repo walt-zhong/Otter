@@ -23,50 +23,40 @@ class OTListAdapter(
     private val itemPadding: Int = 0
 ) : RecyclerView.Adapter<OTViewHolder>() {
     private var listData: JSONArray = JSONArray()
-    private var sdNode: OTNode? = null
+    private var itemNode: OTNode? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OTViewHolder {
-        return createOTViewHolder(parent, viewType)
+        return createOtViewHolder(parent)
     }
 
-    private fun createOTViewHolder(parent: ViewGroup, viewType: Int): OTViewHolder {
-        // 设置展示的视图窗口大小,默认为屏幕的宽高
-        val vSDViewPortSize = OTViewPortSize(
+    private fun createOtViewHolder(parent: ViewGroup): OTViewHolder {
+        val viewPortSize = OTViewPortSize(
             ScreenUtils.getScreenWidthPx(parent.context),
             ScreenUtils.getScreenHeightPx(parent.context)
         )
         val vDomNode: VDomNode? = ListContainerData.listItemVNodeMap[parentId]
         if (vDomNode != null) {
-            sdNode = OTEngine.instance.createNodeTree(vDomNode, vSDViewPortSize)
+            itemNode = OTEngine.instance.createNodeTree(vDomNode, viewPortSize)
         }
 
-        val itemLayoutParam = genItemContainerSize(sdNode?.stretchNode?.layoutByPrepareView)
         val itemContainer = OTItemView(parent.context)
-        itemContainer.layoutParams = itemLayoutParam
-
+        itemContainer.layoutParams = genItemContainerSize(itemNode?.stretchNode?.layoutByPrepareView)
         return OTViewHolder(itemContainer)
     }
 
     private fun genItemContainerSize(containerLayout: Layout?): FrameLayout.LayoutParams {
-        val itemContainerHeight = containerLayout?.height ?: 0F
-        val itemContainerWidth = containerLayout?.width ?: 0F
-
-        return FrameLayout.LayoutParams(
-            itemContainerWidth.toInt(),
-            itemContainerHeight.toInt()
-        )
+        val height = containerLayout?.height ?: 0F
+        val width = containerLayout?.width ?: 0F
+        return FrameLayout.LayoutParams(width.toInt(), height.toInt())
     }
 
-    override fun getItemCount(): Int {
-        return listData.size
-    }
+    override fun getItemCount(): Int = listData.size
 
     override fun onBindViewHolder(holder: OTViewHolder, position: Int) {
-        bindSDViewHolder(holder, position)
+        bindItem(holder, position)
     }
 
-    private fun bindSDViewHolder(holder: OTViewHolder, position: Int) {
-        val listContainerId = parentId
+    private fun bindItem(holder: OTViewHolder, position: Int) {
         val context = holder.itemView.context
         val itemData = if (position < listData.size) {
             listData[position] as JSONObject
@@ -75,36 +65,25 @@ class OTListAdapter(
         }
 
         val itemContainer = holder.itemView as OTItemView
-        val itemLayoutParam = genItemContainerSize(sdNode?.stretchNode?.layoutByPrepareView)
+        val itemLayoutParam = genItemContainerSize(itemNode?.stretchNode?.layoutByPrepareView)
         if (position != listData.size - 1) {
             if (listDirection == RecyclerView.HORIZONTAL) {
                 itemLayoutParam.rightMargin = itemPadding
             } else if (listDirection == RecyclerView.VERTICAL) {
                 itemLayoutParam.bottomMargin = itemPadding
             }
-
             itemContainer.layoutParams = itemLayoutParam
         }
 
-
-        // 设置展示的视图窗口大小,默认为屏幕的宽高
-        val vSDViewPortSize = OTViewPortSize(
-            ScreenUtils.getScreenWidthPx(context),
-            ScreenUtils.getScreenHeightPx(context)
-        )
-
-        val vDomNode: VDomNode? = ListContainerData.listItemVNodeMap[listContainerId]
-
+        val vDomNode = ListContainerData.listItemVNodeMap[parentId]
         val itemView: View? = if (vDomNode != null) {
-            sdNode?.let { OTViewTreeCreator.buildAndroidItemView(it, context, itemData) }
+            itemNode?.let { OTViewTreeCreator.buildAndroidItemView(it, context, itemData) }
         } else {
             null
         }
 
-        ListContainerData.listItemAndroidViewMap[listContainerId] = itemView!!
-        itemContainer.addView(itemView, 0)
+        itemContainer.addView(itemView!!, 0)
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: JSONArray) {

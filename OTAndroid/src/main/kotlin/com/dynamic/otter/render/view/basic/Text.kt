@@ -7,7 +7,6 @@ import android.graphics.Outline
 import android.graphics.Path
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.Keep
@@ -107,7 +106,6 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
     private fun updateStyleByJsonObj(data: JSONObject) {
         // TODO：添加无障碍之类的描述
         val result = ExpressionWrapper.instance.getResult("\$attributes", data)
-        Log.d("zhongxj", "result==>$result")
         if (result is JSONArray) {
             result.forEach { styleObj ->
                 // 只处理数JSONArray中是JSONObject的情况

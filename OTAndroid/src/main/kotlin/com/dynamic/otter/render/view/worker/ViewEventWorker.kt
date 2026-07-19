@@ -15,22 +15,14 @@ class ViewEventWorker private constructor() : IEventWorker {
                 val funKey = paramJsonObj["key"]
                 val rootView = OTEngine.instance.rootView
                 val viewTempId = paramJsonObj["id"]
-                // 通过资源Map找到真实的生成android的View之后的id
                 val viewId = TemplateKey.RMap[viewTempId]
                 val value = paramJsonObj["value"]
-                var sdView: View? = null
-                if (viewId != null) {
-                    if (clickedView.id == viewId) { // 如果点击的View和需要修改属性的View一致，则直接更新
-                        sdView = clickedView
-                    } else if (rootView is OTAbsoluteLayout) {
-                        sdView = rootView.findViewById(viewId)
-                    }
-                }
+                val targetView = resolveTargetView(clickedView, rootView, viewId)
 
                 when (funKey) {
                     "setText", "setTextStyle" -> {
-                        if (sdView is Text) {
-                            sdView.onBindData(value)
+                        if (targetView is Text) {
+                            targetView.onBindData(value)
                         }
                     }
                 }
@@ -38,9 +30,22 @@ class ViewEventWorker private constructor() : IEventWorker {
         }
     }
 
-    companion object {
-        val instance by lazy {
-            ViewEventWorker()
+    private fun resolveTargetView(
+        clickedView: View,
+        rootView: View?,
+        viewId: Int?
+    ): View? {
+        if (viewId == null) {
+            return null
         }
+        return when {
+            clickedView.id == viewId -> clickedView
+            rootView is OTAbsoluteLayout -> rootView.findViewById(viewId)
+            else -> null
+        }
+    }
+
+    companion object {
+        val instance by lazy { ViewEventWorker() }
     }
 }

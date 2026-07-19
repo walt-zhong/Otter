@@ -13,7 +13,6 @@ import com.alibaba.fastjson.JSONObject
 import com.bumptech.glide.Glide
 import com.dynamic.otter.data.OTHelper
 import com.dynamic.otter.data.OTHelper.getResSrc
-import com.dynamic.otter.render.view.attr.ImageAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapability
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
@@ -57,15 +56,9 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
         }
     }
 
-    override fun onBindStyle(attr: ViewAttr, attrData:Any?) {
-        if (attr is ImageAttr) {
-            updateByAttr(attr)
-        }
+    override fun onBindStyle(attr: ViewAttr, attrData: Any?) {
+        // Image style binding is reserved for placeholder / accessibility attributes.
     }
-
-    private fun updateByAttr(imageAttr: ImageAttr) {
-    }
-
 
     private fun bindRes(resUri: String) {
         try {

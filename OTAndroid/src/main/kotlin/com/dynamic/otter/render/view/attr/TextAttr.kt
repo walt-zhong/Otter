@@ -9,7 +9,7 @@ class TextAttr : ViewAttr() {
     var textColor = "#000000"
     var textSize = "12px"
     var text = ""
-    var textAlign:String? = null
+    var textAlign: String? = null
     var includeFontPadding = "false"
 
     override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
@@ -17,36 +17,22 @@ class TextAttr : ViewAttr() {
             val attrName = attrsMap.item(i).nodeName
             val attrValue = attrsMap.item(i).nodeValue.extractExpValue()
             when (attrName) {
-                TemplateKey.ATTR_TEXT_COLOR -> {
-                    textColor = attrValue
-                }
-
-                TemplateKey.ATTR_TEXT_SIZE -> {
-                    textSize = attrValue
-                }
-
-                TemplateKey.ATTR_TEXT -> {
-                    text = attrValue
-                }
-
-                TemplateKey.ATTR_TEXT_ALIGN -> {
-                    textAlign = attrValue
-                }
-
-                TemplateKey.ATTR_INCLUDE_FONT_PADDING->{
-                    includeFontPadding = attrValue
-                }
+                TemplateKey.ATTR_TEXT_COLOR -> textColor = attrValue
+                TemplateKey.ATTR_TEXT_SIZE -> textSize = attrValue
+                TemplateKey.ATTR_TEXT -> text = attrValue
+                TemplateKey.ATTR_TEXT_ALIGN -> textAlign = attrValue
+                TemplateKey.ATTR_INCLUDE_FONT_PADDING -> includeFontPadding = attrValue
             }
         }
 
-        val sdTextAttr = super.parseAttrs(attrsMap) as TextAttr
-        flexbox = OTFlexBox.create(sdTextAttr)
-
+        // Keep legacy double super.parseAttrs call order to avoid changing generated view ids / RMap.
+        val textAttr = super.parseAttrs(attrsMap) as TextAttr
+        flexbox = OTFlexBox.create(textAttr)
         return super.parseAttrs(attrsMap)
     }
 
     override fun toString(): String {
-        return "TextAttr(id = $id, width=${width}, height = $height ,textColor='$textColor',flexbox='$flexbox')"
+        return "TextAttr(id = $id, width=$width, height = $height ,textColor='$textColor',flexbox='$flexbox')"
     }
 
     companion object {

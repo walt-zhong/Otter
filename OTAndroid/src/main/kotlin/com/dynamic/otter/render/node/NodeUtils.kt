@@ -5,22 +5,22 @@ import app.visly.stretch.Size
 
 object NodeUtils {
     fun computeNodeTreeByPrepareView(
-        sdNode: OTNode,
+        node: OTNode,
         size: Size<Float?>
     ) {
-        val stretchNode = sdNode.stretchNode.node
+        val stretchNode = node.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null,please check!")
         val layout = stretchNode.safeComputeLayout(size)
-        composeStretchNodeByPrepareView(sdNode, layout)
+        applyPreparedLayout(node, layout)
     }
 
-    private fun composeStretchNodeByPrepareView(sdNode: OTNode, layout: Layout) {
-        val stretchNode = sdNode.stretchNode.node
+    private fun applyPreparedLayout(node: OTNode, layout: Layout) {
+        val stretchNode = node.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
-        sdNode.stretchNode.layoutByPrepareView = layout
-        sdNode.children?.forEachIndexed { index, sdNode ->
-            composeStretchNodeByPrepareView(sdNode, layout.children[index])
+        node.stretchNode.layoutByPrepareView = layout
+        node.children?.forEachIndexed { index, child ->
+            applyPreparedLayout(child, layout.children[index])
         }
     }
 }

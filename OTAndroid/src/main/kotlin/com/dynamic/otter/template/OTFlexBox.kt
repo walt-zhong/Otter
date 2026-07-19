@@ -51,42 +51,37 @@ data class OTFlexBox(
                 return OTFlexBox()
             }
 
-            val sdFlexBox = OTFlexBox()
+            val flexBox = OTFlexBox()
             if (viewAttr is ColumnAttr) {
-                sdFlexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_COLUMN)
+                flexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_COLUMN)
             }
 
-            // 如果是容器属性
             if (viewAttr is ContainerAttr) {
-                sdFlexBox.justifyContent = viewAttr.justifyContent?.let {
-                    FlexBoxConvert.justifyContent(
-                        it
-                    )
+                flexBox.justifyContent = viewAttr.justifyContent?.let {
+                    FlexBoxConvert.justifyContent(it)
                 }
-
-                sdFlexBox.alignItems = viewAttr.alignItems?.let {
+                flexBox.alignItems = viewAttr.alignItems?.let {
                     FlexBoxConvert.alignItems(it)
                 }
-
-                sdFlexBox.display = FlexBoxConvert.display(FlexBoxKey.FLEXBOX_FLEX)
+                flexBox.display = FlexBoxConvert.display(FlexBoxKey.FLEXBOX_FLEX)
             }
 
             if (viewAttr is RowAttr) {
-                sdFlexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_ROW)
+                flexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_ROW)
             }
 
-            if (sdFlexBox.size == null) {
-                sdFlexBox.size = Size(
+            if (flexBox.size == null) {
+                flexBox.size = Size(
                     OTSize.create(viewAttr.width),
                     OTSize.create(viewAttr.height)
                 )
             }
 
-            if (sdFlexBox.padding == null) {
-                sdFlexBox.padding = StyleConverter.instance.padding(viewAttr)
+            if (flexBox.padding == null) {
+                flexBox.padding = StyleConverter.instance.padding(viewAttr)
             }
 
-            return sdFlexBox
+            return flexBox
         }
     }
 

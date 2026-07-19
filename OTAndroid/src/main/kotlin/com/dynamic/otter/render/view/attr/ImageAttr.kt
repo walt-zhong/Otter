@@ -14,23 +14,18 @@ class ImageAttr : ViewAttr() {
             val attrName = attrsMap.item(i).nodeName
             val attrValue = attrsMap.item(i).nodeValue
             when (attrName) {
-                TemplateKey.ATTR_SRC -> {
-                    src = attrValue.extractExpValue()
-                }
-
-                TemplateKey.ATTR_PLACEHOLDER -> {
-                    placeholder = attrValue.extractExpValue()
-                }
+                TemplateKey.ATTR_SRC -> src = attrValue.extractExpValue()
+                TemplateKey.ATTR_PLACEHOLDER -> placeholder = attrValue.extractExpValue()
             }
         }
 
-        val sdImgAttr = super.parseAttrs(attrsMap) as ImageAttr
-        flexbox = OTFlexBox.create(sdImgAttr)
-        return sdImgAttr
+        val imageAttr = super.parseAttrs(attrsMap) as ImageAttr
+        flexbox = OTFlexBox.create(imageAttr)
+        return imageAttr
     }
 
     override fun toString(): String {
-        return "ImageAttr(id = $id, width=${width}, height = ${height} ,src='$src',flexbox='$flexbox')"
+        return "ImageAttr(id = $id, width=$width, height = $height ,src='$src',flexbox='$flexbox')"
     }
 
     companion object {

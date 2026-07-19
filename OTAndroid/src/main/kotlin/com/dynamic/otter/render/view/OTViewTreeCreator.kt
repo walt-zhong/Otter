@@ -1,7 +1,6 @@
 package com.dynamic.otter.render.view
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +16,8 @@ import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.render.utils.LayoutParamsUtils
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.attr.ImageAttr
-import com.dynamic.otter.render.view.attr.ProgressAttr
 import com.dynamic.otter.render.view.attr.OTListAttr
+import com.dynamic.otter.render.view.attr.ProgressAttr
 import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.AnimationView
@@ -33,129 +32,137 @@ import com.dynamic.otter.template.OTSize
 
 object OTViewTreeCreator {
     fun buildAndroidView(templateContext: TemplateContext): View {
-        val sdNode = templateContext.rootNode
-        val context = templateContext.context
+        val rootNode = templateContext.rootNode
+            ?: throw IllegalStateException("TemplateContext.rootNode is null")
         val eventMap = DataBinding.instance.getEventMap()
-        val layout = sdNode?.stretchNode?.layoutByPrepareView
-        val rootView = sdNode?.let {
-            OTViewFactory
-                .createView<View>(context, it.viewName)
-                .apply {
-                    this.layoutParams = LayoutParamsUtils.createLayoutParams(sdNode, layout)
-                }.apply {
-                    setAttr(this, sdNode, eventMap)
-                }
-        }
-
-        buildAndroidChildView(rootView as ViewGroup, sdNode, eventMap)
+        val rootView = createConfiguredView(
+            context = templateContext.context,
+            node = rootNode,
+            eventMap = eventMap,
+            itemData = null
+        )
+        buildChildViews(rootView as ViewGroup, rootNode, eventMap, itemData = null)
         return rootView
     }
 
     fun buildAndroidItemView(
-        sdNode: OTNode,
+        node: OTNode,
         context: Context,
         itemData: JSONObject
     ): View {
-        val layout = sdNode.stretchNode.layoutByPrepareView
         val eventMap = DataBinding.instance.getEventMap()
-        val itemView = OTViewFactory.createView<View>(context, sdNode.viewName)
-            .apply {
-                this.layoutParams = LayoutParamsUtils.createLayoutParams(sdNode, layout)
-            }.apply {
-                setAttr(this, sdNode, eventMap, itemData)
-            }
-
+        val itemView = createConfiguredView(context, node, eventMap, itemData)
         if (itemView is ViewGroup) {
-            buildAndroidChildItemView(itemView, sdNode, eventMap, itemData)
+            buildChildViews(itemView, node, eventMap, itemData)
         }
         return itemView
     }
 
-    private fun buildAndroidChildItemView(
-        itemView: ViewGroup,
-        sdNode: OTNode,
-        eventMap: MutableMap<String, JSONObject>,
-        itemData: JSONObject
-    ) {
-        sdNode.children?.forEach { child ->
-            val view = OTViewFactory
-                .createView<View>(itemView.context, child.viewName)
-                .apply {
-                    this.layoutParams = LayoutParamsUtils.createLayoutParams(
-                        child,
-                        child.stretchNode.layoutByPrepareView
-                    )
-                }.apply {
-                    setAttr(this, child, eventMap, itemData)
-                }
+    private fun createConfiguredView(
+        context: Context,
+        node: OTNode,
+        eventMap: MutableMap<String, JSONObject>?,
+        itemData: JSONObject?
+    ): View {
+        return OTViewFactory.createView<View>(context, node.viewName).apply {
+            layoutParams = LayoutParamsUtils.createLayoutParams(
+                node,
+                node.stretchNode.layoutByPrepareView
+            )
+            setAttr(this, node, eventMap, itemData)
+        }
+    }
 
-            // TODO： 如果还有嵌套的列表容器，需要进一步开发验证
-            if (child.isListContainer()) {
-                if (view is RecyclerView) {
-                    val adapter = OTListAdapter(child.id)
-                    val data = ((child.attr) as OTListAttr).data
-                    adapter.setData(JSON.parseArray(data))
-                    view.layoutManager = LinearLayoutManager(
-                        view.context, RecyclerView.VERTICAL,
-                        false
-                    )
-                    view.adapter = adapter
-                }
-            }
-            itemView.addView(view)
+    private fun buildChildViews(
+        parentView: ViewGroup,
+        parentNode: OTNode,
+        eventMap: MutableMap<String, JSONObject>?,
+        itemData: JSONObject?
+    ) {
+        parentNode.children?.forEach { child ->
+            val view = createConfiguredView(parentView.context, child, eventMap, itemData)
+            // Item 树路径暂不支持列表方向/间距配置，保持原先固定垂直列表行为
+            configureListContainerIfNeeded(view, child, useItemDefaults = itemData != null)
+            parentView.addView(view)
             if (view is ViewGroup) {
-                buildAndroidChildItemView(view, child, eventMap, itemData)
+                buildChildViews(view, child, eventMap, itemData)
             }
         }
+    }
+
+    /**
+     * @param useItemDefaults when true, force vertical list with zero item padding
+     * (legacy item-tree behavior).
+     */
+    private fun configureListContainerIfNeeded(
+        view: View,
+        node: OTNode,
+        useItemDefaults: Boolean
+    ) {
+        if (!node.isListContainer() || view !is RecyclerView) {
+            return
+        }
+        // TODO: nested list containers need more validation
+        val listAttr = node.attr as OTListAttr
+        val direction = if (useItemDefaults) {
+            RecyclerView.VERTICAL
+        } else {
+            when (listAttr.listDirection) {
+                TemplateKey.OT_HORIZONTAL -> RecyclerView.HORIZONTAL
+                TemplateKey.OT_VERTICAL -> RecyclerView.VERTICAL
+                else -> RecyclerView.VERTICAL
+            }
+        }
+        val itemPadding = if (useItemDefaults) {
+            0
+        } else {
+            OTSize.create(listAttr.itemPadding ?: "0").valueInt
+        }
+        val adapter = OTListAdapter(
+            parentId = node.id,
+            listDirection = direction,
+            itemPadding = itemPadding
+        )
+        adapter.setData(JSON.parseArray(listAttr.data))
+        view.layoutManager = LinearLayoutManager(view.context, direction, false)
+        view.adapter = adapter
     }
 
     private fun setAttr(
         view: View,
-        sdNode: OTNode?,
+        node: OTNode?,
         eventMap: MutableMap<String, JSONObject>?,
         itemData: JSONObject? = null
     ) {
-        val attr = sdNode?.attr
-        if (attr != null) {
-            view.id = attr.id
-        } else {
-            throw IllegalArgumentException("attr is null")
-        }
+        val attr = node?.attr
+            ?: throw IllegalArgumentException("attr is null")
 
-        // 保存DSL模板的根节点生成的View,如果根布局是ViewGroup类型的，绑定事件的时候可以通过
-        // ViewGroup的findViewById方法找到需要更新的View
-        if (sdNode.isRoot && itemData == null) {
+        view.id = attr.id
+
+        // Keep root view for findViewById-based event updates
+        if (node.isRoot && itemData == null) {
             OTEngine.instance.rootView = view
         }
 
-        // 处理View的公共属性
         handleViewCommonAttr(view, attr, eventMap, itemData)
-
-        // 处理文字控件相关的属性
         handleTextAttr(view, attr, itemData)
-
-        // 处理图片控件相关的属性
         handleImageAttr(view, attr, itemData)
-
-        // 处理进度条控件相关的属性
         handleProgressViewAttr(view, attr, itemData)
-
-        // 处理动画相关的属性
-        handleAnimationAttr(view,attr,itemData)
+        handleAnimationAttr(view, attr, itemData)
     }
 
-    private fun handleAnimationAttr(view: View, attr: ViewAttr, itemData: JSONObject?) {
-        if(view is AnimationView && attr is AnimationViewAttr){
-            val repeatCountValue = attr.repeatCount
-            val repeatModeValue = attr.repeatMode
-            val autoPlayValue = attr.autoPlay
-            val animationSrcValue = attr.animationSrc
-            val jsonObj = JSONObject()
-            jsonObj[TemplateKey.ATTR_ANI_REPEAT_COUNT] = repeatCountValue
-            jsonObj[TemplateKey.ATTR_ANI_REPEAT_MODE] = repeatModeValue
-            jsonObj[TemplateKey.ATTR_ANI_AUTO_PLAY] = autoPlayValue
-            jsonObj[TemplateKey.ATTR_ANIMATION_SRC] = animationSrcValue
-
+    private fun handleAnimationAttr(
+        view: View,
+        attr: ViewAttr,
+        @Suppress("UNUSED_PARAMETER") itemData: JSONObject?
+    ) {
+        if (view is AnimationView && attr is AnimationViewAttr) {
+            val jsonObj = JSONObject().apply {
+                put(TemplateKey.ATTR_ANI_REPEAT_COUNT, attr.repeatCount)
+                put(TemplateKey.ATTR_ANI_REPEAT_MODE, attr.repeatMode)
+                put(TemplateKey.ATTR_ANI_AUTO_PLAY, attr.autoPlay)
+                put(TemplateKey.ATTR_ANIMATION_SRC, attr.animationSrc)
+            }
             view.onBindData(jsonObj)
         }
     }
@@ -168,7 +175,6 @@ object OTViewTreeCreator {
     ) {
         view.setBackgroundWithRadius(viewAttr = attr)
 
-        // 设置圆角或者边框，这里的属性是所有view都需要的
         if (attr.radius != null
             || attr.leftBottomRadius != null
             || attr.leftTopRadius != null
@@ -180,13 +186,9 @@ object OTViewTreeCreator {
 
         if (attr.onClick != null) {
             view.setOnClickListener { clickedView ->
-                val originFunStr = attr.onClick
-                if (originFunStr != null) {
-                    val funIdList = extractFunId(originFunStr)
-                    funIdList.forEach { funId ->
-                        val funJsonObj = eventMap?.get(funId)
-                        handleEvent(clickedView, funJsonObj, itemData)
-                    }
+                val originFunStr = attr.onClick ?: return@setOnClickListener
+                extractFunId(originFunStr).forEach { funId ->
+                    handleEvent(clickedView, eventMap?.get(funId), itemData)
                 }
             }
         }
@@ -197,19 +199,17 @@ object OTViewTreeCreator {
         attr: ViewAttr?,
         itemData: JSONObject?
     ) {
-        if (view is Text && attr is TextAttr) {
-            Log.d("zhongxj", "setAttr===>${attr.text}")
-            // 如果ItemData不为空，说明是容器控件的item View,需要重新绑定数据，TODO：不严谨，需要优化
-            if (itemData != null) {
-                // 更新ItemView的文字
-                val itemStr = attr.text.extractExpValue(itemData)
-                view.onBindStyle(attr)
-                view.onBindData(itemStr)
-            } else {
-                view.onBindStyle(attr)
-                view.onBindData(attr.text)
-            }
+        if (view !is Text || attr !is TextAttr) {
+            return
         }
+        // itemData != null means list item rebinding; expression must resolve against item JSON
+        val textValue = if (itemData != null) {
+            attr.text.extractExpValue(itemData)
+        } else {
+            attr.text
+        }
+        view.onBindStyle(attr)
+        view.onBindData(textValue)
     }
 
     private fun handleImageAttr(
@@ -217,18 +217,16 @@ object OTViewTreeCreator {
         attr: ViewAttr?,
         itemData: JSONObject?
     ) {
-        if (view is Image && attr is ImageAttr) {
-            if (itemData != null) {
-                // 更新ItemView的图片，如果是itemView中的View,则attr是原来的表达式，因为刚开始建立
-                // view 树的时候并没有数据可以绑定
-                val srcStr = attr.src.extractExpValue(itemData)
-                view.onBindStyle(attr)
-                view.onBindData(srcStr)
-            } else {
-                view.onBindStyle(attr)
-                view.onBindData(attr.src)
-            }
+        if (view !is Image || attr !is ImageAttr) {
+            return
         }
+        val srcValue = if (itemData != null) {
+            attr.src.extractExpValue(itemData)
+        } else {
+            attr.src
+        }
+        view.onBindStyle(attr)
+        view.onBindData(srcValue)
     }
 
     private fun handleProgressViewAttr(
@@ -236,33 +234,26 @@ object OTViewTreeCreator {
         attr: ViewAttr?,
         itemData: JSONObject?
     ) {
-        if (view is ProgressView && attr is ProgressAttr) {
-            if (itemData != null) {
-                val valueMin = attr.valueMin.extractExpValue(itemData).toFloat()
-                val valueMax = attr.valueMax.extractExpValue(itemData).toFloat()
-                val animateEnable = attr.animateEnable
-
-                val jsonObj = JSONObject()
-                jsonObj[TemplateKey.ATTR_VALUE_MIN] = valueMin
-                jsonObj[TemplateKey.ATTR_VALUE_MAX] = valueMax
-                jsonObj[TemplateKey.ATTR_ANIMATE_ENABLE] = animateEnable
-
-                view.onBindData(jsonObj)
-            } else {
-                val valueMin = attr.valueMin.toFloat()
-                val valueMax = attr.valueMax.toFloat()
-                val animateEnable = attr.animateEnable
-
-                val jsonObj = JSONObject()
-                jsonObj[TemplateKey.ATTR_VALUE_MIN] = valueMin
-                jsonObj[TemplateKey.ATTR_VALUE_MAX] = valueMax
-                jsonObj[TemplateKey.ATTR_ANIMATE_ENABLE] = animateEnable
-
-                view.onBindData(jsonObj)
-            }
-
-            view.onBindStyle(attr, itemData)
+        if (view !is ProgressView || attr !is ProgressAttr) {
+            return
         }
+        val valueMin = if (itemData != null) {
+            attr.valueMin.extractExpValue(itemData).toFloat()
+        } else {
+            attr.valueMin.toFloat()
+        }
+        val valueMax = if (itemData != null) {
+            attr.valueMax.extractExpValue(itemData).toFloat()
+        } else {
+            attr.valueMax.toFloat()
+        }
+        val jsonObj = JSONObject().apply {
+            put(TemplateKey.ATTR_VALUE_MIN, valueMin)
+            put(TemplateKey.ATTR_VALUE_MAX, valueMax)
+            put(TemplateKey.ATTR_ANIMATE_ENABLE, attr.animateEnable)
+        }
+        view.onBindData(jsonObj)
+        view.onBindStyle(attr, itemData)
     }
 
     private fun handleEvent(
@@ -270,7 +261,7 @@ object OTViewTreeCreator {
         funJsonObj: JSONObject?,
         itemData: JSONObject? = null
     ) {
-        val funClass = funJsonObj?.get("class") // 方法分类
+        val funClass = funJsonObj?.get("class")
         val params = funJsonObj?.get("params")
         when (funClass) {
             "view" -> {
@@ -290,72 +281,11 @@ object OTViewTreeCreator {
         if (startIndex > 0 && endIndex > 0) {
             val tempFunIdStr = funIdStr.substring(startIndex + 1, endIndex)
             if (tempFunIdStr.contains(",")) {
-                tempFunIdStr.split(",").forEach {
-                    resultList.add(it)
-                }
+                tempFunIdStr.split(",").forEach { resultList.add(it) }
             } else {
                 resultList.add(tempFunIdStr)
             }
         }
-
         return resultList
-    }
-
-    private fun buildAndroidChildView(
-        parentView: ViewGroup,
-        sdNode: OTNode,
-        eventMap: MutableMap<String, JSONObject>?
-    ) {
-        sdNode.children?.forEach { child ->
-            val view = OTViewFactory
-                .createView<View>(parentView.context, child.viewName)
-                .apply {
-                    this.layoutParams = LayoutParamsUtils.createLayoutParams(
-                        child,
-                        child.stretchNode.layoutByPrepareView
-                    )
-                }.apply {
-                    setAttr(this, child, eventMap)
-                }
-            if (child.isListContainer()) {
-                if (view is RecyclerView) {
-                    val sdListAttr = (child.attr) as OTListAttr
-                    val itemPadding = sdListAttr.itemPadding ?: "0"
-                    val direction: Int = when (sdListAttr.listDirection) {
-                        TemplateKey.OT_HORIZONTAL -> {
-                            RecyclerView.HORIZONTAL
-                        }
-
-                        TemplateKey.OT_VERTICAL -> {
-                            RecyclerView.VERTICAL
-                        }
-
-                        else -> {
-                            RecyclerView.VERTICAL
-                        }
-                    }
-
-                    val adapter = OTListAdapter(
-                        parentId = child.id,
-                        listDirection = direction,
-                        itemPadding = OTSize.create(itemPadding).valueInt
-                    )
-                    val data = sdListAttr.data
-                    adapter.setData(JSON.parseArray(data))
-                    view.layoutManager = LinearLayoutManager(
-                        view.context,
-                        direction,
-                        false
-                    )
-
-
-                    view.adapter = adapter
-                }
-            }
-            parentView.addView(view)
-            if (view is ViewGroup) {
-                buildAndroidChildView(view, child, eventMap)
-            }
-        }
     }
 }

@@ -4,42 +4,38 @@ import app.visly.stretch.Size
 import com.dynamic.otter.OTEngine
 
 object NodeTreePrepare {
-    fun create(vDomNode: VDomNode, sdViewPortSize: OTEngine.OTViewPortSize): OTNode {
-        val rootNode = createSDNode(vDomNode, null)
+    fun create(vDomNode: VDomNode, viewPortSize: OTEngine.OTViewPortSize): OTNode {
+        val rootNode = createOtNode(vDomNode, parent = null)
         rootNode.isRoot = true
         NodeUtils.computeNodeTreeByPrepareView(
             rootNode,
-            size = Size(
-                sdViewPortSize.width,
-                sdViewPortSize.height
-            )
+            size = Size(viewPortSize.width, viewPortSize.height)
         )
-
         return rootNode
     }
 
-    private fun createSDNode(
+    private fun createOtNode(
         vDomNode: VDomNode,
-        sdParentSDNode: OTNode?
+        parent: OTNode?
     ): OTNode {
-        val sdNode = OTNode()
-        sdNode.parentNode = sdParentSDNode
-        sdNode.id = vDomNode.id
-        sdNode.viewName = vDomNode.nodeName
-        sdNode.attr = vDomNode.attr
-        sdNode.stretchNode = StretchNode.createStretchNode(vDomNode)
-        vDomNode.children?.forEach { curVD ->
-            val sdChildNode = createSDNode(curVD, sdNode)
-            if (sdNode.children == null) {
-                sdNode.children = mutableListOf()
-            }
+        val node = OTNode()
+        node.parentNode = parent
+        node.id = vDomNode.id
+        node.viewName = vDomNode.nodeName
+        node.attr = vDomNode.attr
+        node.stretchNode = StretchNode.createStretchNode(vDomNode)
 
-            sdNode.children?.add(sdChildNode)
-            sdChildNode.stretchNode.node?.let {
-                sdNode.stretchNode.node?.safeAddChild(it)
+        vDomNode.children?.forEach { childVDom ->
+            val childNode = createOtNode(childVDom, node)
+            if (node.children == null) {
+                node.children = mutableListOf()
+            }
+            node.children?.add(childNode)
+            childNode.stretchNode.node?.let { stretchChild ->
+                node.stretchNode.node?.safeAddChild(stretchChild)
             }
         }
 
-        return sdNode
+        return node
     }
 }

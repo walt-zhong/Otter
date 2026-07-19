@@ -15,13 +15,13 @@ class RowAttr : ContainerAttr() {
                 }
             }
         }
-        val sdRowAttr = super.parseAttrs(attrsMap) as RowAttr
-        flexbox = OTFlexBox.create(sdRowAttr)
-        return sdRowAttr
+        val rowAttr = super.parseAttrs(attrsMap) as RowAttr
+        flexbox = OTFlexBox.create(rowAttr)
+        return rowAttr
     }
 
     override fun toString(): String {
-        return "RowAttr(id = $id, width=${width}, height = ${height} ,radius='$radius',flexbox='$flexbox')"
+        return "RowAttr(id = $id, width=$width, height = $height ,radius='$radius',flexbox='$flexbox')"
     }
 
     companion object {
