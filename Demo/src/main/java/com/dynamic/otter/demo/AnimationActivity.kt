@@ -25,7 +25,7 @@ class AnimationActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("animation-demo", "animation","templates/animation-demo/animation.xml")
+            .buildTemplate("animation-demo", "animation", "templates/animation-demo/animation.json")
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(
                 this,

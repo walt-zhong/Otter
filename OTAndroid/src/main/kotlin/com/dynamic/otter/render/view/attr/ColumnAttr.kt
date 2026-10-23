@@ -1,11 +1,10 @@
 package com.dynamic.otter.render.view.attr
 
 import com.dynamic.otter.template.OTFlexBox
-import org.w3c.dom.NamedNodeMap
 
 class ColumnAttr : ContainerAttr() {
-    override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        val columnAttr = super.parseAttrs(attrsMap) as ColumnAttr
+    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+        val columnAttr = super.parseAttrs(attrs) as ColumnAttr
         flexbox = OTFlexBox.create(columnAttr)
         return columnAttr
     }
@@ -15,8 +14,8 @@ class ColumnAttr : ContainerAttr() {
     }
 
     companion object {
-        fun create(attrMap: NamedNodeMap): ViewAttr {
-            return ColumnAttr().parseAttrs(attrMap)
+        fun create(attrs: Map<String, String>): ViewAttr {
+            return ColumnAttr().parseAttrs(attrs)
         }
     }
 }

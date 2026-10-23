@@ -11,8 +11,7 @@ import com.dynamic.otter.render.view.attr.RowAttr
 import com.dynamic.otter.render.view.attr.SpacerAttr
 import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
+import com.dynamic.otter.template.json.ParsedNode
 
 class VDomNode(
     var id: String = "0",
@@ -26,79 +25,26 @@ class VDomNode(
     }
 
     companion object {
-        fun create(nodeList: NodeList): VDomNode {
-            // Layout root is expected to have a single element child
-            return createVirtualNode(nodeList.item(0))
-        }
-
-        private fun createVirtualNode(layoutNode: Node): VDomNode {
-            var attributes = layoutNode.attributes
-            var nodeName = layoutNode.nodeName
-            var node = layoutNode
-            var id = "0"
-
-            if (nodeName == TemplateKey.LAYOUT_ROOT_NAME) {
-                for (i in 0 until layoutNode.childNodes.length) {
-                    val item = layoutNode.childNodes.item(i)
-                    if (item.nodeType == Node.ELEMENT_NODE) {
-                        node = item
-                        attributes = node.attributes
-                        nodeName = node.nodeName
-                    }
-                }
-            }
-
-            if (attributes?.getNamedItem(TemplateKey.ATTR_ID) != null) {
-                id = attributes.getNamedItem(TemplateKey.ATTR_ID).nodeValue
-            }
-
-            val attr: ViewAttr? = when (nodeName) {
-                TemplateKey.COLUMN -> ColumnAttr.create(attributes)
-                TemplateKey.ROW -> RowAttr.create(attributes)
-                TemplateKey.TEXT -> TextAttr.create(attributes)
-                TemplateKey.IMAGE -> ImageAttr.create(attributes)
-                TemplateKey.SPACER -> SpacerAttr.create(attributes)
-                TemplateKey.OT_LIST -> OTListAttr.create(attributes)
-                TemplateKey.PROGRESS -> ProgressAttr.create(attributes)
-                TemplateKey.ANIMATION -> AnimationViewAttr.create(attributes)
+        fun bind(node: ParsedNode): VDomNode {
+            val attr: ViewAttr? = when (node.viewName) {
+                TemplateKey.COLUMN -> ColumnAttr.create(node.attrs)
+                TemplateKey.ROW -> RowAttr.create(node.attrs)
+                TemplateKey.TEXT -> TextAttr.create(node.attrs)
+                TemplateKey.IMAGE -> ImageAttr.create(node.attrs)
+                TemplateKey.SPACER -> SpacerAttr.create(node.attrs)
+                TemplateKey.OT_LIST -> OTListAttr.create(node.attrs)
+                TemplateKey.PROGRESS -> ProgressAttr.create(node.attrs)
+                TemplateKey.ANIMATION -> AnimationViewAttr.create(node.attrs)
                 else -> null
             }
-
-            val virtualNode = VDomNode(id, nodeName, attr)
-            initChildrenVirtual(node, virtualNode)
+            val virtualNode = VDomNode(node.id, node.viewName, attr)
+            node.item?.let { item ->
+                ListContainerData.listItemVNodeMap[virtualNode.id] = bind(item)
+            }
+            node.children.forEach { child ->
+                virtualNode.children?.add(bind(child))
+            }
             return virtualNode
-        }
-
-        private fun initChildrenVirtual(
-            layoutNode: Node?,
-            vDomNode: VDomNode
-        ) {
-            if (layoutNode == null) {
-                return
-            }
-
-            val childNodes = layoutNode.childNodes
-            for (i in 0 until childNodes.length) {
-                val child = childNodes.item(i)
-                if (child.nodeType == Node.TEXT_NODE || child.nodeType == Node.COMMENT_NODE) {
-                    continue
-                }
-
-                if (child.nodeName == TemplateKey.LAYOUT_ITEM) {
-                    // Item subtree is the list item template, stored by list container id
-                    val itemChildList = child.childNodes
-                    for (m in 0 until itemChildList.length) {
-                        val itemNode = itemChildList.item(m)
-                        if (itemNode.nodeType == Node.ELEMENT_NODE) {
-                            val itemVDom = createVirtualNode(itemNode)
-                            ListContainerData.listItemVNodeMap[vDomNode.id] = itemVDom
-                        }
-                    }
-                    continue
-                }
-
-                vDomNode.children?.add(createVirtualNode(child))
-            }
         }
     }
 }

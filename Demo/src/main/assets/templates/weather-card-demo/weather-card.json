@@ -1,0 +1,406 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "cl1",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20 },
+      "justify": "center",
+      "align": "center"
+    },
+    "children": [
+      {
+        "type": "column",
+        "id": "cl2",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": 20,
+          "justify": "start",
+          "align": "start"
+        },
+        "style": {
+          "background": {
+            "direction": "top",
+            "colors": ["#888888", "#eeeeee"]
+          },
+          "radius": 20
+        },
+        "children": [
+          {
+            "type": "row",
+            "id": "rw1",
+            "layout": {
+              "width": "fill",
+              "height": "wrap",
+              "justify": "spaceBetween",
+              "align": "start"
+            },
+            "children": [
+              {
+                "type": "column",
+                "id": "cl_tem_loc",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "justify": "start",
+                  "align": "start"
+                },
+                "children": [
+                  {
+                    "type": "row",
+                    "id": "rw2",
+                    "layout": {
+                      "width": "wrap",
+                      "height": "wrap",
+                      "justify": "center",
+                      "align": "center"
+                    },
+                    "children": [
+                      {
+                        "type": "text",
+                        "id": "tv_cur_loc",
+                        "text": "$curLoc",
+                        "layout": { "width": 80, "height": 30 },
+                        "style": { "color": "#ffffff", "fontSize": 10 },
+                        "onClick": ["goMap", "resetStyle"]
+                      },
+                      {
+                        "type": "image",
+                        "id": "img1",
+                        "src": "res:ic_nav",
+                        "layout": { "width": 16, "height": 16 },
+                        "onClick": ["goMap"]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "spacer",
+                    "layout": { "width": "fill", "height": 20 }
+                  },
+                  {
+                    "type": "text",
+                    "id": "tx_cur_tem",
+                    "text": "$curTem",
+                    "layout": { "width": 80, "height": 60 },
+                    "style": {
+                      "color": "#ffffff",
+                      "fontSize": 18,
+                      "align": "center",
+                      "includeFontPadding": false
+                    },
+                    "onClick": ["updateStyle", "showTemTip"]
+                  }
+                ]
+              },
+              {
+                "type": "column",
+                "id": "rw2",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "justify": "end",
+                  "align": "end"
+                },
+                "children": [
+                  {
+                    "type": "column",
+                    "id": "rw_cloudy_container",
+                    "layout": {
+                      "width": "fill",
+                      "height": "wrap",
+                      "justify": "center",
+                      "align": "end"
+                    },
+                    "children": [
+                      {
+                        "type": "image",
+                        "id": "img1",
+                        "src": "res:ic_cloudy",
+                        "layout": { "width": 32, "height": 32 },
+                        "onClick": ["goMap"]
+                      },
+                      {
+                        "type": "spacer",
+                        "layout": { "width": "fill", "height": 5 }
+                      },
+                      {
+                        "type": "text",
+                        "id": "tv_cloud",
+                        "text": "$curWeatherDesc",
+                        "layout": { "width": 38, "height": 20 },
+                        "style": { "color": "#ffffff", "fontSize": 7, "align": "start" },
+                        "onClick": ["goMap"]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "spacer",
+                    "layout": { "width": "fill", "height": 5 }
+                  },
+                  {
+                    "type": "row",
+                    "id": "rw_min_max_tem",
+                    "layout": {
+                      "width": "fill",
+                      "height": 100,
+                      "justify": "start",
+                      "align": "start"
+                    },
+                    "children": [
+                      {
+                        "type": "text",
+                        "id": "tv_tem_max",
+                        "text": "最高",
+                        "layout": { "width": 18, "height": 40 },
+                        "style": { "color": "#ffffff", "fontSize": 7, "align": "start" },
+                        "onClick": ["goMap"]
+                      },
+                      {
+                        "type": "text",
+                        "id": "tv_tem_min",
+                        "text": "$maxTem",
+                        "layout": { "width": 60, "height": 40, "padding": { "start": 5 } },
+                        "style": { "color": "#ffffff", "fontSize": 14, "align": "start" },
+                        "onClick": ["goMap"]
+                      },
+                      {
+                        "type": "spacer",
+                        "layout": { "width": 10, "height": "fill" }
+                      },
+                      {
+                        "type": "text",
+                        "id": "tv_tem_max",
+                        "text": "最低",
+                        "layout": { "width": 18, "height": 40 },
+                        "style": { "color": "#ffffff", "fontSize": 7, "align": "start" },
+                        "onClick": ["goMap"]
+                      },
+                      {
+                        "type": "text",
+                        "id": "tv_tem_min",
+                        "text": "$minTem",
+                        "layout": { "width": 60, "height": 40, "padding": { "start": 5 } },
+                        "style": { "color": "#ffffff", "fontSize": 14, "align": "start" },
+                        "onClick": ["goMap"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 0.5 },
+            "style": { "background": "#D3D3D3" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "id": "rw_tem",
+            "layout": {
+              "width": "fill",
+              "height": "wrap",
+              "justify": "start",
+              "align": "center"
+            },
+            "children": [
+              {
+                "type": "image",
+                "id": "img1",
+                "src": "res:ic_warning",
+                "layout": { "width": 24, "height": 24 },
+                "onClick": ["goMap"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 10, "height": "fill" }
+              },
+              {
+                "type": "text",
+                "id": "tv_high_tip",
+                "text": "高温",
+                "layout": { "width": 38, "height": 20 },
+                "style": { "color": "#ffffff", "fontSize": 6, "align": "start" },
+                "onClick": ["goMap"]
+              }
+            ]
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 0.5 },
+            "style": { "background": "#D3D3D3" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "list",
+            "id": "sd_list_horizontal",
+            "data": "$weatherData24",
+            "direction": "horizontal",
+            "gap": 16,
+            "layout": { "width": "fill", "height": 100 },
+            "item": {
+              "type": "column",
+              "id": "cl_weather_24",
+              "layout": {
+                "width": "wrap",
+                "height": "wrap",
+                "justify": "center",
+                "align": "center"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tv_text_time",
+                  "text": "$time",
+                  "layout": { "width": 60, "height": 20 },
+                  "style": { "color": "#D3D3D3", "fontSize": 6, "align": "center" }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 10 }
+                },
+                {
+                  "type": "image",
+                  "id": "iv_cloudy",
+                  "src": "$img",
+                  "layout": { "width": 32, "height": 32 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 10 }
+                },
+                {
+                  "type": "text",
+                  "id": "tv_text_temp",
+                  "text": "$degree",
+                  "layout": { "width": 60, "height": 20 },
+                  "style": { "color": "#ffffff", "fontSize": 8, "align": "center" }
+                }
+              ]
+            }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 0.5 },
+            "style": { "background": "#D3D3D3" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "list",
+            "id": "sd_list_vertical",
+            "data": "$weatherDataWeek",
+            "direction": "vertical",
+            "gap": 16,
+            "layout": { "width": "fill", "height": 100 },
+            "item": {
+              "type": "row",
+              "id": "cl_weather_24",
+              "layout": {
+                "width": "wrap",
+                "height": "wrap",
+                "justify": "center",
+                "align": "center"
+              },
+              "onClick": ["showToastMsg"],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tv_text_week",
+                  "text": "$week",
+                  "layout": { "width": 60, "height": 20 },
+                  "style": { "color": "#D3D3D3", "fontSize": 6, "align": "center" }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 10 }
+                },
+                {
+                  "type": "lottie",
+                  "id": "ani_loading1",
+                  "src": "assets:animation/lottie-sunny",
+                  "repeat": "infinite",
+                  "mode": "restart",
+                  "autoPlay": true,
+                  "layout": { "width": 24, "height": 24 },
+                  "style": { "background": "transparent", "radius": 15 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 10 }
+                },
+                {
+                  "type": "text",
+                  "id": "tv_text_min_degree",
+                  "text": "$degreeMin",
+                  "layout": { "width": 60, "height": 20 },
+                  "style": { "color": "#ffffff", "fontSize": 8, "align": "center" }
+                },
+                {
+                  "type": "progress",
+                  "layout": { "width": 80, "height": 7 },
+                  "from": "$curDegreeMinPercent",
+                  "to": "$curDegreeMaxPercent",
+                  "animate": false,
+                  "style": { "track": "$strokeColor", "bar": "$trailColor" }
+                },
+                {
+                  "type": "text",
+                  "id": "tv_text_min_degree",
+                  "text": "$degreeMax",
+                  "layout": { "width": 60, "height": 20 },
+                  "style": { "color": "#ffffff", "fontSize": 8, "align": "center" }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "events": {
+    "goMap": {
+      "action": "toast",
+      "message": "打开地图导航"
+    },
+    "showTemTip": {
+      "action": "toast",
+      "message": " $temTip != null ? $temTip : '热死了'"
+    },
+    "showToastMsg": {
+      "action": "toast",
+      "message": "$week != null ? $week : '热到没度数'"
+    },
+    "updateStyle": {
+      "action": "setTextStyle",
+      "target": "tx_cur_tem",
+      "fontSize": 20,
+      "color": "#ff0000"
+    },
+    "resetStyle": {
+      "action": "setTextStyle",
+      "target": "tx_cur_tem",
+      "fontSize": 18,
+      "color": "#ffffff"
+    }
+  }
+}

@@ -25,7 +25,7 @@ class LayoutDemoActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("layout-demo", "layout","templates/layout-demo/layout.xml")
+            .buildTemplate("layout-demo", "layout", "templates/layout-demo/layout.json")
 
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(

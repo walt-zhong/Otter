@@ -1,0 +1,24 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "cl_container",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 20, "bottom": 20 },
+      "justify": "center",
+      "align": "center"
+    },
+    "style": {
+      "background": "#ffff00",
+      "border": { "color": "#ff0000", "width": 10 },
+      "radius": { "topStart": 30, "topEnd": 20, "bottomEnd": 20, "bottomStart": 10 }
+    }
+  },
+  "events": {
+    "showToast": {
+      "action": "toast",
+      "message": "$toastMsg"
+    }
+  }
+}

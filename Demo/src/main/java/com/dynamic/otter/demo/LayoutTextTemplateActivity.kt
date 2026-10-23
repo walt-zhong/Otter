@@ -28,7 +28,7 @@ class LayoutTextTemplateActivity : AppCompatActivity() {
             .buildTemplate(
                 "text-demo",
                 "text",
-                "templates/text-demo/layout_text.xml"
+                "templates/text-demo/layout_text.json"
             )
 
         DataBinding.instance.buildTemplateData(

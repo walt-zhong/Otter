@@ -1,0 +1,28 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "cl_container",
+    "layout": {
+      "width": "fill",
+      "height": 200,
+      "padding": { "start": 20, "end": 20, "bottom": 20 },
+      "justify": "center",
+      "align": "center"
+    },
+    "style": {
+      "background": "#ffff00",
+      "border": { "color": "#ff0000", "width": 10 },
+      "radius": { "topStart": 30, "topEnd": 20, "bottomEnd": 20, "bottomStart": 10 }
+    },
+    "children": [
+      {
+        "type": "progress",
+        "layout": { "width": 200, "height": 7 },
+        "from": "$start",
+        "to": "$end",
+        "animate": false,
+        "style": { "track": "#ff0000", "bar": "#0000ff" }
+      }
+    ]
+  }
+}

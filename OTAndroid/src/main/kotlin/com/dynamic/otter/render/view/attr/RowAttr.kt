@@ -1,21 +1,10 @@
 package com.dynamic.otter.render.view.attr
 
-import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.template.OTFlexBox
-import org.w3c.dom.NamedNodeMap
 
 class RowAttr : ContainerAttr() {
-    override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        for (i in 0 until attrsMap.length) {
-            val attrName = attrsMap.item(i).nodeName
-            val attrValue = attrsMap.item(i).nodeValue
-            when (attrName) {
-                TemplateKey.ATTR_RADIUS -> {
-                    radius = attrValue
-                }
-            }
-        }
-        val rowAttr = super.parseAttrs(attrsMap) as RowAttr
+    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+        val rowAttr = super.parseAttrs(attrs) as RowAttr
         flexbox = OTFlexBox.create(rowAttr)
         return rowAttr
     }
@@ -25,8 +14,8 @@ class RowAttr : ContainerAttr() {
     }
 
     companion object {
-        fun create(attrMap: NamedNodeMap): ViewAttr {
-            return RowAttr().parseAttrs(attrMap)
+        fun create(attrs: Map<String, String>): ViewAttr {
+            return RowAttr().parseAttrs(attrs)
         }
     }
 }

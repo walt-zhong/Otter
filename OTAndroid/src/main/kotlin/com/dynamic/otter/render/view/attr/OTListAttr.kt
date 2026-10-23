@@ -3,17 +3,16 @@ package com.dynamic.otter.render.view.attr
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.template.OTFlexBox
-import org.w3c.dom.NamedNodeMap
 
 class OTListAttr : ViewAttr() {
     var data: String? = null
     var listDirection: String? = null
-    var itemPadding:String? = null
-    override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        val listAttr = super.parseAttrs(attrsMap) as OTListAttr
-        for (i in 0 until attrsMap.length) {
-            val attrName = attrsMap.item(i).nodeName
-            val attrValue = attrsMap.item(i).nodeValue.extractExpValue()
+    var itemPadding: String? = null
+
+    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+        val listAttr = super.parseAttrs(attrs) as OTListAttr
+        attrs.forEach { (attrName, rawValue) ->
+            val attrValue = rawValue.extractExpValue()
             when (attrName) {
                 TemplateKey.ATTR_DATA -> listAttr.data = attrValue
                 TemplateKey.ATTR_LIST_DIRECTION -> listAttr.listDirection = attrValue
@@ -25,8 +24,8 @@ class OTListAttr : ViewAttr() {
     }
 
     companion object {
-        fun create(attrMap: NamedNodeMap): ViewAttr {
-            return OTListAttr().parseAttrs(attrMap)
+        fun create(attrs: Map<String, String>): ViewAttr {
+            return OTListAttr().parseAttrs(attrs)
         }
     }
 }

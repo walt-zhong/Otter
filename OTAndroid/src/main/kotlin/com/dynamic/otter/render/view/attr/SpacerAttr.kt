@@ -1,18 +1,17 @@
 package com.dynamic.otter.render.view.attr
 
 import com.dynamic.otter.template.OTFlexBox
-import org.w3c.dom.NamedNodeMap
 
 class SpacerAttr : ViewAttr() {
-    override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        val spacerAttr = super.parseAttrs(attrsMap)
+    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+        val spacerAttr = super.parseAttrs(attrs)
         flexbox = OTFlexBox.create(spacerAttr)
         return spacerAttr
     }
 
     companion object {
-        fun create(attrsMap: NamedNodeMap): ViewAttr {
-            return SpacerAttr().parseAttrs(attrsMap)
+        fun create(attrs: Map<String, String>): ViewAttr {
+            return SpacerAttr().parseAttrs(attrs)
         }
     }
 }

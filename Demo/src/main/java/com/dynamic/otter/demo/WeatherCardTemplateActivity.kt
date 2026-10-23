@@ -25,7 +25,7 @@ class WeatherCardTemplateActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("weather-card-demo", "weather-card","templates/weather-card-demo/weather-card.xml")
+            .buildTemplate("weather-card-demo", "weather-card", "templates/weather-card-demo/weather-card.json")
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(
                 this,

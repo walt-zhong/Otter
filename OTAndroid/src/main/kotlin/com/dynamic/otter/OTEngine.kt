@@ -3,13 +3,14 @@ package com.dynamic.otter
 import android.content.Context
 import android.view.View
 import com.dynamic.otter.context.TemplateContext
-import com.dynamic.otter.data.TemplateKey
+import com.dynamic.otter.data.ListContainerData
 import com.dynamic.otter.render.RenderImpl
 import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.node.VDomNode
+import com.dynamic.otter.template.json.TemplateJsonParser
+import com.dynamic.otter.utils.AssetsUtils
 import com.dynamic.otter.utils.ScreenUtils
-import javax.xml.parsers.DocumentBuilderFactory
 
 class OTEngine {
     internal lateinit var context: Context
@@ -30,28 +31,19 @@ class OTEngine {
     }
 
     fun createAndroidView(templateContext: TemplateContext): View? {
-        val document = parseTemplateDocument(templateContext)
-        val documentElement = document.documentElement
-
-        val layoutNodes = documentElement.getElementsByTagName(TemplateKey.LAYOUT_ROOT_NAME)
-        val eventNodes = documentElement.getElementsByTagName(TemplateKey.EVENTS_ROOT_NAME)
-
-        val vDomNode = VDomNode.create(layoutNodes)
-        DataBinding.instance.parseEvents(eventNodes)
+        val templateJson = AssetsUtils.parseAssetsToString(
+            templateContext.context,
+            templateContext.template.templatePath
+        )
+        val parsed = TemplateJsonParser.parse(templateJson)
+        ListContainerData.listItemVNodeMap.clear()
+        val vDomNode = VDomNode.bind(parsed.root)
+        DataBinding.instance.replaceEvents(parsed.events)
 
         // TODO: 布局结果可按模板缓存，当前每次全量计算
         val viewPortSize = defaultViewPortSize()
         return createAndroidViewByVNode(vDomNode, viewPortSize, templateContext)
     }
-
-    private fun parseTemplateDocument(templateContext: TemplateContext) =
-        DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(
-                templateContext.context.resources.assets.open(
-                    templateContext.template.templatePath
-                )
-            )
 
     private fun defaultViewPortSize() = OTViewPortSize(
         ScreenUtils.getScreenWidthPx(context),

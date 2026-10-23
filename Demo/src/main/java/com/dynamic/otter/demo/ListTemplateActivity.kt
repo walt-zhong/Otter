@@ -25,7 +25,7 @@ class ListTemplateActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("list-demo", "list","templates/list-demo/list.xml")
+            .buildTemplate("list-demo", "list", "templates/list-demo/list.json")
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(
                 this,

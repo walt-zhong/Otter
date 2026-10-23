@@ -25,7 +25,7 @@ class ScaffoldActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("scaffold-demo", "scaffold","templates/scaffold-demo/scaffold.xml")
+            .buildTemplate("scaffold-demo", "scaffold", "templates/scaffold-demo/scaffold.json")
 
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(

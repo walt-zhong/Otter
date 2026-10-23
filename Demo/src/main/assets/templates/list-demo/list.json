@@ -1,0 +1,96 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "cl_container",
+    "layout": {
+      "width": "fill",
+      "height": "wrap",
+      "justify": "center",
+      "align": "center"
+    },
+    "style": {
+      "background": "#ffff00",
+      "border": { "color": "#ff0000", "width": 5 },
+      "radius": { "topStart": 30, "topEnd": 20, "bottomEnd": 20, "bottomStart": 10 }
+    },
+    "children": [
+      {
+        "type": "list",
+        "id": "cl_vertical",
+        "data": "$data",
+        "direction": "vertical",
+        "gap": 16,
+        "layout": { "width": "fill", "height": 200 },
+        "item": {
+          "type": "column",
+          "id": "row_container",
+          "layout": {
+            "width": "fill",
+            "height": "wrap",
+            "justify": "center",
+            "align": "center"
+          },
+          "style": { "background": "#00ff00", "radius": 15 },
+          "onClick": ["showToast"],
+          "children": [
+            {
+              "type": "row",
+              "id": "row_container",
+              "layout": {
+                "width": "fill",
+                "height": "wrap",
+                "justify": "center",
+                "align": "center"
+              },
+              "style": { "background": "#00ff00", "radius": 15 },
+              "onClick": ["showToast"],
+              "children": [
+                {
+                  "type": "image",
+                  "id": "iv",
+                  "src": "$img",
+                  "layout": { "width": 100, "height": 100 },
+                  "style": { "radius": 15 }
+                },
+                {
+                  "type": "text",
+                  "id": "tv_text",
+                  "text": "$title",
+                  "layout": { "width": 100, "height": 80 },
+                  "style": { "background": "#00ffff", "color": "#0000ff" }
+                },
+                {
+                  "type": "image",
+                  "id": "iv1",
+                  "src": "$img",
+                  "layout": { "width": 100, "height": 100 },
+                  "style": { "radius": 15 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "text",
+        "id": "tv_text1",
+        "text": "$str",
+        "layout": { "width": 100, "height": 80 },
+        "style": { "background": "#0000ff", "color": "#00ffff", "fontSize": 13 }
+      },
+      {
+        "type": "image",
+        "id": "iv",
+        "src": "res:test",
+        "layout": { "width": 200, "height": 200 },
+        "style": { "radius": 15 }
+      }
+    ]
+  },
+  "events": {
+    "showToast": {
+      "action": "toast",
+      "message": "$toastMsg"
+    }
+  }
+}

@@ -25,7 +25,7 @@ class ProgressTemplateActivity : AppCompatActivity() {
 
         val context = OTEngine.instance
             .init(this)
-            .buildTemplate("progress-demo", "progress","templates/progress-demo/progress.xml")
+            .buildTemplate("progress-demo", "progress", "templates/progress-demo/progress.json")
         DataBinding.instance.buildTemplateData(
             AssetsUtils.parseAssetsToString(
                 this,

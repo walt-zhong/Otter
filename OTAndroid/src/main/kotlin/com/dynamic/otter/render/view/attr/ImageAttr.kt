@@ -3,23 +3,19 @@ package com.dynamic.otter.render.view.attr
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.template.OTFlexBox
-import org.w3c.dom.NamedNodeMap
 
 class ImageAttr : ViewAttr() {
     var src = ""
     var placeholder = ""
 
-    override fun parseAttrs(attrsMap: NamedNodeMap): ViewAttr {
-        for (i in 0 until attrsMap.length) {
-            val attrName = attrsMap.item(i).nodeName
-            val attrValue = attrsMap.item(i).nodeValue
+    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+        attrs.forEach { (attrName, rawValue) ->
             when (attrName) {
-                TemplateKey.ATTR_SRC -> src = attrValue.extractExpValue()
-                TemplateKey.ATTR_PLACEHOLDER -> placeholder = attrValue.extractExpValue()
+                TemplateKey.ATTR_SRC -> src = rawValue.extractExpValue()
+                TemplateKey.ATTR_PLACEHOLDER -> placeholder = rawValue.extractExpValue()
             }
         }
-
-        val imageAttr = super.parseAttrs(attrsMap) as ImageAttr
+        val imageAttr = super.parseAttrs(attrs) as ImageAttr
         flexbox = OTFlexBox.create(imageAttr)
         return imageAttr
     }
@@ -29,8 +25,8 @@ class ImageAttr : ViewAttr() {
     }
 
     companion object {
-        fun create(attrMap: NamedNodeMap): ViewAttr {
-            return ImageAttr().parseAttrs(attrMap)
+        fun create(attrs: Map<String, String>): ViewAttr {
+            return ImageAttr().parseAttrs(attrs)
         }
     }
 }
