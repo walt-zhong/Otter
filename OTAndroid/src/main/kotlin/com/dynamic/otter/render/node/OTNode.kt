@@ -25,6 +25,9 @@ class OTNode {
 
     var children: MutableList<OTNode>? = null
 
+    /** Item template for a list. Layout is computed against the list box, not the screen. */
+    var itemTemplate: VDomNode? = null
+
     fun isListContainer(): Boolean = viewName == TemplateKey.OT_LIST
 
     fun release() {

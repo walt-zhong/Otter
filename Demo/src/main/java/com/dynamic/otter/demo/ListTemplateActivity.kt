@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class ListTemplateActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class ListTemplateActivity : AppCompatActivity() {
         val context = OTEngine.instance
             .init(this)
             .buildTemplate("list-demo", "list", "templates/list-demo/list.json")
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/list-demo/mock-data/list.json"))

@@ -23,6 +23,7 @@ object NodeTreePrepare {
         node.id = vDomNode.id
         node.viewName = vDomNode.nodeName
         node.attr = vDomNode.attr
+        node.itemTemplate = vDomNode.item
         node.stretchNode = StretchNode.createStretchNode(vDomNode)
 
         vDomNode.children?.forEach { childVDom ->

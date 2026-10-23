@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class WeatherCardTemplateActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class WeatherCardTemplateActivity : AppCompatActivity() {
         val context = OTEngine.instance
             .init(this)
             .buildTemplate("weather-card-demo", "weather-card", "templates/weather-card-demo/weather-card.json")
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/weather-card-demo/mock-data/weather-card.json"))

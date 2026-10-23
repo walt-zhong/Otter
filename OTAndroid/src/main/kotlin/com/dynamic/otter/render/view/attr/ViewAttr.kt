@@ -1,6 +1,7 @@
 package com.dynamic.otter.render.view.attr
 
 import android.view.View
+import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.template.OTFlexBox
@@ -25,20 +26,20 @@ open class ViewAttr {
     var paddingBottom: String? = null
     lateinit var flexbox: OTFlexBox
 
-    protected open fun parseAttrs(attrs: Map<String, String>): ViewAttr {
+    protected open fun parseAttrs(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
         attrs.forEach { (attrName, rawValue) ->
-            val attrValue = rawValue.extractExpValue()
+            val attrValue = rawValue.extractExpValue(scope.data)
             when (attrName) {
                 TemplateKey.ATTR_ID -> {
                     val viewId = View.generateViewId()
                     id = viewId
-                    TemplateKey.RMap[attrValue] = viewId
+                    scope.viewIds[attrValue] = viewId
                 }
 
                 TemplateKey.ATTR_WIDTH -> width = attrValue
                 TemplateKey.ATTR_HEIGHT -> height = attrValue
                 TemplateKey.ATTR_BACKGROUND -> background = attrValue
-                TemplateKey.ATTR_ONCLICK -> onClick = attrValue
+                TemplateKey.ATTR_ONCLICK -> onClick = rawValue
                 TemplateKey.ATTR_RADIUS -> radius = attrValue
                 TemplateKey.ATTR_LEFT_TOP_RADIUS -> leftTopRadius = attrValue
                 TemplateKey.ATTR_LEFT_BOTTOM_RADIUS -> leftBottomRadius = attrValue

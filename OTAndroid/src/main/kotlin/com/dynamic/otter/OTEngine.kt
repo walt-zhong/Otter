@@ -3,9 +3,7 @@ package com.dynamic.otter
 import android.content.Context
 import android.view.View
 import com.dynamic.otter.context.TemplateContext
-import com.dynamic.otter.data.ListContainerData
 import com.dynamic.otter.render.RenderImpl
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.node.VDomNode
 import com.dynamic.otter.template.json.TemplateJsonParser
@@ -14,9 +12,6 @@ import com.dynamic.otter.utils.ScreenUtils
 
 class OTEngine {
     internal lateinit var context: Context
-
-    // TODO: 多页面模板路由时，用 map 缓存每个模板的 rootView
-    var rootView: View? = null
 
     internal val render by lazy { RenderImpl() }
 
@@ -36,11 +31,10 @@ class OTEngine {
             templateContext.template.templatePath
         )
         val parsed = TemplateJsonParser.parse(templateJson)
-        ListContainerData.listItemVNodeMap.clear()
-        val vDomNode = VDomNode.bind(parsed.root)
-        DataBinding.instance.replaceEvents(parsed.events)
+        templateContext.viewIds.clear()
+        templateContext.events = parsed.events
+        val vDomNode = VDomNode.bind(parsed.root, templateContext)
 
-        // TODO: 布局结果可按模板缓存，当前每次全量计算
         val viewPortSize = defaultViewPortSize()
         return createAndroidViewByVNode(vDomNode, viewPortSize, templateContext)
     }
@@ -78,7 +72,6 @@ class OTEngine {
         val templateId: String,
         val templatePath: String
     ) {
-        // 模板版本号，后续用于动态更新
         var templateVersion: String = ""
         var isLocal: Boolean = false
     }

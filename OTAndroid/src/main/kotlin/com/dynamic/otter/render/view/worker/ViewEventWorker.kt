@@ -2,31 +2,39 @@ package com.dynamic.otter.render.view.worker
 
 import android.view.View
 import com.alibaba.fastjson.JSONObject
-import com.dynamic.otter.OTEngine
-import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.view.basic.OTAbsoluteLayout
 import com.dynamic.otter.render.view.basic.Text
+import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 
 class ViewEventWorker private constructor() : IEventWorker {
-    override fun handleEvent(clickedView: View, paramJsonObj: JSONObject, itemData: JSONObject?) {
-        val funMarker = paramJsonObj["fun"]
-        when (funMarker) {
-            "changeAttributes" -> {
-                val funKey = paramJsonObj["key"]
-                val rootView = OTEngine.instance.rootView
-                val viewTempId = paramJsonObj["id"]
-                val viewId = TemplateKey.RMap[viewTempId]
+    override fun handleEvent(
+        clickedView: View,
+        paramJsonObj: JSONObject,
+        itemData: JSONObject?,
+        pageData: JSONObject?,
+        rootView: View?,
+        viewIds: Map<String, Int>
+    ) {
+        if (paramJsonObj["fun"] != "changeAttributes") {
+            return
+        }
+        val targetId = viewIds[paramJsonObj["id"]]
+        val targetView = resolveTargetView(clickedView, rootView, targetId)
+        if (targetView !is Text) {
+            return
+        }
+        when (paramJsonObj["key"]) {
+            "setText" -> {
                 val value = paramJsonObj["value"]
-                val targetView = resolveTargetView(clickedView, rootView, viewId)
-
-                when (funKey) {
-                    "setText", "setTextStyle" -> {
-                        if (targetView is Text) {
-                            targetView.onBindData(value)
-                        }
-                    }
+                val text = if (value is String) {
+                    value.extractExpValue(itemData ?: pageData)
+                } else {
+                    value?.toString().orEmpty()
                 }
+                targetView.onBindData(text)
             }
+
+            "setTextStyle" -> targetView.onBindData(paramJsonObj["value"])
         }
     }
 

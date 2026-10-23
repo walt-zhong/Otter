@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import app.visly.stretch.Layout
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.view.basic.OTLayoutParams
+import kotlin.math.roundToInt
 
 object LayoutParamsUtils {
     fun createLayoutParams(
@@ -12,10 +13,10 @@ object LayoutParamsUtils {
     ): OTLayoutParams {
         return if (layout != null) {
             OTLayoutParams(
-                layout.width.toInt(),
-                layout.height.toInt(),
-                layout.x.toInt(),
-                layout.y.toInt()
+                layout.width.roundToInt(),
+                layout.height.roundToInt(),
+                layout.x.roundToInt(),
+                layout.y.roundToInt()
             )
         } else {
             OTLayoutParams(

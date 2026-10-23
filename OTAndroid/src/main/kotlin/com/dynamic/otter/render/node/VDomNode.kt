@@ -1,6 +1,6 @@
 package com.dynamic.otter.render.node
 
-import com.dynamic.otter.data.ListContainerData
+import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.attr.ColumnAttr
@@ -19,30 +19,27 @@ class VDomNode(
     var attr: ViewAttr?
 ) {
     var children: MutableList<VDomNode>? = mutableListOf()
-
-    override fun toString(): String {
-        return "VDomNode(id='$id', nodeName='$nodeName', children=$children), attr={$attr}"
-    }
+    var item: VDomNode? = null
 
     companion object {
-        fun bind(node: ParsedNode): VDomNode {
+        fun bind(node: ParsedNode, scope: TemplateContext): VDomNode {
             val attr: ViewAttr? = when (node.viewName) {
-                TemplateKey.COLUMN -> ColumnAttr.create(node.attrs)
-                TemplateKey.ROW -> RowAttr.create(node.attrs)
-                TemplateKey.TEXT -> TextAttr.create(node.attrs)
-                TemplateKey.IMAGE -> ImageAttr.create(node.attrs)
-                TemplateKey.SPACER -> SpacerAttr.create(node.attrs)
-                TemplateKey.OT_LIST -> OTListAttr.create(node.attrs)
-                TemplateKey.PROGRESS -> ProgressAttr.create(node.attrs)
-                TemplateKey.ANIMATION -> AnimationViewAttr.create(node.attrs)
+                TemplateKey.COLUMN -> ColumnAttr.create(node.attrs, scope)
+                TemplateKey.ROW -> RowAttr.create(node.attrs, scope)
+                TemplateKey.TEXT -> TextAttr.create(node.attrs, scope)
+                TemplateKey.IMAGE -> ImageAttr.create(node.attrs, scope)
+                TemplateKey.SPACER -> SpacerAttr.create(node.attrs, scope)
+                TemplateKey.OT_LIST -> OTListAttr.create(node.attrs, scope)
+                TemplateKey.PROGRESS -> ProgressAttr.create(node.attrs, scope)
+                TemplateKey.ANIMATION -> AnimationViewAttr.create(node.attrs, scope)
                 else -> null
             }
             val virtualNode = VDomNode(node.id, node.viewName, attr)
             node.item?.let { item ->
-                ListContainerData.listItemVNodeMap[virtualNode.id] = bind(item)
+                virtualNode.item = bind(item, scope)
             }
             node.children.forEach { child ->
-                virtualNode.children?.add(bind(child))
+                virtualNode.children?.add(bind(child, scope))
             }
             return virtualNode
         }

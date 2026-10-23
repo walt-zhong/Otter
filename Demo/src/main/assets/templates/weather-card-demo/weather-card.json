@@ -87,8 +87,7 @@
                     "style": {
                       "color": "#ffffff",
                       "fontSize": 18,
-                      "align": "center",
-                      "includeFontPadding": false
+                      "align": "center"
                     },
                     "onClick": ["updateStyle", "showTemTip"]
                   }

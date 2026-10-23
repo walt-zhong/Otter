@@ -1,21 +1,18 @@
 package com.dynamic.otter.render.view.attr
 
+import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.template.OTFlexBox
 
 class ColumnAttr : ContainerAttr() {
-    override fun parseAttrs(attrs: Map<String, String>): ViewAttr {
-        val columnAttr = super.parseAttrs(attrs) as ColumnAttr
+    override fun parseAttrs(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
+        val columnAttr = super.parseAttrs(attrs, scope) as ColumnAttr
         flexbox = OTFlexBox.create(columnAttr)
         return columnAttr
     }
 
-    override fun toString(): String {
-        return "ColumnAttr(id = $id, width=$width, height = $height ,radius='$radius',flexbox='$flexbox')"
-    }
-
     companion object {
-        fun create(attrs: Map<String, String>): ViewAttr {
-            return ColumnAttr().parseAttrs(attrs)
+        fun create(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
+            return ColumnAttr().parseAttrs(attrs, scope)
         }
     }
 }

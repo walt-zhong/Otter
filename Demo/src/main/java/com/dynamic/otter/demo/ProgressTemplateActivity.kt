@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class ProgressTemplateActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class ProgressTemplateActivity : AppCompatActivity() {
         val context = OTEngine.instance
             .init(this)
             .buildTemplate("progress-demo", "progress", "templates/progress-demo/progress.json")
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/progress-demo/mock-data/progress.json"))

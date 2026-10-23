@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class ScaffoldActivity : AppCompatActivity() {
@@ -27,7 +26,7 @@ class ScaffoldActivity : AppCompatActivity() {
             .init(this)
             .buildTemplate("scaffold-demo", "scaffold", "templates/scaffold-demo/scaffold.json")
 
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/scaffold-demo/mock-data/scaffold.json"))

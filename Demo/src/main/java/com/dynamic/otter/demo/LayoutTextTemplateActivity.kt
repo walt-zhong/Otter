@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class LayoutTextTemplateActivity : AppCompatActivity() {
@@ -31,7 +30,7 @@ class LayoutTextTemplateActivity : AppCompatActivity() {
                 "templates/text-demo/layout_text.json"
             )
 
-        DataBinding.instance.buildTemplateData(
+        templateContext.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/text-demo/mock-data/layout_text.json"

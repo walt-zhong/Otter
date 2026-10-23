@@ -66,7 +66,7 @@
 - `radius`：数字表示四角相同。四角分开时用 `topStart`、`topEnd`、`bottomEnd`、`bottomStart`，单位 dp。
 - `border`：必须同时有 `color` 和 `width`。`width` 是 dp。
 
-`text` 还可以写 `color`、`fontSize`、`align`（`start` `center` `end`）、`includeFontPadding`（布尔值，缺省 `false`）。
+`text` 还可以写 `color`、`fontSize`、`align`（`start` `center` `end`）。
 
 `progress` 还可以写 `track`（底色）和 `bar`（进度颜色）。
 

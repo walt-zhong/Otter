@@ -5,11 +5,7 @@ object TemplateKey {
     const val LAYOUT_ROOT_NAME = "Layout"
     const val EVENTS_ROOT_NAME = "Events"
     const val LAYOUT_ITEM = "Item"
-    // 用于保存页面DSL上的id和通过View生成的id的对应关系，需要将View生成的ID设置给View
-    // 并且将其和DSL中定义的ID做一一映射，这样就可以在绑定事件的时候通过ID 获取到对应的View了
-    val RMap: MutableMap<String, Int> = mutableMapOf()
 
-    // view node name key
     const val COLUMN = "Column"
     const val ROW = "Row"
     const val TEXT = "Text"
@@ -19,9 +15,6 @@ object TemplateKey {
     const val OT_LIST = "OTList"
     const val PROGRESS = "Progress"
     const val ANIMATION = "Animation"
-
-    // function
-    const val ATTR_FUN_ID = "funId"
 
     // common attribute
     const val ATTR_ID = "id"
@@ -58,7 +51,6 @@ object TemplateKey {
     const val ATTR_TEXT_COLOR = "textColor"
     const val ATTR_TEXT_SIZE = "textSize"
     const val ATTR_TEXT_ALIGN = "textAlign"
-    const val ATTR_INCLUDE_FONT_PADDING = "includeFontPadding"
 
     // ColumnList attribute
     const val ATTR_DATA = "data"

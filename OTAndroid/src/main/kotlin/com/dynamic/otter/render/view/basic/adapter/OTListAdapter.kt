@@ -1,88 +1,68 @@
 package com.dynamic.otter.render.view.basic.adapter
 
 import android.annotation.SuppressLint
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import app.visly.stretch.Layout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.OTEngine.OTViewPortSize
-import com.dynamic.otter.data.ListContainerData
+import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.node.VDomNode
 import com.dynamic.otter.render.view.OTViewTreeCreator
 import com.dynamic.otter.render.view.basic.OTItemView
-import com.dynamic.otter.utils.ScreenUtils
+import kotlin.math.roundToInt
 
 class OTListAdapter(
-    private val parentId: String,
+    itemTemplate: VDomNode,
+    viewport: OTEngine.OTViewPortSize,
+    private val templateContext: TemplateContext,
     private val listDirection: Int = RecyclerView.VERTICAL,
     private val itemPadding: Int = 0
 ) : RecyclerView.Adapter<OTViewHolder>() {
     private var listData: JSONArray = JSONArray()
-    private var itemNode: OTNode? = null
+    private val itemNode: OTNode = OTEngine.instance.createNodeTree(itemTemplate, viewport)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OTViewHolder {
-        return createOtViewHolder(parent)
-    }
-
-    private fun createOtViewHolder(parent: ViewGroup): OTViewHolder {
-        val viewPortSize = OTViewPortSize(
-            ScreenUtils.getScreenWidthPx(parent.context),
-            ScreenUtils.getScreenHeightPx(parent.context)
-        )
-        val vDomNode: VDomNode? = ListContainerData.listItemVNodeMap[parentId]
-        if (vDomNode != null) {
-            itemNode = OTEngine.instance.createNodeTree(vDomNode, viewPortSize)
-        }
-
         val itemContainer = OTItemView(parent.context)
-        itemContainer.layoutParams = genItemContainerSize(itemNode?.stretchNode?.layoutByPrepareView)
+        itemContainer.layoutParams = itemLayoutParams(gap = 0)
         return OTViewHolder(itemContainer)
-    }
-
-    private fun genItemContainerSize(containerLayout: Layout?): FrameLayout.LayoutParams {
-        val height = containerLayout?.height ?: 0F
-        val width = containerLayout?.width ?: 0F
-        return FrameLayout.LayoutParams(width.toInt(), height.toInt())
     }
 
     override fun getItemCount(): Int = listData.size
 
     override fun onBindViewHolder(holder: OTViewHolder, position: Int) {
-        bindItem(holder, position)
-    }
-
-    private fun bindItem(holder: OTViewHolder, position: Int) {
-        val context = holder.itemView.context
         val itemData = if (position < listData.size) {
             listData[position] as JSONObject
         } else {
             JSONObject()
         }
-
         val itemContainer = holder.itemView as OTItemView
-        val itemLayoutParam = genItemContainerSize(itemNode?.stretchNode?.layoutByPrepareView)
-        if (position != listData.size - 1) {
-            if (listDirection == RecyclerView.HORIZONTAL) {
-                itemLayoutParam.rightMargin = itemPadding
-            } else if (listDirection == RecyclerView.VERTICAL) {
-                itemLayoutParam.bottomMargin = itemPadding
-            }
-            itemContainer.layoutParams = itemLayoutParam
-        }
+        val gap = if (position == listData.size - 1) 0 else itemPadding
+        itemContainer.layoutParams = itemLayoutParams(gap)
+        itemContainer.removeAllViews()
+        itemContainer.addView(
+            OTViewTreeCreator.buildAndroidItemView(itemNode, templateContext, itemData)
+        )
+    }
 
-        val vDomNode = ListContainerData.listItemVNodeMap[parentId]
-        val itemView: View? = if (vDomNode != null) {
-            itemNode?.let { OTViewTreeCreator.buildAndroidItemView(it, context, itemData) }
+    override fun onViewRecycled(holder: OTViewHolder) {
+        (holder.itemView as? ViewGroup)?.removeAllViews()
+    }
+
+    private fun itemLayoutParams(gap: Int): FrameLayout.LayoutParams {
+        val layout = itemNode.stretchNode.layoutByPrepareView
+        val params = FrameLayout.LayoutParams(
+            layout?.width?.roundToInt() ?: 0,
+            layout?.height?.roundToInt() ?: 0
+        )
+        if (listDirection == RecyclerView.HORIZONTAL) {
+            params.rightMargin = gap
         } else {
-            null
+            params.bottomMargin = gap
         }
-
-        itemContainer.addView(itemView!!, 0)
+        return params
     }
 
     @SuppressLint("NotifyDataSetChanged")

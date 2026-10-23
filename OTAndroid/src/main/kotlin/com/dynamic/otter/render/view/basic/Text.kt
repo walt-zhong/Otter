@@ -7,6 +7,7 @@ import android.graphics.Outline
 import android.graphics.Path
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.Keep
@@ -16,7 +17,6 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.expression.ExpressionWrapper
-import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapability
@@ -49,9 +49,7 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
 
     override fun onBindData(data: Any?) {
         when (data) {
-            is String -> {
-                this.text = data.extractExpValue()
-            }
+            is String -> this.text = data
 
             is JSONObject -> {
                 updateStyleByJsonObj(data)
@@ -66,16 +64,21 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
     }
 
     private fun updateStyleByAttr(attr: TextAttr) {
-        textSize = OTSize.create(attr.textSize).valueFloat
+        applyTextSize(attr.textSize)
         setTextBackground(StyleConverter.instance.backgroundLinearColor(attr.background))
         val textColor = OTColor.create(attr.textColor)?.value()
         // 因为背景边框的设置是依赖shader的所以设置前应该将shader置空
         paint.shader = null
         setTextColor(textColor ?: Color.BLACK)
-        includeFontPadding = attr.includeFontPadding == "true"
+        includeFontPadding = false
         //设置文本的对齐方式
         attr.textAlign?.let { setTextAlign(it) }
         setTextPadding(StyleConverter.instance.padding(attr))
+    }
+
+    // OTSize 已把字号从 dp 换成 px。textSize 的 setter 会按 sp 再乘一次 density，字形会超出布局框。
+    private fun applyTextSize(rawSize: String) {
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, OTSize.create(rawSize).valueFloat)
     }
 
     private fun setTextPadding(padding: Rect<OTSize?>?) {
@@ -113,9 +116,7 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
                     styleObj.keys.forEach { key ->
                         val value = ExpressionWrapper.instance.getResult("\$$key", styleObj)
                         when (key) {
-                            TemplateKey.ATTR_TEXT_SIZE -> {
-                                this.textSize = OTSize.create(value.toString()).valueFloat
-                            }
+                            TemplateKey.ATTR_TEXT_SIZE -> applyTextSize(value.toString())
 
                             TemplateKey.ATTR_TEXT_COLOR -> this.setTextColor(
                                 Color.parseColor(

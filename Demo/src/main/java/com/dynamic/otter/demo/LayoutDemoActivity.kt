@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 @SuppressLint("MissingInflatedId")
@@ -27,7 +26,7 @@ class LayoutDemoActivity : AppCompatActivity() {
             .init(this)
             .buildTemplate("layout-demo", "layout", "templates/layout-demo/layout.json")
 
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
             this,
             "templates/layout-demo/mock-data/layout.json"))

@@ -8,7 +8,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.utils.AssetsUtils
 
 class AnimationActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class AnimationActivity : AppCompatActivity() {
         val context = OTEngine.instance
             .init(this)
             .buildTemplate("animation-demo", "animation", "templates/animation-demo/animation.json")
-        DataBinding.instance.buildTemplateData(
+        context.setData(
             AssetsUtils.parseAssetsToString(
                 this,
                 "templates/animation-demo/mock-data/animation.json"))

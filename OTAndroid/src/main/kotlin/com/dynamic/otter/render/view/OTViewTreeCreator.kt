@@ -1,16 +1,15 @@
 package com.dynamic.otter.render.view
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.OTEngine
 import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.data.TemplateKey
-import com.dynamic.otter.render.node.DataBinding
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.render.utils.LayoutParamsUtils
@@ -34,96 +33,83 @@ object OTViewTreeCreator {
     fun buildAndroidView(templateContext: TemplateContext): View {
         val rootNode = templateContext.rootNode
             ?: throw IllegalStateException("TemplateContext.rootNode is null")
-        val eventMap = DataBinding.instance.getEventMap()
-        val rootView = createConfiguredView(
-            context = templateContext.context,
-            node = rootNode,
-            eventMap = eventMap,
-            itemData = null
-        )
-        buildChildViews(rootView as ViewGroup, rootNode, eventMap, itemData = null)
+        val rootView = createConfiguredView(templateContext, rootNode, itemData = null)
+        templateContext.rootView = rootView
+        buildChildViews(rootView as ViewGroup, rootNode, templateContext, itemData = null)
         return rootView
     }
 
     fun buildAndroidItemView(
         node: OTNode,
-        context: Context,
+        templateContext: TemplateContext,
         itemData: JSONObject
     ): View {
-        val eventMap = DataBinding.instance.getEventMap()
-        val itemView = createConfiguredView(context, node, eventMap, itemData)
+        val itemView = createConfiguredView(templateContext, node, itemData)
         if (itemView is ViewGroup) {
-            buildChildViews(itemView, node, eventMap, itemData)
+            buildChildViews(itemView, node, templateContext, itemData)
         }
         return itemView
     }
 
     private fun createConfiguredView(
-        context: Context,
+        templateContext: TemplateContext,
         node: OTNode,
-        eventMap: MutableMap<String, JSONObject>?,
         itemData: JSONObject?
     ): View {
-        return OTViewFactory.createView<View>(context, node.viewName).apply {
+        return OTViewFactory.createView<View>(templateContext.context, node.viewName).apply {
             layoutParams = LayoutParamsUtils.createLayoutParams(
                 node,
                 node.stretchNode.layoutByPrepareView
             )
-            setAttr(this, node, eventMap, itemData)
+            setAttr(this, node, templateContext, itemData)
         }
     }
 
     private fun buildChildViews(
         parentView: ViewGroup,
         parentNode: OTNode,
-        eventMap: MutableMap<String, JSONObject>?,
+        templateContext: TemplateContext,
         itemData: JSONObject?
     ) {
         parentNode.children?.forEach { child ->
-            val view = createConfiguredView(parentView.context, child, eventMap, itemData)
-            // Item 树路径暂不支持列表方向/间距配置，保持原先固定垂直列表行为
-            configureListContainerIfNeeded(view, child, useItemDefaults = itemData != null)
+            val view = createConfiguredView(templateContext, child, itemData)
+            configureListContainerIfNeeded(view, child, templateContext)
             parentView.addView(view)
-            if (view is ViewGroup) {
-                buildChildViews(view, child, eventMap, itemData)
+            if (view is ViewGroup && !child.isListContainer()) {
+                buildChildViews(view, child, templateContext, itemData)
             }
         }
     }
 
-    /**
-     * @param useItemDefaults when true, force vertical list with zero item padding
-     * (legacy item-tree behavior).
-     */
     private fun configureListContainerIfNeeded(
         view: View,
         node: OTNode,
-        useItemDefaults: Boolean
+        templateContext: TemplateContext
     ) {
         if (!node.isListContainer() || view !is RecyclerView) {
             return
         }
-        // TODO: nested list containers need more validation
+        val itemTemplate = node.itemTemplate ?: return
         val listAttr = node.attr as OTListAttr
-        val direction = if (useItemDefaults) {
-            RecyclerView.VERTICAL
-        } else {
-            when (listAttr.listDirection) {
-                TemplateKey.OT_HORIZONTAL -> RecyclerView.HORIZONTAL
-                TemplateKey.OT_VERTICAL -> RecyclerView.VERTICAL
-                else -> RecyclerView.VERTICAL
-            }
+        val direction = when (listAttr.listDirection) {
+            TemplateKey.OT_HORIZONTAL -> RecyclerView.HORIZONTAL
+            else -> RecyclerView.VERTICAL
         }
-        val itemPadding = if (useItemDefaults) {
-            0
+        val itemPadding = OTSize.create(listAttr.itemPadding ?: "0").valueInt
+        val listLayout = node.stretchNode.layoutByPrepareView
+        val viewport = if (direction == RecyclerView.HORIZONTAL) {
+            OTEngine.OTViewPortSize(width = null, height = listLayout?.height)
         } else {
-            OTSize.create(listAttr.itemPadding ?: "0").valueInt
+            OTEngine.OTViewPortSize(width = listLayout?.width, height = null)
         }
         val adapter = OTListAdapter(
-            parentId = node.id,
+            itemTemplate = itemTemplate,
+            viewport = viewport,
+            templateContext = templateContext,
             listDirection = direction,
             itemPadding = itemPadding
         )
-        adapter.setData(JSON.parseArray(listAttr.data))
+        adapter.setData(JSON.parseArray(listAttr.data) ?: JSONArray())
         view.layoutManager = LinearLayoutManager(view.context, direction, false)
         view.adapter = adapter
     }
@@ -131,31 +117,21 @@ object OTViewTreeCreator {
     private fun setAttr(
         view: View,
         node: OTNode?,
-        eventMap: MutableMap<String, JSONObject>?,
+        templateContext: TemplateContext,
         itemData: JSONObject? = null
     ) {
         val attr = node?.attr
             ?: throw IllegalArgumentException("attr is null")
 
         view.id = attr.id
-
-        // Keep root view for findViewById-based event updates
-        if (node.isRoot && itemData == null) {
-            OTEngine.instance.rootView = view
-        }
-
-        handleViewCommonAttr(view, attr, eventMap, itemData)
+        handleViewCommonAttr(view, attr, templateContext, itemData)
         handleTextAttr(view, attr, itemData)
         handleImageAttr(view, attr, itemData)
         handleProgressViewAttr(view, attr, itemData)
-        handleAnimationAttr(view, attr, itemData)
+        handleAnimationAttr(view, attr)
     }
 
-    private fun handleAnimationAttr(
-        view: View,
-        attr: ViewAttr,
-        @Suppress("UNUSED_PARAMETER") itemData: JSONObject?
-    ) {
+    private fun handleAnimationAttr(view: View, attr: ViewAttr) {
         if (view is AnimationView && attr is AnimationViewAttr) {
             val jsonObj = JSONObject().apply {
                 put(TemplateKey.ATTR_ANI_REPEAT_COUNT, attr.repeatCount)
@@ -170,7 +146,7 @@ object OTViewTreeCreator {
     private fun handleViewCommonAttr(
         view: View,
         attr: ViewAttr,
-        eventMap: MutableMap<String, JSONObject>?,
+        templateContext: TemplateContext,
         itemData: JSONObject?
     ) {
         view.setBackgroundWithRadius(viewAttr = attr)
@@ -184,11 +160,11 @@ object OTViewTreeCreator {
             view.setViewRoundCornerAndBorder(attr)
         }
 
-        if (attr.onClick != null) {
+        val clickNames = attr.onClick?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }
+        if (!clickNames.isNullOrEmpty()) {
             view.setOnClickListener { clickedView ->
-                val originFunStr = attr.onClick ?: return@setOnClickListener
-                extractFunId(originFunStr).forEach { funId ->
-                    handleEvent(clickedView, eventMap?.get(funId), itemData)
+                clickNames.forEach { name ->
+                    dispatchEvent(clickedView, templateContext.events[name], itemData, templateContext)
                 }
             }
         }
@@ -202,7 +178,6 @@ object OTViewTreeCreator {
         if (view !is Text || attr !is TextAttr) {
             return
         }
-        // itemData != null means list item rebinding; expression must resolve against item JSON
         val textValue = if (itemData != null) {
             attr.text.extractExpValue(itemData)
         } else {
@@ -256,36 +231,31 @@ object OTViewTreeCreator {
         view.onBindStyle(attr, itemData)
     }
 
-    private fun handleEvent(
+    private fun dispatchEvent(
         clickedView: View,
-        funJsonObj: JSONObject?,
-        itemData: JSONObject? = null
+        event: JSONObject?,
+        itemData: JSONObject?,
+        templateContext: TemplateContext
     ) {
-        val funClass = funJsonObj?.get("class")
-        val params = funJsonObj?.get("params")
-        when (funClass) {
-            "view" -> {
-                ViewEventWorker.instance.handleEvent(clickedView, params as JSONObject, itemData)
-            }
+        val params = event?.get("params") as? JSONObject ?: return
+        when (event.get("class")) {
+            "view" -> ViewEventWorker.instance.handleEvent(
+                clickedView,
+                params,
+                itemData,
+                templateContext.data,
+                templateContext.rootView,
+                templateContext.viewIds
+            )
 
-            "util" -> {
-                UtilEventWorker.instance.handleEvent(clickedView, params as JSONObject, itemData)
-            }
+            "util" -> UtilEventWorker.instance.handleEvent(
+                clickedView,
+                params,
+                itemData,
+                templateContext.data,
+                templateContext.rootView,
+                templateContext.viewIds
+            )
         }
-    }
-
-    private fun extractFunId(funIdStr: String): MutableList<String> {
-        val resultList: MutableList<String> = mutableListOf()
-        val startIndex = funIdStr.indexOf("{")
-        val endIndex = funIdStr.lastIndexOf("}")
-        if (startIndex > 0 && endIndex > 0) {
-            val tempFunIdStr = funIdStr.substring(startIndex + 1, endIndex)
-            if (tempFunIdStr.contains(",")) {
-                tempFunIdStr.split(",").forEach { resultList.add(it) }
-            } else {
-                resultList.add(tempFunIdStr)
-            }
-        }
-        return resultList
     }
 }

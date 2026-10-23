@@ -60,7 +60,7 @@ class TemplateJsonParserTest {
         )
         assertEquals("12", root.attrs[TemplateKey.ATTR_LEFT_TOP_RADIUS])
         assertEquals(TemplateKey.TEXT, root.children.single().viewName)
-        assertEquals("fun{rename}", root.children.single().attrs[TemplateKey.ATTR_ONCLICK])
+        assertEquals("rename", root.children.single().attrs[TemplateKey.ATTR_ONCLICK])
         assertEquals("title", parsed.events.getValue("rename").getJSONObject("params").getString("id"))
     }
 

@@ -240,7 +240,7 @@ object TemplateJsonParser {
                 throw TemplateParseException("$path.onClick 不能是空数组")
             }
             clicks.addAll(names)
-            attrs[TemplateKey.ATTR_ONCLICK] = "fun{${names.joinToString(",")}}"
+            attrs[TemplateKey.ATTR_ONCLICK] = names.joinToString(",")
         }
 
         when (type) {
@@ -337,7 +337,7 @@ object TemplateJsonParser {
     private fun parseStyle(style: JSONObject, path: String, type: String, attrs: MutableMap<String, String>) {
         val allowed = linkedSetOf("background", "radius", "border")
         when (type) {
-            "text" -> allowed.addAll(listOf("color", "fontSize", "align", "includeFontPadding"))
+            "text" -> allowed.addAll(listOf("color", "fontSize", "align"))
             "progress" -> allowed.addAll(listOf("track", "bar"))
         }
         requireKeys(style, path, allowed, required = emptySet())
@@ -365,10 +365,6 @@ object TemplateJsonParser {
                 throw TemplateParseException("$path.align 只能是 start、center、end")
             }
             attrs[TemplateKey.ATTR_TEXT_ALIGN] = align
-        }
-        if (style.containsKey("includeFontPadding")) {
-            attrs[TemplateKey.ATTR_INCLUDE_FONT_PADDING] =
-                boolString(style.get("includeFontPadding"), "$path.includeFontPadding")
         }
         if (style.containsKey("track")) {
             attrs[TemplateKey.ATTR_STROKE_COLOR] = colorValue(style.get("track"), "$path.track")
