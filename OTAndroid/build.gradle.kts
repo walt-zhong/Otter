@@ -18,7 +18,8 @@ android {
                 arguments(
                     "-DANDROID_PLATFORM_LEVEL=16",
                     "-DANDROID_TOOLCHAIN=clang",
-                    "-DANDROID_STL=c++_shared"
+                    "-DANDROID_STL=c++_shared",
+                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
                 )
             }
         }

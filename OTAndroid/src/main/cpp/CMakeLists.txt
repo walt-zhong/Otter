@@ -5,10 +5,13 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
     #编译包大小优化选项 如表达式需要debug，请把以下三个编译选项注释掉
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -fdata-sections -ffunction-sections")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -flto -fdata-sections -ffunction-sections")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -O3 -flto  -Wl,--gc-sections -Wl")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -O3 -flto -Wl,--gc-sections")
 else ()
     # nothing
 endif ()
+
+# Android 15+ 16KB page size: ELF LOAD segments must be aligned to 16384.
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,max-page-size=16384")
 
 add_library(
         ${PROJECT_NAME}
