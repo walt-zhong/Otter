@@ -25,6 +25,7 @@ import com.dynamic.otter.render.view.basic.ProgressView
 import com.dynamic.otter.render.view.basic.Text
 import com.dynamic.otter.render.view.basic.adapter.OTListAdapter
 import com.dynamic.otter.render.view.factory.OTViewFactory
+import com.dynamic.otter.render.view.worker.NavEventWorker
 import com.dynamic.otter.render.view.worker.UtilEventWorker
 import com.dynamic.otter.render.view.worker.ViewEventWorker
 import com.dynamic.otter.template.OTSize
@@ -176,6 +177,15 @@ object OTViewTreeCreator {
         val params = event?.get("params") as? JSONObject ?: return
         when (event.get("class")) {
             "view" -> ViewEventWorker.instance.handleEvent(
+                clickedView,
+                params,
+                itemData,
+                templateContext.data,
+                templateContext.rootView,
+                templateContext.viewIds
+            )
+
+            "nav" -> NavEventWorker.instance.handleEvent(
                 clickedView,
                 params,
                 itemData,

@@ -1,16 +1,16 @@
 package com.dynamic.otter.demo
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dynamic.otter.ExpansionCenter
+import com.dynamic.otter.OTEngine
+import com.dynamic.otter.utils.AssetsUtils
 
 class MainActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,45 +21,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        findViewById<Button>(R.id.btn_layout_temp).setOnClickListener {
-            val intent = Intent(this, LayoutDemoActivity::class.java)
-            startActivity(intent)
+        ExpansionCenter.instance.registerPageOpener { context, page ->
+            DemoRoutes.open(context, page)
         }
 
-        findViewById<Button>(R.id.btn_text_temp).setOnClickListener {
-            val intent = Intent(this, LayoutTextTemplateActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_list_temp).setOnClickListener {
-            val intent = Intent(this, ListTemplateActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_progress_temp).setOnClickListener {
-            val intent = Intent(this, ProgressTemplateActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_weather_card_temp).setOnClickListener {
-            val intent = Intent(this, WeatherCardTemplateActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_animation_temp).setOnClickListener {
-            val intent = Intent(this, AnimationActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_scaffold_temp).setOnClickListener {
-            val intent = Intent(this, ScaffoldActivity::class.java)
-            startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.btn_tablayout_demo).setOnClickListener {
-            val intent = Intent(this, TabLayoutVp2Activity::class.java)
-            startActivity(intent)
-        }
-
+        val template = OTEngine.instance
+            .init(this)
+            .buildTemplate("home-demo", "home", "templates/home-demo/home.json")
+        template.setData(
+            AssetsUtils.parseAssetsToString(this, "templates/home-demo/mock-data/home.json")
+        )
+        val rootView = OTEngine.instance.createAndroidView(template)
+        findViewById<LinearLayoutCompat>(R.id.home_container).addView(rootView)
     }
 }

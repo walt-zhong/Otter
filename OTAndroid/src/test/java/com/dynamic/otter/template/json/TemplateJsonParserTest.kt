@@ -176,7 +176,8 @@ class TemplateJsonParserTest {
             "progress-demo/progress.json",
             "animation-demo/animation.json",
             "scaffold-demo/scaffold.json",
-            "weather-card-demo/weather-card.json"
+            "weather-card-demo/weather-card.json",
+            "home-demo/home.json"
         ).forEach { relative ->
             val file = File(root, relative)
             assertTrue("缺少 ${file.path}", file.isFile)

@@ -1,0 +1,52 @@
+{
+  "demos": [
+    {
+      "index": "01",
+      "title": "天气",
+      "desc": "渐变卡片、小时预报和一周趋势",
+      "page": "weather"
+    },
+    {
+      "index": "02",
+      "title": "布局",
+      "desc": "圆角、描边、图片和点击改样式",
+      "page": "layout"
+    },
+    {
+      "index": "03",
+      "title": "文字",
+      "desc": "对齐、留白，以及点击后改写",
+      "page": "text"
+    },
+    {
+      "index": "04",
+      "title": "列表",
+      "desc": "纵向信息流，点一条看标题",
+      "page": "list"
+    },
+    {
+      "index": "05",
+      "title": "进度",
+      "desc": "区间进度，用颜色而不是色块",
+      "page": "progress"
+    },
+    {
+      "index": "06",
+      "title": "动画",
+      "desc": "两段循环播放的 Lottie",
+      "page": "animation"
+    },
+    {
+      "index": "07",
+      "title": "骨架",
+      "desc": "一页里的标题、正文和操作",
+      "page": "scaffold"
+    },
+    {
+      "index": "08",
+      "title": "分页",
+      "desc": "顶栏和 ViewPager 的原生示例",
+      "page": "tabs"
+    }
+  ]
+}

@@ -73,24 +73,16 @@ object ScreenUtils {
         }
     }
 
-    fun dpAdapt(context: Context,dp:Float):Int{
-        return dpAdapt(context,dp,360f)
-    }
-
-    private fun dpAdapt(
-        context: Context,
-        dp: Float,
-        widthDpBase: Float
-    ): Int {
-        val dm = context.resources.displayMetrics
-        val heightPixels = dm.heightPixels
-        val widthPixels = dm.widthPixels
-        val density = dm.density
-        val heightDp = heightPixels / density
-        val widthDp = widthPixels / density
-
-        val w = widthDp.coerceAtMost(heightDp)
-        return (dp * w / widthDpBase * density + 0.5).toInt()
+    fun dpAdapt(context: Context, dp: Float): Int {
+        val metrics = context.resources.displayMetrics
+        val configuredWidth = context.resources.configuration.screenWidthDp.toFloat()
+        val widthDp = if (configuredWidth > 0f) {
+            configuredWidth
+        } else {
+            metrics.widthPixels / metrics.density
+        }
+        val scale = ScreenAdapt.scaleFor(widthDp)
+        return (dp * scale * metrics.density + 0.5f).toInt()
     }
 
 }

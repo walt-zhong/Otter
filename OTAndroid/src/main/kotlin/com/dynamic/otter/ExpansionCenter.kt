@@ -1,15 +1,27 @@
 package com.dynamic.otter
 
-class ExpansionCenter {
-    internal var extensionSize:ExtensionSize? = null
+import android.content.Context
 
-    interface ExtensionSize{
-        fun create(value:String):Float?
-        fun convert(value:Float):Float?
+class ExpansionCenter {
+    internal var extensionSize: ExtensionSize? = null
+    internal var pageOpener: PageOpener? = null
+
+    interface ExtensionSize {
+        fun create(value: String): Float?
+        fun convert(value: Float): Float?
     }
 
-    fun registerExtensionSize(extensionSize:ExtensionSize):ExpansionCenter{
+    fun interface PageOpener {
+        fun open(context: Context, page: String)
+    }
+
+    fun registerExtensionSize(extensionSize: ExtensionSize): ExpansionCenter {
         this.extensionSize = extensionSize
+        return this
+    }
+
+    fun registerPageOpener(pageOpener: PageOpener): ExpansionCenter {
+        this.pageOpener = pageOpener
         return this
     }
 

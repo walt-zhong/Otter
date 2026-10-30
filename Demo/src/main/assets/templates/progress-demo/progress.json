@@ -1,27 +1,93 @@
 {
   "layout": {
     "type": "column",
-    "id": "cl_container",
+    "id": "page",
     "layout": {
       "width": "fill",
-      "height": 200,
-      "padding": { "start": 20, "end": 20, "bottom": 20 },
-      "justify": "center",
-      "align": "center"
-    },
-    "style": {
-      "background": "#ffff00",
-      "border": { "color": "#ff0000", "width": 10 },
-      "radius": { "topStart": 30, "topEnd": 20, "bottomEnd": 20, "bottomStart": 10 }
+      "height": "wrap",
+      "padding": { "start": 20, "end": 20, "top": 28, "bottom": 28 }
     },
     "children": [
       {
-        "type": "progress",
-        "layout": { "width": 200, "height": 7 },
-        "from": "$start",
-        "to": "$end",
-        "animate": false,
-        "style": { "track": "#ff0000", "bar": "#0000ff" }
+        "type": "column",
+        "id": "card",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": 20
+        },
+        "style": { "background": "#FFFCF8", "radius": 24 },
+        "children": [
+          {
+            "type": "text",
+            "id": "kicker",
+            "text": "进度",
+            "layout": { "width": "fill", "height": 16 },
+            "style": { "color": "#C45C26", "fontSize": 12 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "text": "$label",
+            "layout": { "width": "fill", "height": 28 },
+            "style": { "color": "#1F1A17", "fontSize": 20 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 6 }
+          },
+          {
+            "type": "text",
+            "id": "caption",
+            "text": "从 40% 走到 80%",
+            "layout": { "width": "fill", "height": 20 },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 18 }
+          },
+          {
+            "type": "progress",
+            "layout": { "width": "fill", "height": 8 },
+            "from": "$start",
+            "to": "$end",
+            "animate": false,
+            "style": { "track": "#E7E1D8", "bar": "#C45C26" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": {
+              "width": "fill",
+              "height": "wrap",
+              "justify": "spaceBetween"
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "start_label",
+                "text": "起点",
+                "layout": { "width": 40, "height": 18 },
+                "style": { "color": "#8A8178", "fontSize": 12 }
+              },
+              {
+                "type": "text",
+                "id": "end_label",
+                "text": "当前",
+                "layout": { "width": 40, "height": 18 },
+                "style": { "color": "#C45C26", "fontSize": 12, "align": "end" }
+              }
+            ]
+          }
+        ]
       }
     ]
   }

@@ -1,141 +1,144 @@
 {
   "layout": {
     "type": "column",
-    "layout": { "width": "fill", "height": "wrap" },
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "wrap",
+      "padding": { "start": 20, "end": 20, "top": 20, "bottom": 20 }
+    },
     "children": [
       {
-        "type": "column",
-        "id": "cl_container",
-        "layout": {
-          "width": "fill",
-          "height": "wrap",
-          "padding": { "start": 10, "end": 10, "top": 20, "bottom": 20 },
+        "type": "text",
+        "id": "kicker",
+        "text": "文字",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 6 }
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "text": "三种对齐",
+        "layout": { "width": "fill", "height": 30 },
+        "style": { "color": "#1F1A17", "fontSize": 22 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 6 }
+      },
+      {
+        "type": "text",
+        "id": "hint",
+        "text": "点第一张卡片，字号和颜色会改掉。",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "id": "text_tip",
+        "text": "$textTip",
+        "layout": { "width": "fill", "height": 72, "padding": 16 },
+        "style": {
+          "background": "#1F6F6A",
+          "radius": 18,
+          "color": "#F4FBF8",
+          "fontSize": 18,
           "align": "center"
         },
+        "onClick": ["showToast", "updateStyle"]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "text",
+        "id": "text_start",
+        "text": "靠左。句子从这一侧开始。",
+        "layout": { "width": "fill", "height": 64, "padding": 16 },
         "style": {
-          "background": "#ffffff",
-          "border": { "color": "#ff0000", "width": 2 },
-          "radius": { "topStart": 10, "topEnd": 10, "bottomEnd": 10, "bottomStart": 10 }
-        },
-        "children": [
-          {
-            "type": "text",
-            "id": "text_tip",
-            "text": "$textTip",
-            "layout": { "width": 300, "height": 200, "padding": 20 },
-            "style": {
-              "background": "#00ffff",
-              "radius": 20,
-              "color": "#ffffff",
-              "fontSize": 8,
-              "align": "center"
-            },
-            "onClick": ["showToast", "updateStyle"]
-          },
-          {
-            "type": "spacer",
-            "layout": { "width": "fill", "height": 20 },
-            "style": { "background": "transparent" }
-          },
-          {
-            "type": "text",
-            "id": "text_tip1",
-            "text": "Hello",
-            "layout": { "width": 300, "height": 200, "padding": 10 },
-            "style": {
-              "background": "#ff0000",
-              "radius": 20,
-              "color": "#ffffff",
-              "fontSize": 10,
-              "align": "start"
-            },
-            "onClick": ["showToast", "updateStyle"]
-          },
-          {
-            "type": "spacer",
-            "layout": { "width": "fill", "height": 20 }
-          },
-          {
-            "type": "text",
-            "id": "text_tip2",
-            "text": "I Am Otter!!!",
-            "layout": { "width": 300, "height": 200, "padding": 10 },
-            "style": {
-              "background": "#00ff00",
-              "radius": 20,
-              "color": "#ff0000",
-              "fontSize": 5,
-              "align": "end"
-            },
-            "onClick": ["showToast", "updateStyle"]
-          },
-          {
-            "type": "spacer",
-            "layout": { "width": "fill", "height": 20 }
-          }
-        ]
+          "background": "#FFFCF8",
+          "radius": 18,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "align": "start"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "text",
+        "id": "text_end",
+        "text": "靠右。收在这一侧。",
+        "layout": { "width": "fill", "height": 64, "padding": 16 },
+        "style": {
+          "background": "#F3E2D4",
+          "radius": 18,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "align": "end"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
       },
       {
         "type": "row",
-        "id": "row1",
+        "id": "pills",
         "layout": {
           "width": "fill",
-          "height": 200,
-          "padding": { "start": 10, "end": 10, "top": 10, "bottom": 10 },
-          "justify": "center"
-        },
-        "style": {
-          "background": "#00ff00",
-          "border": { "color": "#ff0000", "width": 2 },
-          "radius": 20
+          "height": "wrap",
+          "justify": "spaceBetween"
         },
         "children": [
           {
             "type": "text",
-            "id": "text_tip2",
-            "text": "Hello,Otter",
-            "layout": { "width": 100, "height": "fill" },
+            "id": "pill_a",
+            "text": "Otter",
+            "layout": { "width": 96, "height": 44 },
             "style": {
-              "background": "#0000ff",
-              "radius": 20,
-              "color": "#ffffff",
-              "fontSize": 7,
-              "align": "start"
-            }
-          },
-          {
-            "type": "spacer",
-            "layout": { "width": 10, "height": "fill" },
-            "style": { "background": "transparent" }
-          },
-          {
-            "type": "text",
-            "id": "text_tip2",
-            "text": "Go,zhongxj",
-            "layout": { "width": 100, "height": "fill" },
-            "style": {
-              "background": "#ff00ff",
-              "radius": 20,
-              "color": "#ffffff",
-              "fontSize": 5,
+              "background": "#1F1A17",
+              "radius": 22,
+              "color": "#F3EFE7",
+              "fontSize": 14,
               "align": "center"
             }
           },
           {
-            "type": "spacer",
-            "layout": { "width": 10, "height": "fill" }
+            "type": "text",
+            "id": "pill_b",
+            "text": "居中",
+            "layout": { "width": 96, "height": 44 },
+            "style": {
+              "background": "#FFFCF8",
+              "radius": 22,
+              "color": "#1F1A17",
+              "fontSize": 14,
+              "align": "center"
+            }
           },
           {
             "type": "text",
-            "id": "text_tip3",
-            "text": "Go,XCY",
-            "layout": { "width": 100, "height": "fill" },
+            "id": "pill_c",
+            "text": "末尾",
+            "layout": { "width": 96, "height": 44 },
             "style": {
-              "background": "#ffff00",
-              "radius": 20,
-              "color": "#000000",
-              "fontSize": 5,
-              "align": "end"
+              "background": "#C45C26",
+              "radius": 22,
+              "color": "#FFFCF8",
+              "fontSize": 14,
+              "align": "center"
             }
           }
         ]
@@ -150,9 +153,9 @@
     "updateStyle": {
       "action": "setTextStyle",
       "target": "text_tip",
-      "fontSize": 14,
-      "color": "#CCCCCC",
-      "text": "我改变了！！！！！"
+      "fontSize": 16,
+      "color": "#F6E7C1",
+      "text": "这句话被改写了"
     }
   }
 }

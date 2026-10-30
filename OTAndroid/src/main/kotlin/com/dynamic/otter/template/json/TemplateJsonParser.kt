@@ -166,7 +166,19 @@ object TemplateJsonParser {
                 )
             }
 
-            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle")
+            "open" -> {
+                requireKeys(event, path, allowed = setOf("action", "page"), required = setOf("action", "page"))
+                val page = requireString(event.get("page"), "$path.page")
+                if (!page.startsWith("$") && !namePattern.matches(page)) {
+                    throw TemplateParseException("$path.page 必须是页面名或以 \$ 开头")
+                }
+                jsonObject(
+                    "class" to "nav",
+                    "params" to jsonObject("fun" to "open", "page" to page)
+                )
+            }
+
+            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle、open")
         }
     }
 

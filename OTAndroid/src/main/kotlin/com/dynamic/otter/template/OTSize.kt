@@ -17,15 +17,12 @@
 package com.dynamic.otter.template
 
 import android.content.res.Resources
-import android.util.TypedValue
 import app.visly.stretch.Dimension
 import com.dynamic.otter.ExpansionCenter
 import com.dynamic.otter.OTEngine
 import com.dynamic.otter.data.TemplateKey
-import com.dynamic.otter.utils.ScreenUtils
+import com.dynamic.otter.utils.ScreenAdapt
 
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -46,7 +43,7 @@ sealed class OTSize {
                 value.isNotBlank() -> {
                     // 先判断是否可以转化为数字，如果可以，那么直接转换
                     value.toFloatOrNull()?.let {
-                        return PX(value, it.dpToPx())
+                        return PX(value, it.adaptDpToPx())
                     }
 
                     // 桥接到外部处理
@@ -65,25 +62,49 @@ sealed class OTSize {
 
         private fun convertPE(value: String) = value.replacePeToEmpty().toFloat() / 100F
 
-        private fun convertPx(value: String) = value.replacePxToEmpty().toFloat().dpToPx()
+        private fun convertPx(value: String) = value.replacePxToEmpty().toFloat().adaptDpToPx()
 
         fun Float.dpToPx(): Float {
-            return (TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                this,
-                Resources.getSystem().displayMetrics
-            )).roundToInt().toFloat()
+            return (this * displayDensity()).roundToInt().toFloat()
+        }
+
+        /**
+         * JSON 里的纯数字走这里：先按 375dp 设计稿适配当前窗口，再换成像素。
+         */
+        private fun Float.adaptDpToPx(): Float {
+            return (this * resolvedScale(ScreenAdapt.scaleFor(windowWidthDp())) * displayDensity())
+                .roundToInt()
+                .toFloat()
         }
 
         fun Float.ptToPx(): Float {
-            val screenWidthPx = ScreenUtils.getScreenWidthPx(OTEngine.instance.context)
-            val screenHeightPx = ScreenUtils.getScreenHeightPx(OTEngine.instance.context)
-            val dpToPx = 375F.dpToPx()
-            var ratio = min(screenWidthPx, screenHeightPx) / dpToPx
-            ExpansionCenter.instance.extensionSize?.convert(ratio)?.let {
-                ratio = it
+            val widthDp = windowWidthDp()
+            val ratio = if (widthDp > 0f) widthDp / ScreenAdapt.DESIGN_WIDTH_DP else 1f
+            return (this * resolvedScale(ratio) * displayDensity()).roundToInt().toFloat()
+        }
+
+        private fun windowWidthDp(): Float {
+            val resources = runCatching { OTEngine.instance.context.resources }.getOrNull()
+                ?: Resources.getSystem()
+            val configured = resources.configuration.screenWidthDp.toFloat()
+            if (configured > 0f) {
+                return configured
             }
-            return (this.dpToPx() * max(ratio, 1F)).roundToInt().toFloat()
+            val metrics = resources.displayMetrics
+            if (metrics.density <= 0f) {
+                return 0f
+            }
+            return metrics.widthPixels / metrics.density
+        }
+
+        private fun displayDensity(): Float {
+            val resources = runCatching { OTEngine.instance.context.resources }.getOrNull()
+                ?: Resources.getSystem()
+            return resources.displayMetrics.density
+        }
+
+        private fun resolvedScale(ratio: Float): Float {
+            return ExpansionCenter.instance.extensionSize?.convert(ratio) ?: ratio
         }
 
         private fun String.replacePxToEmpty(): String {
