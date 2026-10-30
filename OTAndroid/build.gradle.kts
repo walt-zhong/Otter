@@ -6,6 +6,8 @@ plugins {
 android {
     namespace = "com.dynamic.outter"
     compileSdk = 34
+    // r28+ ships a 16 KB aligned libc++_shared.so. r26 does not.
+    ndkVersion = "30.0.16248370"
 
     defaultConfig {
         minSdk = 24
