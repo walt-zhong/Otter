@@ -18,11 +18,6 @@ class OTColor private constructor(private val value: Any) {
     }
 
     companion object {
-        fun createHex(color: String): OTColor {
-            parseHexColor(color)?.let { return OTColor(it) }
-            throw IllegalArgumentException("Create hex color error")
-        }
-
         fun create(targetColor: String): OTColor? {
             var color = targetColor.trim()
             if (color.contains("%")) {

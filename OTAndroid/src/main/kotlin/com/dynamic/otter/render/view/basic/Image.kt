@@ -9,20 +9,17 @@ import android.widget.ImageView
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
-import com.alibaba.fastjson.JSONObject
 import com.bumptech.glide.Glide
 import com.dynamic.otter.data.OTHelper
 import com.dynamic.otter.data.OTHelper.getResSrc
-import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapability
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 import com.dynamic.otter.render.view.basic.capability.IReleaseCapability
-import com.dynamic.otter.render.view.basic.capability.IStyleBindingCapability
 import com.dynamic.otter.render.view.worker.ImageRoundBorderWorker
 
 @Keep
 class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
-    ICornerRoundConfigCapability,IStyleBindingCapability {
+    ICornerRoundConfigCapability {
     private val roundBorderWorker by lazy {
         ImageRoundBorderWorker()
     }
@@ -36,28 +33,12 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
     )
 
     override fun onBindData(data: Any?) {
+        val src = data as? String ?: return
         scaleType = ScaleType.CENTER_CROP
-        // 若只是传了一个String,说明只有一个Src,直接加载就行
-        when (data) {
-            is String -> {
-                // 如果是网络图片，使用glide加载
-                if (OTHelper.isNetSrc(data)) {
-                    Glide.with(context).load(data).into(this)
-                }else if(OTHelper.isResSrc(data)){
-                    val finaLocalUrl = getResSrc(data)
-                    bindRes(finaLocalUrl)
-                }
-                // 如果传递过来的是一个json对象，说明有很多的数据需要绑定，比如无障碍信息，placeholder等
-            }
-
-            is JSONObject -> {
-                // TODO 需要添加无障碍信息，placeholder等
-            }
+        when {
+            OTHelper.isNetSrc(src) -> Glide.with(context).load(src).into(this)
+            OTHelper.isResSrc(src) -> bindRes(getResSrc(src))
         }
-    }
-
-    override fun onBindStyle(attr: ViewAttr, attrData: Any?) {
-        // Image style binding is reserved for placeholder / accessibility attributes.
     }
 
     private fun bindRes(resUri: String) {
@@ -91,10 +72,6 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
 
     override fun release() {
         setImageDrawable(null)
-    }
-
-    override fun onClear() {
-        super.onClear()
     }
 
     private fun getDrawableByResId(imageView: ImageView, resId: Int): Drawable? {

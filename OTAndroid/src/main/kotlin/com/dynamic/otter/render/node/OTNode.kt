@@ -23,7 +23,7 @@ class OTNode {
 
     var parentNode: OTNode? = null
 
-    var children: MutableList<OTNode>? = null
+    val children = mutableListOf<OTNode>()
 
     /** Item template for a list. Layout is computed against the list box, not the screen. */
     var itemTemplate: VDomNode? = null
@@ -31,13 +31,11 @@ class OTNode {
     fun isListContainer(): Boolean = viewName == TemplateKey.OT_LIST
 
     fun release() {
-        if (viewRoot is IReleaseCapability) {
-            (viewRoot as IReleaseCapability).release()
-        }
+        (viewRoot as? IReleaseCapability)?.release()
         viewRoot = null
         stretchNode.free()
-        children?.forEach { it.release() }
-        children?.clear()
+        children.forEach { it.release() }
+        children.clear()
         parentNode = null
     }
 }

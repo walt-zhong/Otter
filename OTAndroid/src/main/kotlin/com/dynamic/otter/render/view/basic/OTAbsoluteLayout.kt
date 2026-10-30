@@ -1,15 +1,15 @@
 package com.dynamic.otter.render.view.basic
 
 import android.content.Context
-import android.graphics.Outline
+import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import androidx.annotation.Keep
+import com.dynamic.otter.render.view.applyUniformCornerOutline
 import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapability
 import kotlin.math.max
 
@@ -47,8 +47,8 @@ open class OTAbsoluteLayout : ViewGroup, ICornerRoundConfigCapability {
                 childRight = lp.x + child.measuredWidth
                 childBottom = lp.y + child.measuredHeight
 
-                maxWidth = max(maxWidth.toDouble(), childRight.toDouble()).toInt()
-                maxHeight = max(maxHeight.toDouble(), childBottom.toDouble()).toInt()
+                maxWidth = max(maxWidth, childRight)
+                maxHeight = max(maxHeight, childBottom)
             }
         }
 
@@ -57,8 +57,8 @@ open class OTAbsoluteLayout : ViewGroup, ICornerRoundConfigCapability {
         maxHeight += paddingTop + paddingBottom
 
         // Check against minimum height and width
-        maxHeight = max(maxHeight.toDouble(), suggestedMinimumHeight.toDouble()).toInt()
-        maxWidth = max(maxWidth.toDouble(), suggestedMinimumWidth.toDouble()).toInt()
+        maxHeight = max(maxHeight, suggestedMinimumHeight)
+        maxWidth = max(maxWidth, suggestedMinimumWidth)
 
         setMeasuredDimension(
             resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
@@ -114,46 +114,39 @@ open class OTAbsoluteLayout : ViewGroup, ICornerRoundConfigCapability {
         return false
     }
 
+    override fun dispatchDraw(canvas: Canvas) {
+        val path = roundCornerPath
+        if (path == null || clipToOutline) {
+            super.dispatchDraw(canvas)
+            return
+        }
+        canvas.save()
+        canvas.clipPath(path)
+        super.dispatchDraw(canvas)
+        canvas.restore()
+    }
+
     override fun configureViewRoundCorner(radius: FloatArray) {
         this.radius = radius
-        if (radius.size == 8) {
-            val lt = radius[0]
-            val rt = radius[2]
-            val lb = radius[4]
-            val rb = radius[6]
-
-            if (lt == rt && lb == rt && lb == rb && lt > 0) {// 四个角都需要设置相同大小的圆角
-                roundCornerPath = null
-                this.clipToOutline = true
-                this.outlineProvider = object : ViewOutlineProvider() {
-                    override fun getOutline(view: View, outline: Outline) {
-                        if (alpha >= 0.0f) {
-                            outline.alpha = alpha
-                        }
-
-                        outline.setRoundRect(0, 0, view.width, view.height, lt)
-                    }
-                }
-            } else { // 四个角的圆角大小不一样的情况下。使用Path的方法绘制
-                this.clipToOutline = false
-                if (roundCornerPath == null) {
-                    roundCornerPath = Path()
-                } else {
-                    roundCornerPath?.reset()
-                }
-
-                roundCornerPath?.addRoundRect(
-                    RectF(
-                        0f,
-                        0f,
-                        this.layoutParams.width.toFloat(),
-                        this.layoutParams.height.toFloat(),
-                    ), radius, Path.Direction.CW
-                )
-
-                this.outlineProvider = null
-            }
+        if (radius.size != 8) {
+            return
         }
+        val uniform = radius[0]
+        val sameCorner = radius[2] == uniform && radius[4] == uniform && radius[6] == uniform
+        if (sameCorner && uniform > 0) {
+            roundCornerPath = null
+            applyUniformCornerOutline(uniform)
+            return
+        }
+        clipToOutline = false
+        outlineProvider = null
+        val path = roundCornerPath ?: Path().also { roundCornerPath = it }
+        path.reset()
+        path.addRoundRect(
+            RectF(0f, 0f, layoutParams.width.toFloat(), layoutParams.height.toFloat()),
+            radius,
+            Path.Direction.CW
+        )
     }
 
     override fun configureViewRoundCornerBorder(

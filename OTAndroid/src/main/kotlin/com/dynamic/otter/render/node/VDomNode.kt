@@ -18,30 +18,36 @@ class VDomNode(
     var nodeName: String,
     var attr: ViewAttr?
 ) {
-    var children: MutableList<VDomNode>? = mutableListOf()
+    val children = mutableListOf<VDomNode>()
     var item: VDomNode? = null
 
     companion object {
         fun bind(node: ParsedNode, scope: TemplateContext): VDomNode {
-            val attr: ViewAttr? = when (node.viewName) {
-                TemplateKey.COLUMN -> ColumnAttr.create(node.attrs, scope)
-                TemplateKey.ROW -> RowAttr.create(node.attrs, scope)
-                TemplateKey.TEXT -> TextAttr.create(node.attrs, scope)
-                TemplateKey.IMAGE -> ImageAttr.create(node.attrs, scope)
-                TemplateKey.SPACER -> SpacerAttr.create(node.attrs, scope)
-                TemplateKey.OT_LIST -> OTListAttr.create(node.attrs, scope)
-                TemplateKey.PROGRESS -> ProgressAttr.create(node.attrs, scope)
-                TemplateKey.ANIMATION -> AnimationViewAttr.create(node.attrs, scope)
-                else -> null
-            }
+            val attr = createAttr(node.viewName, node.attrs, scope)
             val virtualNode = VDomNode(node.id, node.viewName, attr)
             node.item?.let { item ->
                 virtualNode.item = bind(item, scope)
             }
             node.children.forEach { child ->
-                virtualNode.children?.add(bind(child, scope))
+                virtualNode.children.add(bind(child, scope))
             }
             return virtualNode
+        }
+
+        private fun createAttr(
+            viewName: String,
+            attrs: Map<String, String>,
+            scope: TemplateContext
+        ): ViewAttr? = when (viewName) {
+            TemplateKey.COLUMN -> ColumnAttr.create(attrs, scope)
+            TemplateKey.ROW -> RowAttr.create(attrs, scope)
+            TemplateKey.TEXT -> TextAttr.create(attrs, scope)
+            TemplateKey.IMAGE -> ImageAttr.create(attrs, scope)
+            TemplateKey.SPACER -> SpacerAttr.create(attrs, scope)
+            TemplateKey.OT_LIST -> OTListAttr.create(attrs, scope)
+            TemplateKey.PROGRESS -> ProgressAttr.create(attrs, scope)
+            TemplateKey.ANIMATION -> AnimationViewAttr.create(attrs, scope)
+            else -> null
         }
     }
 }

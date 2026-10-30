@@ -13,7 +13,7 @@ class OTLayoutParams : ViewGroup.LayoutParams {
     var y = 0
 
     constructor(width: Int, height: Int, x: Int, y: Int) : super(width, height) {
-        this.x = x;
+        this.x = x
         this.y = y
     }
 

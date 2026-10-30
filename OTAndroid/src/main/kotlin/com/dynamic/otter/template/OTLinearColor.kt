@@ -5,49 +5,26 @@ import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
 import com.dynamic.otter.render.view.drawable.LinearColorGradientDrawable
 
-/**
- * @suppress
- */
 class OTLinearColor(
     val direction: GradientDrawable.Orientation,
     val colors: MutableList<OTColor>
 ) {
-
     fun createShader(view: TextView): Shader? {
-        val height = view.layoutParams.height.toFloat()
-        val width = view.layoutParams.width.toFloat()
-        return createShader(view, width, height)
+        return StyleConverter.createLinearGradient(
+            view.layoutParams.width.toFloat(),
+            view.layoutParams.height.toFloat(),
+            direction,
+            colorArray()
+        )
     }
 
-    private fun createShader(
-        view: TextView, width: Float, height: Float
-    ) = if (colors.size == 1) {
-        val value = colors[0].value()
-        val result = IntArray(2)
-        result[0] = value
-        result[1] = value
-        StyleConverter.instance.createLinearGradient(width, height, direction, result)
-    } else {
-        val result = IntArray(colors.size)
-        colors.forEachIndexed { index, color ->
-            result[index] = color.value()
-        }
-        StyleConverter.instance.createLinearGradient(width, height, direction, result)
-    }
+    fun createDrawable() = LinearColorGradientDrawable(direction, colorArray())
 
-
-    fun createDrawable() = if (colors.size == 1) {
-        val value = colors[0].value()
-        val result = IntArray(2)
-        result[0] = value
-        result[1] = value
-        LinearColorGradientDrawable(direction, result)
-    } else {
-        val result = IntArray(colors.size)
-        colors.forEachIndexed { index, color ->
-            result[index] = color.value()
+    private fun colorArray(): IntArray {
+        if (colors.size == 1) {
+            val value = colors[0].value()
+            return intArrayOf(value, value)
         }
-        LinearColorGradientDrawable(direction, result)
+        return IntArray(colors.size) { index -> colors[index].value() }
     }
 }
-

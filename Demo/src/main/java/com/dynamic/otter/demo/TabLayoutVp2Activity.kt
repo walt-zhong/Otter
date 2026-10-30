@@ -1,25 +1,12 @@
 package com.dynamic.otter.demo
 
-import android.annotation.SuppressLint
-import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
-import com.dynamic.otter.render.view.components.tabpager.TabAdapter
-import com.dynamic.otter.render.view.components.tabpager.TabGradientTextView
-import com.dynamic.otter.render.view.components.tabpager.TabLayoutScroll
-import com.dynamic.otter.render.view.components.tabpager.TabMediator
 import com.dynamic.otter.render.view.components.tabpager.TabPager
-import com.dynamic.otter.render.view.components.tabpager.TabViewHolder
-import com.dynamic.otter.render.view.components.tabpager.adapter.FragPageAdapter
 
 class TabLayoutVp2Activity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -65,13 +52,5 @@ class TabLayoutVp2Activity : AppCompatActivity() {
 
         val container = findViewById<FrameLayout>(R.id.tab_container)
         container.addView(tabPagerView)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-//        val viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
-//        val tablayout = findViewById<TabLayoutScroll>(R.id.tab_layout)
-
     }
 }

@@ -110,24 +110,6 @@ class ImageRoundBorderWorker {
         }
     }
 
-    fun setRoundCornerRadius(
-        topLeft: Float,
-        topRight: Float,
-        bottomLeft: Float,
-        bottomRight: Float
-    ) {
-        this.setRoundCornerRadius(FloatArray(8).apply {
-            this[0] = topLeft
-            this[1] = topLeft
-            this[2] = topRight
-            this[3] = topRight
-            this[4] = bottomLeft
-            this[5] = bottomLeft
-            this[6] = bottomRight
-            this[7] = bottomRight
-        })
-    }
-
     fun setRoundCornerRadius(radius: FloatArray) {
         roundCornerRadiusArray = radius
         roundCornerRadiusPath = null
@@ -140,25 +122,5 @@ class ImageRoundBorderWorker {
         roundCornerBorderRadiusArray = radius
         roundCornerBorderPath = null
         roundCornerBorderPathIsDirty = true
-    }
-
-    fun setRoundCornerBorder(
-        borderColor: Int,
-        borderWidth: Float,
-        topLeft: Float,
-        topRight: Float,
-        bottomLeft: Float,
-        bottomRight: Float
-    ) {
-        this.setRoundCornerBorder(borderColor, borderWidth, FloatArray(8).apply {
-            this[0] = topLeft
-            this[1] = topLeft
-            this[2] = topRight
-            this[3] = topRight
-            this[4] = bottomLeft
-            this[5] = bottomLeft
-            this[6] = bottomRight
-            this[7] = bottomRight
-        })
     }
 }

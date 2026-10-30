@@ -24,6 +24,8 @@ import com.dynamic.otter.OTEngine
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.utils.ScreenUtils
 
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -77,11 +79,11 @@ sealed class OTSize {
             val screenWidthPx = ScreenUtils.getScreenWidthPx(OTEngine.instance.context)
             val screenHeightPx = ScreenUtils.getScreenHeightPx(OTEngine.instance.context)
             val dpToPx = 375F.dpToPx()
-            var ratio = (Math.min(screenWidthPx, screenHeightPx)) / dpToPx
+            var ratio = min(screenWidthPx, screenHeightPx) / dpToPx
             ExpansionCenter.instance.extensionSize?.convert(ratio)?.let {
                 ratio = it
             }
-            return (this.dpToPx() * Math.max(ratio, 1F)).roundToInt().toFloat()
+            return (this.dpToPx() * max(ratio, 1F)).roundToInt().toFloat()
         }
 
         private fun String.replacePxToEmpty(): String {

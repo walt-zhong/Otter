@@ -10,7 +10,6 @@ object TemplateKey {
     const val ROW = "Row"
     const val TEXT = "Text"
     const val IMAGE = "Image"
-    const val CUSTOM = "Custom"
     const val SPACER = "Spacer"
     const val OT_LIST = "OTList"
     const val PROGRESS = "Progress"
@@ -44,7 +43,6 @@ object TemplateKey {
 
     // Image attribute
     const val ATTR_SRC = "src"
-    const val ATTR_PLACEHOLDER = "placeholder"
 
     // Text attribute
     const val ATTR_TEXT = "text"

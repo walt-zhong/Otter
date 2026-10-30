@@ -7,19 +7,19 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieListener
-import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.data.OTHelper
-import com.dynamic.otter.data.TemplateKey
+import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 
 class AnimationView : LottieAnimationView, IDataBindingCapability {
-    constructor(context: Context) : super(context) {
-        initView()
-    }
+    private var url: String? = null
+    private var autoPlay: Boolean = true
+    private var aniRepeatCount: Int = LottieDrawable.INFINITE
+    private var aniRepeatMode: Int = LottieDrawable.RESTART
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        initView()
-    }
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
         context,
@@ -27,21 +27,32 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
         defStyle
     )
 
-    private fun initView() {
+    override fun onBindData(data: Any?) {
+        val attr = data as? AnimationViewAttr ?: return
+        url = attr.animationSrc
+        autoPlay = attr.autoPlay.equals("true", ignoreCase = true)
+        aniRepeatCount = parseRepeatCount(attr.repeatCount)
+        aniRepeatMode = parseRepeatMode(attr.repeatMode)
+        if (autoPlay) {
+            playAnimationFromBoundUrl()
+        }
     }
 
-    private fun playNetAnimation(
-        url: String,
-        loopCount: Int = LottieDrawable.INFINITE,
-        loopMode: Int = LottieDrawable.RESTART
-    ) {
-        val downloadTask = LottieCompositionFactory
-            .fromUrl(
-                context,
-                url
-            )
+    private fun playAnimationFromBoundUrl() {
+        val source = url ?: return
+        when {
+            OTHelper.isNetSrc(source) -> playNetAnimation(source, aniRepeatCount, aniRepeatMode)
+            OTHelper.isAssetsSrc(source) -> {
+                val assetPath = OTHelper.getAssetsSrc(source)
+                assetImageFolder(assetPath)?.let { imageAssetsFolder = it }
+                playAssetsAnimation(assetPath, aniRepeatCount, aniRepeatMode)
+            }
+        }
+    }
 
-        downloadTask.addListener(object : LottieListener<LottieComposition> {
+    private fun playNetAnimation(url: String, loopCount: Int, loopMode: Int) {
+        val downloadTask = LottieCompositionFactory.fromUrl(context, url)
+        val listener = object : LottieListener<LottieComposition> {
             override fun onResult(result: LottieComposition?) {
                 downloadTask.removeListener(this)
                 result?.let {
@@ -51,94 +62,42 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
                     playAnimation()
                 }
             }
-        })
+        }
+        downloadTask.addListener(listener)
     }
 
-    private fun playAssetsAnimation(
-        url: String,
-        loopCount: Int = LottieDrawable.INFINITE,
-        loopMode: Int = LottieDrawable.RESTART
-    ) {
-        setAnimation(localAppendJsonExt(url))
+    private fun playAssetsAnimation(url: String, loopCount: Int, loopMode: Int) {
+        setAnimation(appendJsonExtension(url))
         repeatCount = loopCount
         repeatMode = loopMode
         playAnimation()
     }
 
-    private var url: String? = null
-    private var autoPlay: Boolean = true
-    private var aniRepeatCount: Int = LottieDrawable.INFINITE
-    private var aniRepeatMode: Int = LottieDrawable.RESTART
+    private fun parseRepeatCount(raw: String?): Int {
+        if (raw.equals("infinite", ignoreCase = true)) {
+            return LottieDrawable.INFINITE
+        }
+        return if (raw != null && OTHelper.isNumeric(raw)) raw.toInt() else LottieDrawable.INFINITE
+    }
 
-    override fun onBindData(data: Any?) {
-        if (data is JSONObject) {
-            url = data[TemplateKey.ATTR_ANIMATION_SRC].toString()
-
-            autoPlay = "true".equals(
-                data[TemplateKey.ATTR_ANI_AUTO_PLAY].toString(), true
-            )
-
-            aniRepeatCount =
-                if ("infinite".equals(data[TemplateKey.ATTR_ANI_REPEAT_COUNT].toString(), true)) {
-                    LottieDrawable.INFINITE
-                } else {
-                    if (OTHelper.isNumeric(data[TemplateKey.ATTR_ANI_REPEAT_COUNT].toString())) {
-                        data[TemplateKey.ATTR_ANI_REPEAT_COUNT].toString().toInt()
-                    } else {
-                        LottieDrawable.INFINITE
-                    }
-                }
-
-            aniRepeatMode = data[TemplateKey.ATTR_ANI_REPEAT_MODE].toString().let {
-                if ("restart".equals(it, true)) {
-                    LottieDrawable.RESTART
-                } else if ("reverse".equals(it, true)) {
-                    LottieDrawable.REVERSE
-                } else {
-                    LottieDrawable.RESTART
-                }
-            }
-            if (autoPlay) {
-                playAnimationFromBoundUrl()
-            }
+    private fun parseRepeatMode(raw: String?): Int {
+        return if (raw.equals("reverse", ignoreCase = true)) {
+            LottieDrawable.REVERSE
+        } else {
+            LottieDrawable.RESTART
         }
     }
 
-    private fun playAnimationFromBoundUrl() {
-        url?.let {
-            if (OTHelper.isNetSrc(it)) {
-                playNetAnimation(
-                    it,
-                    aniRepeatCount,
-                    aniRepeatCount,
-                )
-            }
-
-            if (OTHelper.isAssetsSrc(it)) {
-                initLottieLocalResourceDir(it, this)
-                playAssetsAnimation(
-                    OTHelper.getAssetsSrc(it),
-                    aniRepeatCount,
-                    aniRepeatMode
-                )
-            }
+    private fun assetImageFolder(assetPath: String): String? {
+        val dirIndex = assetPath.indexOf("/")
+        if (dirIndex <= 0) {
+            return null
         }
+        val dir = assetPath.substring(0, dirIndex)
+        return if (dir.isEmpty()) null else "$dir/images/"
     }
 
-    private fun initLottieLocalResourceDir(value: String, lottieView: LottieAnimationView) {
-        val dirIndex = value.indexOf("/")
-        if (dirIndex > 0) {
-            val dir = value.substring(0, dirIndex)
-            if (dir.isNotEmpty()) {
-                lottieView.imageAssetsFolder = "$dir/images/"
-            }
-        }
-    }
-
-    private fun localAppendJsonExt(value: String?): String? {
-        if (value != null && !value.endsWith(".json")) {
-            return "$value.json"
-        }
-        return value
+    private fun appendJsonExtension(value: String): String {
+        return if (value.endsWith(".json")) value else "$value.json"
     }
 }

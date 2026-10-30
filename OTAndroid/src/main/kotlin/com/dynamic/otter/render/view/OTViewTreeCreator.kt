@@ -57,10 +57,7 @@ object OTViewTreeCreator {
         itemData: JSONObject?
     ): View {
         return OTViewFactory.createView<View>(templateContext.context, node.viewName).apply {
-            layoutParams = LayoutParamsUtils.createLayoutParams(
-                node,
-                node.stretchNode.layoutByPrepareView
-            )
+            layoutParams = LayoutParamsUtils.createLayoutParams(node.stretchNode.layoutByPrepareView)
             setAttr(this, node, templateContext, itemData)
         }
     }
@@ -71,7 +68,7 @@ object OTViewTreeCreator {
         templateContext: TemplateContext,
         itemData: JSONObject?
     ) {
-        parentNode.children?.forEach { child ->
+        parentNode.children.forEach { child ->
             val view = createConfiguredView(templateContext, child, itemData)
             configureListContainerIfNeeded(view, child, templateContext)
             parentView.addView(view)
@@ -120,27 +117,27 @@ object OTViewTreeCreator {
         templateContext: TemplateContext,
         itemData: JSONObject? = null
     ) {
-        val attr = node?.attr
-            ?: throw IllegalArgumentException("attr is null")
-
+        val attr = node?.attr ?: throw IllegalArgumentException("attr is null")
         view.id = attr.id
         handleViewCommonAttr(view, attr, templateContext, itemData)
-        handleTextAttr(view, attr, itemData)
-        handleImageAttr(view, attr, itemData)
-        handleProgressViewAttr(view, attr, itemData)
-        handleAnimationAttr(view, attr)
+        when {
+            view is Text && attr is TextAttr -> bindText(view, attr, itemData)
+            view is Image && attr is ImageAttr -> view.onBindData(attr.src.resolve(itemData))
+            view is ProgressView && attr is ProgressAttr -> {
+                view.onBindData(ProgressView.ProgressBind(attr, itemData))
+                view.onBindStyle(attr, itemData)
+            }
+            view is AnimationView && attr is AnimationViewAttr -> view.onBindData(attr)
+        }
     }
 
-    private fun handleAnimationAttr(view: View, attr: ViewAttr) {
-        if (view is AnimationView && attr is AnimationViewAttr) {
-            val jsonObj = JSONObject().apply {
-                put(TemplateKey.ATTR_ANI_REPEAT_COUNT, attr.repeatCount)
-                put(TemplateKey.ATTR_ANI_REPEAT_MODE, attr.repeatMode)
-                put(TemplateKey.ATTR_ANI_AUTO_PLAY, attr.autoPlay)
-                put(TemplateKey.ATTR_ANIMATION_SRC, attr.animationSrc)
-            }
-            view.onBindData(jsonObj)
-        }
+    private fun bindText(view: Text, attr: TextAttr, itemData: JSONObject?) {
+        view.onBindStyle(attr)
+        view.onBindData(attr.text.resolve(itemData))
+    }
+
+    private fun String.resolve(itemData: JSONObject?): String {
+        return if (itemData != null) extractExpValue(itemData) else this
     }
 
     private fun handleViewCommonAttr(
@@ -168,67 +165,6 @@ object OTViewTreeCreator {
                 }
             }
         }
-    }
-
-    private fun handleTextAttr(
-        view: View,
-        attr: ViewAttr?,
-        itemData: JSONObject?
-    ) {
-        if (view !is Text || attr !is TextAttr) {
-            return
-        }
-        val textValue = if (itemData != null) {
-            attr.text.extractExpValue(itemData)
-        } else {
-            attr.text
-        }
-        view.onBindStyle(attr)
-        view.onBindData(textValue)
-    }
-
-    private fun handleImageAttr(
-        view: View,
-        attr: ViewAttr?,
-        itemData: JSONObject?
-    ) {
-        if (view !is Image || attr !is ImageAttr) {
-            return
-        }
-        val srcValue = if (itemData != null) {
-            attr.src.extractExpValue(itemData)
-        } else {
-            attr.src
-        }
-        view.onBindStyle(attr)
-        view.onBindData(srcValue)
-    }
-
-    private fun handleProgressViewAttr(
-        view: View,
-        attr: ViewAttr?,
-        itemData: JSONObject?
-    ) {
-        if (view !is ProgressView || attr !is ProgressAttr) {
-            return
-        }
-        val valueMin = if (itemData != null) {
-            attr.valueMin.extractExpValue(itemData).toFloat()
-        } else {
-            attr.valueMin.toFloat()
-        }
-        val valueMax = if (itemData != null) {
-            attr.valueMax.extractExpValue(itemData).toFloat()
-        } else {
-            attr.valueMax.toFloat()
-        }
-        val jsonObj = JSONObject().apply {
-            put(TemplateKey.ATTR_VALUE_MIN, valueMin)
-            put(TemplateKey.ATTR_VALUE_MAX, valueMax)
-            put(TemplateKey.ATTR_ANIMATE_ENABLE, attr.animateEnable)
-        }
-        view.onBindData(jsonObj)
-        view.onBindStyle(attr, itemData)
     }
 
     private fun dispatchEvent(

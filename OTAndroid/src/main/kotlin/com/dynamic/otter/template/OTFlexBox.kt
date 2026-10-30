@@ -1,119 +1,56 @@
 package com.dynamic.otter.template
 
-import app.visly.stretch.AlignContent
 import app.visly.stretch.AlignItems
-import app.visly.stretch.AlignSelf
 import app.visly.stretch.Dimension
-import app.visly.stretch.Direction
 import app.visly.stretch.Display
 import app.visly.stretch.FlexDirection
-import app.visly.stretch.FlexWrap
 import app.visly.stretch.JustifyContent
-import app.visly.stretch.Overflow
-import app.visly.stretch.PositionType
 import app.visly.stretch.Rect
 import app.visly.stretch.Size
-import com.dynamic.otter.data.FlexBoxKey
-import com.dynamic.otter.render.view.attr.ColumnAttr
 import com.dynamic.otter.render.view.attr.ContainerAttr
-import com.dynamic.otter.render.view.attr.RowAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 
 data class OTFlexBox(
     internal var display: Display? = null,
-    internal var positionType: PositionType? = null,
-    internal var direction: Direction? = null,
     internal var flexDirection: FlexDirection? = null,
-    internal var flexWrap: FlexWrap? = null,
-    internal var overflow: Overflow? = null,
     internal var alignItems: AlignItems? = null,
-    internal var alignSelf: AlignSelf? = null,
-    internal var alignContent: AlignContent? = null,
     internal var justifyContent: JustifyContent? = null,
-    internal var position: Rect<OTSize?>? = null,
-    internal var margin: Rect<OTSize?>? = null,
     internal var padding: Rect<OTSize?>? = null,
-    internal var border: Rect<OTSize?>? = null,
-    internal var flexGrow: Float? = null,
-    internal var flexShrink: Float? = null,
-    internal var flexBasis: OTSize? = null,
-    internal var size: Size<OTSize?>? = null,
-    internal var minSize: Size<OTSize?>? = null,
-    internal var maxSize: Size<OTSize?>? = null,
-    internal var aspectRation: Float? = null
+    internal var size: Size<OTSize?>? = null
 ) {
-    private var finalSize: Size<Dimension>? = null
-    private var paddingDimension: Rect<Dimension>? = null
+    val sizeForDimension: Size<Dimension>?
+        get() {
+            val current = size ?: return null
+            return Size(
+                current.width?.valueDimension ?: Dimension.Auto,
+                current.height?.valueDimension ?: Dimension.Auto
+            )
+        }
+
+    val paddingForDimension: Rect<Dimension>
+        get() = Rect(
+            padding?.start?.valueDimension ?: Dimension.Undefined,
+            padding?.end?.valueDimension ?: Dimension.Undefined,
+            padding?.top?.valueDimension ?: Dimension.Undefined,
+            padding?.bottom?.valueDimension ?: Dimension.Undefined
+        )
 
     companion object {
-        fun create(viewAttr: ViewAttr?): OTFlexBox {
-            if (viewAttr == null) {
-                return OTFlexBox()
-            }
-
-            val flexBox = OTFlexBox()
-            if (viewAttr is ColumnAttr) {
-                flexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_COLUMN)
-            }
-
-            if (viewAttr is ContainerAttr) {
-                flexBox.justifyContent = viewAttr.justifyContent?.let {
-                    FlexBoxConvert.justifyContent(it)
-                }
-                flexBox.alignItems = viewAttr.alignItems?.let {
-                    FlexBoxConvert.alignItems(it)
-                }
-                flexBox.display = FlexBoxConvert.display(FlexBoxKey.FLEXBOX_FLEX)
-            }
-
-            if (viewAttr is RowAttr) {
-                flexBox.flexDirection = FlexBoxConvert.flexDirection(FlexBoxKey.FLEXBOX_ROW)
-            }
-
-            if (flexBox.size == null) {
-                flexBox.size = Size(
+        fun create(viewAttr: ViewAttr): OTFlexBox {
+            val flexBox = OTFlexBox(
+                size = Size(
                     OTSize.create(viewAttr.width),
                     OTSize.create(viewAttr.height)
-                )
+                ),
+                padding = StyleConverter.padding(viewAttr)
+            )
+            if (viewAttr is ContainerAttr) {
+                flexBox.flexDirection = viewAttr.flexDirection
+                flexBox.justifyContent = viewAttr.justifyContent?.let(FlexBoxConvert::justifyContent)
+                flexBox.alignItems = viewAttr.alignItems?.let(FlexBoxConvert::alignItems)
+                flexBox.display = Display.Flex
             }
-
-            if (flexBox.padding == null) {
-                flexBox.padding = StyleConverter.instance.padding(viewAttr)
-            }
-
             return flexBox
         }
     }
-
-    val sizeForDimension: Size<Dimension>?
-        get() {
-            return if (size != null) {
-                if (finalSize == null) {
-                    finalSize = Size(
-                        size?.width?.valueDimension ?: Dimension.Auto,
-                        size?.height?.valueDimension ?: Dimension.Auto
-                    )
-                    finalSize
-                } else {
-                    finalSize
-                }
-            } else {
-                null
-            }
-        }
-
-    val paddingForDimension: Rect<Dimension>?
-        get() {
-            return if (paddingDimension == null) {
-                paddingDimension = Rect(
-                    padding?.start?.valueDimension ?: Dimension.Undefined,
-                    padding?.end?.valueDimension ?: Dimension.Undefined,
-                    padding?.top?.valueDimension ?: Dimension.Undefined,
-                    padding?.bottom?.valueDimension ?: Dimension.Undefined
-                )
-                paddingDimension
-            } else {
-                paddingDimension
-            }
-        }
 }

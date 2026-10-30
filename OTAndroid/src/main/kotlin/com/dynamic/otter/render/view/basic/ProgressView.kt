@@ -14,7 +14,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.render.utils.FunctionExt.isExp
 import com.dynamic.otter.render.view.attr.ProgressAttr
@@ -31,12 +30,6 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
         private const val PADDING = 1.0f
     }
 
-    private var percent: Float = 1f
-        get() {
-            return if (field < 0) {
-                0f
-            } else field.coerceAtMost(1f)
-        }
     private var currentProgressWidth: Float = 0f
 
     private val mPaint = Paint()
@@ -48,17 +41,9 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
     private var mTailColor = Color.GREEN
 
     private var startProgressPercent = 0f
-        get() {
-            return if (field < 0f) {
-                0f
-            } else field.coerceAtMost(1f)
-        }
+        get() = field.coerceIn(0f, 1f)
     private var endProgressPercent = 1f
-        get() {
-            return if (field > 1f) {
-                1f
-            } else field.coerceAtMost(1f)
-        }
+        get() = field.coerceAtMost(1f)
 
     constructor(context: Context) : super(context) {
         initView()
@@ -94,11 +79,8 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
 
         mPaint.color = mStrokeColor
         canvas.drawPath(mProgressBgPath, mPaint)
-
-        if (percent > 0) {
-            mPaint.color = mTailColor
-            canvas.drawPath(progressPath, mPaint)
-        }
+        mPaint.color = mTailColor
+        canvas.drawPath(progressPath, mPaint)
     }
 
     private fun updateProgressPath(animateEnable: Boolean = false) {
@@ -142,33 +124,39 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
     }
 
     override fun onBindData(data: Any?) {
-        if (data is JSONObject) {
-            val valueMin = data[TemplateKey.ATTR_VALUE_MIN] as Float
-            val valueMax = data[TemplateKey.ATTR_VALUE_MAX] as Float
-            startProgressPercent = valueMin
-            endProgressPercent = (valueMax - valueMin)
-            val animateEnable = data[TemplateKey.ATTR_ANIMATE_ENABLE] as Boolean
-            updateProgressPath(animateEnable)
-            invalidate()
-        }
+        val bind = data as? ProgressBind ?: return
+        val valueMin = bind.attr.valueMin.resolve(bind.itemData)
+        val valueMax = bind.attr.valueMax.resolve(bind.itemData)
+        startProgressPercent = valueMin
+        endProgressPercent = valueMax - valueMin
+        updateProgressPath(bind.attr.animateEnable)
+        invalidate()
     }
 
-    override fun onBindStyle(attr: ViewAttr,attrData:Any?) {
-        if (attr is ProgressAttr) {
-            val strokeColor = attr.strokeColor
-            val trailColor = attr.trailColor
+    private fun String.resolve(itemData: JSONObject?): Float {
+        val raw = if (itemData != null) extractExpValue(itemData) else this
+        return raw.toFloat()
+    }
 
-            mStrokeColor = if(strokeColor.isExp() && attrData is JSONObject){
-                OTColor.create(attr.strokeColor.extractExpValue(attrData))?.value() ?: Color.GRAY
-            }else{
-                OTColor.create(attr.strokeColor)?.value() ?: Color.GRAY
-            }
+    class ProgressBind(
+        val attr: ProgressAttr,
+        val itemData: JSONObject?
+    )
 
-            mTailColor = if(trailColor.isExp() && attrData is JSONObject){
-                OTColor.create(attr.trailColor.extractExpValue(attrData))?.value() ?: Color.GREEN
-            }else{
-                OTColor.create(attr.trailColor)?.value() ?: Color.GREEN
-            }
+    override fun onBindStyle(attr: ViewAttr, attrData: Any?) {
+        if (attr !is ProgressAttr) {
+            return
         }
+        mStrokeColor = resolveColor(attr.strokeColor, attrData, Color.GRAY)
+        mTailColor = resolveColor(attr.trailColor, attrData, Color.GREEN)
+    }
+
+    private fun resolveColor(raw: String, attrData: Any?, fallback: Int): Int {
+        val value = if (raw.isExp() && attrData is JSONObject) {
+            raw.extractExpValue(attrData)
+        } else {
+            raw
+        }
+        return OTColor.create(value)?.value() ?: fallback
     }
 }

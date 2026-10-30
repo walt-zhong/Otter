@@ -3,13 +3,9 @@ package com.dynamic.otter.render.view.basic
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Outline
-import android.graphics.Path
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.View
-import android.view.ViewOutlineProvider
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import app.visly.stretch.Rect
@@ -23,6 +19,7 @@ import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapabili
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 import com.dynamic.otter.render.view.basic.capability.IReleaseCapability
 import com.dynamic.otter.render.view.basic.capability.IStyleBindingCapability
+import com.dynamic.otter.render.view.applyUniformCornerOutline
 import com.dynamic.otter.render.view.setTextAlign
 import com.dynamic.otter.render.view.setTextBackground
 import com.dynamic.otter.template.OTColor
@@ -32,8 +29,6 @@ import com.dynamic.otter.template.StyleConverter
 @Keep
 class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
     IStyleBindingCapability, ICornerRoundConfigCapability {
-    private var radius: FloatArray? = null
-    private var roundCornerPath: Path? = null
     private var lastStartPadding: Int? = null
     private var lastEndPadding: Int? = null
     private var lastTopPadding: Int? = null
@@ -65,7 +60,7 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
 
     private fun updateStyleByAttr(attr: TextAttr) {
         applyTextSize(attr.textSize)
-        setTextBackground(StyleConverter.instance.backgroundLinearColor(attr.background))
+        setTextBackground(StyleConverter.backgroundLinearColor(attr.background))
         val textColor = OTColor.create(attr.textColor)?.value()
         // 因为背景边框的设置是依赖shader的所以设置前应该将shader置空
         paint.shader = null
@@ -73,7 +68,7 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
         includeFontPadding = false
         //设置文本的对齐方式
         attr.textAlign?.let { setTextAlign(it) }
-        setTextPadding(StyleConverter.instance.padding(attr))
+        setTextPadding(StyleConverter.padding(attr))
     }
 
     // OTSize 已把字号从 dp 换成 px。textSize 的 setter 会按 sp 再乘一次 density，字形会超出布局框。
@@ -138,29 +133,16 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
     }
 
     override fun configureViewRoundCorner(radius: FloatArray) {
-        this.radius = radius
-        if (radius.size == 8) {
-            val lt = radius[0]
-            val rt = radius[2]
-            val lb = radius[4]
-            val rb = radius[6]
-
-            if (lt == rt && lb == rt && lb == rb && lt > 0) {// 四个角都需要设置相同大小的圆角
-                roundCornerPath = null
-                this.clipToOutline = true
-                this.outlineProvider = object : ViewOutlineProvider() {
-                    override fun getOutline(view: View, outline: Outline) {
-                        if (alpha >= 0.0f) {
-                            outline.alpha = alpha
-                        }
-
-                        outline.setRoundRect(0, 0, view.width, view.height, lt)
-                    }
-                }
-            } else { // 四个角的圆角大小不一样的情况下。使用Path的方法绘制
-                this.clipToOutline = false
-                this.outlineProvider = null
-            }
+        if (radius.size != 8) {
+            return
+        }
+        val uniform = radius[0]
+        val sameCorner = radius[2] == uniform && radius[4] == uniform && radius[6] == uniform
+        if (sameCorner && uniform > 0) {
+            applyUniformCornerOutline(uniform)
+        } else {
+            clipToOutline = false
+            outlineProvider = null
         }
     }
 

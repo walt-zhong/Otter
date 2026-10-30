@@ -26,12 +26,9 @@ object NodeTreePrepare {
         node.itemTemplate = vDomNode.item
         node.stretchNode = StretchNode.createStretchNode(vDomNode)
 
-        vDomNode.children?.forEach { childVDom ->
+        vDomNode.children.forEach { childVDom ->
             val childNode = createOtNode(childVDom, node)
-            if (node.children == null) {
-                node.children = mutableListOf()
-            }
-            node.children?.add(childNode)
+            node.children.add(childNode)
             childNode.stretchNode.node?.let { stretchChild ->
                 node.stretchNode.node?.safeAddChild(stretchChild)
             }

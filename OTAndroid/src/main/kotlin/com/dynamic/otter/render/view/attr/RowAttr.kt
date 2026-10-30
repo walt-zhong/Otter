@@ -1,18 +1,14 @@
 package com.dynamic.otter.render.view.attr
 
+import app.visly.stretch.FlexDirection
 import com.dynamic.otter.context.TemplateContext
-import com.dynamic.otter.template.OTFlexBox
 
 class RowAttr : ContainerAttr() {
-    override fun parseAttrs(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
-        val rowAttr = super.parseAttrs(attrs, scope) as RowAttr
-        flexbox = OTFlexBox.create(rowAttr)
-        return rowAttr
-    }
+    override val flexDirection: FlexDirection = FlexDirection.Row
 
     companion object {
         fun create(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
-            return RowAttr().parseAttrs(attrs, scope)
+            return RowAttr().bind(attrs, scope)
         }
     }
 }

@@ -3,7 +3,6 @@ package com.dynamic.otter.render.view.attr
 import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
-import com.dynamic.otter.template.OTFlexBox
 
 class TextAttr : ViewAttr() {
     var textColor = "#000000"
@@ -11,24 +10,19 @@ class TextAttr : ViewAttr() {
     var text = ""
     var textAlign: String? = null
 
-    override fun parseAttrs(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
-        val textAttr = super.parseAttrs(attrs, scope) as TextAttr
-        attrs.forEach { (attrName, rawValue) ->
-            val attrValue = rawValue.extractExpValue(scope.data)
-            when (attrName) {
-                TemplateKey.ATTR_TEXT_COLOR -> textColor = attrValue
-                TemplateKey.ATTR_TEXT_SIZE -> textSize = attrValue
-                TemplateKey.ATTR_TEXT -> text = attrValue
-                TemplateKey.ATTR_TEXT_ALIGN -> textAlign = attrValue
-            }
+    override fun applyOwn(name: String, raw: String, scope: TemplateContext) {
+        val value = raw.extractExpValue(scope.data)
+        when (name) {
+            TemplateKey.ATTR_TEXT_COLOR -> textColor = value
+            TemplateKey.ATTR_TEXT_SIZE -> textSize = value
+            TemplateKey.ATTR_TEXT -> text = value
+            TemplateKey.ATTR_TEXT_ALIGN -> textAlign = value
         }
-        flexbox = OTFlexBox.create(textAttr)
-        return textAttr
     }
 
     companion object {
         fun create(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
-            return TextAttr().parseAttrs(attrs, scope)
+            return TextAttr().bind(attrs, scope)
         }
     }
 }

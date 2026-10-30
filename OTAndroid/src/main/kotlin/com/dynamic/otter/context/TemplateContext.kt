@@ -12,8 +12,6 @@ class TemplateContext private constructor(
     val context: Context,
     val template: OTEngine.OTTemplate
 ) {
-    var isAppear: Boolean? = null
-
     var rootView: View? = null
 
     var rootNode: OTNode? = null

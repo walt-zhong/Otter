@@ -26,34 +26,45 @@ open class ViewAttr {
     var paddingBottom: String? = null
     lateinit var flexbox: OTFlexBox
 
-    protected open fun parseAttrs(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
-        attrs.forEach { (attrName, rawValue) ->
-            val attrValue = rawValue.extractExpValue(scope.data)
-            when (attrName) {
-                TemplateKey.ATTR_ID -> {
-                    val viewId = View.generateViewId()
-                    id = viewId
-                    scope.viewIds[attrValue] = viewId
-                }
-
-                TemplateKey.ATTR_WIDTH -> width = attrValue
-                TemplateKey.ATTR_HEIGHT -> height = attrValue
-                TemplateKey.ATTR_BACKGROUND -> background = attrValue
-                TemplateKey.ATTR_ONCLICK -> onClick = rawValue
-                TemplateKey.ATTR_RADIUS -> radius = attrValue
-                TemplateKey.ATTR_LEFT_TOP_RADIUS -> leftTopRadius = attrValue
-                TemplateKey.ATTR_LEFT_BOTTOM_RADIUS -> leftBottomRadius = attrValue
-                TemplateKey.ATTR_RIGHT_TOP_RADIUS -> rightTopRadius = attrValue
-                TemplateKey.ATTR_RIGHT_BOTTOM_RADIUS -> rightBottomRadius = attrValue
-                TemplateKey.ATTR_BORDER_COLOR -> borderColor = attrValue
-                TemplateKey.ATTR_BORDER_WIDTH -> borderWidth = attrValue
-                TemplateKey.ATTR_PADDING -> padding = attrValue
-                TemplateKey.ATTR_PADDING_START -> paddingStart = attrValue
-                TemplateKey.ATTR_PADDING_END -> paddingEnd = attrValue
-                TemplateKey.ATTR_PADDING_TOP -> paddingTop = attrValue
-                TemplateKey.ATTR_PADDING_BOTTOM -> paddingBottom = attrValue
+    fun bind(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
+        attrs.forEach { (name, raw) ->
+            if (!applyCommon(name, raw, scope)) {
+                applyOwn(name, raw, scope)
             }
         }
+        flexbox = OTFlexBox.create(this)
         return this
+    }
+
+    protected open fun applyOwn(name: String, raw: String, scope: TemplateContext) = Unit
+
+    private fun applyCommon(name: String, raw: String, scope: TemplateContext): Boolean {
+        val value = raw.extractExpValue(scope.data)
+        when (name) {
+            TemplateKey.ATTR_ID -> {
+                val viewId = View.generateViewId()
+                id = viewId
+                scope.viewIds[value] = viewId
+            }
+
+            TemplateKey.ATTR_WIDTH -> width = value
+            TemplateKey.ATTR_HEIGHT -> height = value
+            TemplateKey.ATTR_BACKGROUND -> background = value
+            TemplateKey.ATTR_ONCLICK -> onClick = raw
+            TemplateKey.ATTR_RADIUS -> radius = value
+            TemplateKey.ATTR_LEFT_TOP_RADIUS -> leftTopRadius = value
+            TemplateKey.ATTR_LEFT_BOTTOM_RADIUS -> leftBottomRadius = value
+            TemplateKey.ATTR_RIGHT_TOP_RADIUS -> rightTopRadius = value
+            TemplateKey.ATTR_RIGHT_BOTTOM_RADIUS -> rightBottomRadius = value
+            TemplateKey.ATTR_BORDER_COLOR -> borderColor = value
+            TemplateKey.ATTR_BORDER_WIDTH -> borderWidth = value
+            TemplateKey.ATTR_PADDING -> padding = value
+            TemplateKey.ATTR_PADDING_START -> paddingStart = value
+            TemplateKey.ATTR_PADDING_END -> paddingEnd = value
+            TemplateKey.ATTR_PADDING_TOP -> paddingTop = value
+            TemplateKey.ATTR_PADDING_BOTTOM -> paddingBottom = value
+            else -> return false
+        }
+        return true
     }
 }

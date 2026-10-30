@@ -1,7 +1,6 @@
 package com.dynamic.otter.render.view.basic
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import androidx.annotation.Keep
 
