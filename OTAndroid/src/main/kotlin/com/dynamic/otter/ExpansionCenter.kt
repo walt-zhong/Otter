@@ -15,6 +15,12 @@ class ExpansionCenter {
         fun open(context: Context, page: String)
     }
 
+    fun interface ItemClick {
+        fun onItemClick(item: Map<String, String>)
+    }
+
+    var itemClick: ItemClick? = null
+
     fun registerExtensionSize(extensionSize: ExtensionSize): ExpansionCenter {
         this.extensionSize = extensionSize
         return this

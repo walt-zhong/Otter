@@ -14,6 +14,10 @@ object TemplateKey {
     const val OT_LIST = "OTList"
     const val PROGRESS = "Progress"
     const val ANIMATION = "Animation"
+    const val INPUT = "Input"
+    const val CHECKBOX = "CheckBox"
+    const val RADIO = "Radio"
+    const val SWITCH = "Switch"
 
     // common attribute
     const val ATTR_ID = "id"
@@ -50,6 +54,17 @@ object TemplateKey {
     const val ATTR_TEXT_SIZE = "textSize"
     const val ATTR_TEXT_ALIGN = "textAlign"
 
+    // input attribute
+    const val ATTR_HINT = "hint"
+    const val ATTR_HINT_COLOR = "hintColor"
+    const val ATTR_INPUT_TYPE = "inputType"
+    const val ATTR_MAX_LENGTH = "maxLength"
+
+    // checkbox / radio / switch attribute
+    const val ATTR_CHECKED = "checked"
+    const val ATTR_TINT = "tint"
+    const val ATTR_GROUP = "group"
+
     // ColumnList attribute
     const val ATTR_DATA = "data"
     const val ATTR_LIST_DIRECTION = "listDirection"
@@ -80,6 +95,7 @@ object TemplateKey {
     // flexbox attribute
     const val FLEXBOX_ATTR_JUSTIFY_CONTENT = "justifyContent"
     const val FLEXBOX_ATTR_ALIGN_ITEMS = "alignItems"
+    const val ATTR_FLEX_GROW = "flexGrow"
 
 
 }

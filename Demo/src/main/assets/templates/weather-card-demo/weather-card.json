@@ -4,10 +4,23 @@
     "id": "page",
     "layout": {
       "width": "fill",
-      "height": "wrap",
+      "height": "fill",
       "padding": { "start": 16, "end": 16, "top": 12, "bottom": 16 }
     },
+    "style": { "background": "#E4EEF1" },
     "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
       {
         "type": "text",
         "id": "page_kicker",
@@ -25,6 +38,7 @@
         "layout": {
           "width": "fill",
           "height": "wrap",
+          "grow": 1,
           "padding": 20
         },
         "style": {
@@ -276,7 +290,7 @@
             "data": "$weatherDataWeek",
             "direction": "vertical",
             "gap": 4,
-            "layout": { "width": "fill", "height": 188 },
+            "layout": { "width": "fill", "height": "wrap", "grow": 1 },
             "item": {
               "type": "row",
               "layout": {
@@ -309,11 +323,17 @@
                 },
                 {
                   "type": "progress",
-                  "layout": { "width": 88, "height": 6 },
+                  "layout": { "width": 88, "height": 8 },
                   "from": "$curDegreeMinPercent",
                   "to": "$curDegreeMaxPercent",
                   "animate": false,
-                  "style": { "track": "$strokeColor", "bar": "$trailColor" }
+                  "style": {
+                    "track": "#1E4550",
+                    "bar": {
+                      "direction": "right",
+                      "colors": ["#7EB6C9", "#F2C14E", "#E07A3D"]
+                    }
+                  }
                 },
                 {
                   "type": "text",
@@ -329,6 +349,7 @@
     ]
   },
   "events": {
+    "goBack": { "action": "back" },
     "goMap": {
       "action": "toast",
       "message": "打开地图导航"

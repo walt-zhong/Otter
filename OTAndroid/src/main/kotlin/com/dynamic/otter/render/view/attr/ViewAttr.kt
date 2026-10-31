@@ -8,6 +8,7 @@ import com.dynamic.otter.template.OTFlexBox
 
 open class ViewAttr {
     var id: Int = 0
+    var idName: String? = null
     var width: String = "0"
     var height: String = "0"
     var background: String? = null
@@ -24,6 +25,7 @@ open class ViewAttr {
     var paddingEnd: String? = null
     var paddingTop: String? = null
     var paddingBottom: String? = null
+    var flexGrow: Float = 0f
     lateinit var flexbox: OTFlexBox
 
     fun bind(attrs: Map<String, String>, scope: TemplateContext): ViewAttr {
@@ -44,6 +46,7 @@ open class ViewAttr {
             TemplateKey.ATTR_ID -> {
                 val viewId = View.generateViewId()
                 id = viewId
+                idName = value
                 scope.viewIds[value] = viewId
             }
 
@@ -63,6 +66,7 @@ open class ViewAttr {
             TemplateKey.ATTR_PADDING_END -> paddingEnd = value
             TemplateKey.ATTR_PADDING_TOP -> paddingTop = value
             TemplateKey.ATTR_PADDING_BOTTOM -> paddingBottom = value
+            TemplateKey.ATTR_FLEX_GROW -> flexGrow = value.toFloatOrNull() ?: 0f
             else -> return false
         }
         return true

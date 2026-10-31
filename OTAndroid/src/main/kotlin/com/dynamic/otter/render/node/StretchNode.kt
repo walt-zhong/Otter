@@ -54,6 +54,10 @@ data class StretchNode(
             flexBox?.paddingForDimension?.let {
                 style.padding = it
             }
+
+            flexBox?.let {
+                style.flexGrow = it.flexGrow
+            }
         }
     }
 }

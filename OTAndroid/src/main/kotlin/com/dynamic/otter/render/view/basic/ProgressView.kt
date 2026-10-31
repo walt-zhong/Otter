@@ -7,9 +7,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.CornerPathEffect
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.Shader
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.Keep
@@ -21,6 +24,8 @@ import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 import com.dynamic.otter.render.view.basic.capability.IStyleBindingCapability
 import com.dynamic.otter.template.OTColor
+import com.dynamic.otter.template.OTLinearColor
+import com.dynamic.otter.template.StyleConverter
 
 @Keep
 class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
@@ -39,6 +44,15 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
     private var animator: Animator? = null
     private var mStrokeColor = Color.GRAY
     private var mTailColor = Color.GREEN
+    private var barGradient: OTLinearColor? = null
+
+    var seekable: Boolean = false
+        set(value) {
+            field = value
+            isClickable = value
+        }
+
+    var onSeekChanged: ((fraction: Float, settled: Boolean) -> Unit)? = null
 
     private var startProgressPercent = 0f
         get() = field.coerceIn(0f, 1f)
@@ -60,39 +74,96 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
         mPaint.strokeWidth = 1f
     }
 
+    fun setFraction(fraction: Float) {
+        animator?.cancel()
+        startProgressPercent = 0f
+        endProgressPercent = fraction.coerceIn(0f, 1f)
+        invalidate()
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!seekable) {
+            return super.onTouchEvent(event)
+        }
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                parent?.requestDisallowInterceptTouchEvent(true)
+                val fraction = fractionAt(event.x)
+                setFraction(fraction)
+                onSeekChanged?.invoke(fraction, false)
+                return true
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                val fraction = fractionAt(event.x)
+                setFraction(fraction)
+                onSeekChanged?.invoke(fraction, true)
+                return true
+            }
+        }
+        return true
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
-        mPaint.pathEffect = CornerPathEffect((h - PADDING * 2) / 2)
+        val (top, thick) = band(h.toFloat())
+        mPaint.pathEffect = CornerPathEffect(thick / 2f)
         mProgressBgPath.reset()
-        mProgressBgPath.moveTo(PADDING, PADDING)
-        mProgressBgPath.lineTo(w - PADDING, PADDING)
-        mProgressBgPath.lineTo(w - PADDING, h - PADDING)
-        mProgressBgPath.lineTo(PADDING, h - PADDING)
+        mProgressBgPath.moveTo(PADDING, top)
+        mProgressBgPath.lineTo(w - PADDING, top)
+        mProgressBgPath.lineTo(w - PADDING, top + thick)
+        mProgressBgPath.lineTo(PADDING, top + thick)
         mProgressBgPath.close()
 
-        updateProgressPath()
+        updateProgressPath(viewWidth = w.toFloat(), viewHeight = h.toFloat())
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (width > 0 && height > 0 && animator?.isRunning != true) {
+            updateProgressPath(viewWidth = width.toFloat(), viewHeight = height.toFloat())
+        }
 
+        mPaint.shader = null
         mPaint.color = mStrokeColor
         canvas.drawPath(mProgressBgPath, mPaint)
-        mPaint.color = mTailColor
+        val gradient = barGradient
+        if (gradient != null && measuredWidth > 0) {
+            val colors = IntArray(gradient.colors.size) { gradient.colors[it].value() }
+            val inner = measuredWidth - PADDING * 2
+            val start = startProgressPercent * inner
+            val end = start + currentProgressWidth.coerceAtLeast(1f)
+            mPaint.shader = LinearGradient(
+                start,
+                PADDING,
+                end,
+                PADDING,
+                colors,
+                null,
+                Shader.TileMode.CLAMP
+            )
+        } else {
+            mPaint.color = mTailColor
+        }
         canvas.drawPath(progressPath, mPaint)
+        mPaint.shader = null
     }
 
-    private fun updateProgressPath(animateEnable: Boolean = false) {
-        val startProgress = startProgressPercent * (measuredWidth - PADDING * 2)
-        val progressWidth = (measuredWidth - PADDING * 2) * endProgressPercent
+    private fun updateProgressPath(
+        animateEnable: Boolean = false,
+        viewWidth: Float = width.toFloat(),
+        viewHeight: Float = height.toFloat()
+    ) {
+        val inner = (viewWidth - PADDING * 2).coerceAtLeast(0f)
+        val (top, thick) = band(viewHeight)
+        val startProgress = startProgressPercent * inner
+        val progressWidth = inner * endProgressPercent
 
         if (!animateEnable) {
             progressPath.reset()
-            progressPath.moveTo(startProgress, PADDING)
-            progressPath.lineTo(startProgress + progressWidth, PADDING)
-            progressPath.lineTo(startProgress + progressWidth, measuredHeight - PADDING)
-            progressPath.lineTo(startProgress, measuredHeight - PADDING)
+            progressPath.moveTo(startProgress, top)
+            progressPath.lineTo(startProgress + progressWidth, top)
+            progressPath.lineTo(startProgress + progressWidth, top + thick)
+            progressPath.lineTo(startProgress, top + thick)
             progressPath.close()
         } else {
             animator?.cancel()
@@ -109,10 +180,10 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
                     val width = it.getAnimatedValue(PROGRESS_WIDTH_VALUE_HOLDER) as Float
                     progressPath.reset()
 
-                    progressPath.moveTo(startProgress, PADDING)
-                    progressPath.lineTo(startProgress + width, PADDING)
-                    progressPath.lineTo(startProgress + width, measuredHeight - PADDING)
-                    progressPath.lineTo(startProgress, measuredHeight - PADDING)
+                    progressPath.moveTo(startProgress, top)
+                    progressPath.lineTo(startProgress + width, top)
+                    progressPath.lineTo(startProgress + width, top + thick)
+                    progressPath.lineTo(startProgress, top + thick)
                     progressPath.close()
 
                     invalidate()
@@ -129,8 +200,23 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
         val valueMax = bind.attr.valueMax.resolve(bind.itemData)
         startProgressPercent = valueMin
         endProgressPercent = valueMax - valueMin
-        updateProgressPath(bind.attr.animateEnable)
+        if (width > 0 && height > 0) {
+            updateProgressPath(bind.attr.animateEnable)
+        }
         invalidate()
+    }
+
+    private fun band(viewHeight: Float): Pair<Float, Float> {
+        val full = (viewHeight - PADDING * 2).coerceAtLeast(0f)
+        val slim = 6f * resources.displayMetrics.density
+        val thick = if (full > slim * 2.2f) slim else full
+        val top = ((viewHeight - thick) / 2f).coerceAtLeast(0f)
+        return top to thick
+    }
+
+    private fun fractionAt(x: Float): Float {
+        val inner = (width - PADDING * 2).coerceAtLeast(1f)
+        return ((x - PADDING) / inner).coerceIn(0f, 1f)
     }
 
     private fun String.resolve(itemData: JSONObject?): Float {
@@ -148,15 +234,31 @@ class ProgressView : View, IDataBindingCapability,IStyleBindingCapability {
             return
         }
         mStrokeColor = resolveColor(attr.strokeColor, attrData, Color.GRAY)
-        mTailColor = resolveColor(attr.trailColor, attrData, Color.GREEN)
+        val trail = resolveRaw(attr.trailColor, attrData)
+        val gradient = if (trail.startsWith("linear-gradient")) {
+            runCatching { StyleConverter.backgroundLinearColor(trail) }.getOrNull()
+        } else {
+            null
+        }
+        if (gradient != null && gradient.colors.size > 1) {
+            barGradient = gradient
+            mTailColor = gradient.colors.last().value()
+        } else {
+            barGradient = null
+            mTailColor = OTColor.create(trail)?.value() ?: Color.GREEN
+        }
+        invalidate()
     }
 
     private fun resolveColor(raw: String, attrData: Any?, fallback: Int): Int {
-        val value = if (raw.isExp() && attrData is JSONObject) {
+        return OTColor.create(resolveRaw(raw, attrData))?.value() ?: fallback
+    }
+
+    private fun resolveRaw(raw: String, attrData: Any?): String {
+        return if (raw.isExp() && attrData is JSONObject) {
             raw.extractExpValue(attrData)
         } else {
             raw
         }
-        return OTColor.create(value)?.value() ?: fallback
     }
 }

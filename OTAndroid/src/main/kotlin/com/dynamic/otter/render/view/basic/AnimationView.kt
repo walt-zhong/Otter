@@ -11,7 +11,7 @@ import com.dynamic.otter.data.OTHelper
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 
-class AnimationView : LottieAnimationView, IDataBindingCapability {
+class AnimationView : LottieAnimationView, IDataBindingCapability, Playable {
     private var url: String? = null
     private var autoPlay: Boolean = true
     private var aniRepeatCount: Int = LottieDrawable.INFINITE
@@ -26,6 +26,14 @@ class AnimationView : LottieAnimationView, IDataBindingCapability {
         attrs,
         defStyle
     )
+
+    override fun setPlaying(playing: Boolean) {
+        if (playing) {
+            resumeAnimation()
+        } else {
+            pauseAnimation()
+        }
+    }
 
     override fun onBindData(data: Any?) {
         val attr = data as? AnimationViewAttr ?: return

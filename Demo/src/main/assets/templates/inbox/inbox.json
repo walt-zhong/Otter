@@ -1,0 +1,104 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 12 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "收件",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "今天的消息",
+        "layout": { "width": "fill", "height": 32 },
+        "style": { "color": "#1F1A17", "fontSize": 26 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "头像、名字、摘要和时间叠在一行里。列表铺满屏幕，往下滚。",
+        "layout": { "width": "fill", "height": 36 },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 14 } },
+      {
+        "type": "list",
+        "id": "inbox_list",
+        "data": "$messages",
+        "direction": "vertical",
+        "gap": 10,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 76,
+            "padding": 12,
+            "align": "center"
+          },
+          "style": { "background": "#FFFCF8", "radius": 18 },
+          "onClick": ["openMessage"],
+          "children": [
+            {
+              "type": "image",
+              "src": "$avatar",
+              "layout": { "width": 48, "height": 48 },
+              "style": { "radius": 24, "background": "#F3E2D4" }
+            },
+            { "type": "spacer", "layout": { "width": 12, "height": 48 } },
+            {
+              "type": "column",
+              "layout": { "width": 168, "height": "wrap" },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$name",
+                  "layout": { "width": 168, "height": 22 },
+                  "style": { "color": "#1F1A17", "fontSize": 15 }
+                },
+                { "type": "spacer", "layout": { "width": 168, "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$preview",
+                  "layout": { "width": 168, "height": 18 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "$time",
+              "layout": { "width": 48, "height": 18 },
+              "style": { "color": "#C45C26", "fontSize": 11, "align": "end" }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "openMessage": { "action": "toast", "message": "$name" }
+  }
+}

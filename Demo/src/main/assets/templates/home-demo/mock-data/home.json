@@ -1,52 +1,21 @@
 {
   "demos": [
-    {
-      "index": "01",
-      "title": "天气",
-      "desc": "渐变卡片、小时预报和一周趋势",
-      "page": "weather"
-    },
-    {
-      "index": "02",
-      "title": "布局",
-      "desc": "圆角、描边、图片和点击改样式",
-      "page": "layout"
-    },
-    {
-      "index": "03",
-      "title": "文字",
-      "desc": "对齐、留白，以及点击后改写",
-      "page": "text"
-    },
-    {
-      "index": "04",
-      "title": "列表",
-      "desc": "纵向信息流，点一条看标题",
-      "page": "list"
-    },
-    {
-      "index": "05",
-      "title": "进度",
-      "desc": "区间进度，用颜色而不是色块",
-      "page": "progress"
-    },
-    {
-      "index": "06",
-      "title": "动画",
-      "desc": "两段循环播放的 Lottie",
-      "page": "animation"
-    },
-    {
-      "index": "07",
-      "title": "骨架",
-      "desc": "一页里的标题、正文和操作",
-      "page": "scaffold"
-    },
-    {
-      "index": "08",
-      "title": "分页",
-      "desc": "顶栏和 ViewPager 的原生示例",
-      "page": "tabs"
-    }
+    { "index": "01", "tag": "场景", "title": "天气", "desc": "渐变卡片、小时预报和一周趋势", "page": "weather" },
+    { "index": "02", "tag": "场景", "title": "行程", "desc": "头图、进度和可滚动的日程", "page": "journey" },
+    { "index": "03", "tag": "场景", "title": "收件", "desc": "一长串会话，点开看是谁", "page": "inbox" },
+    { "index": "04", "tag": "场景", "title": "播放", "desc": "封面、进度和控制", "page": "player" },
+    { "index": "05", "tag": "场景", "title": "聊天", "desc": "左右气泡和底部输入", "page": "chat" },
+    { "index": "06", "tag": "组件", "title": "Column", "desc": "纵向容器的全部属性", "page": "column" },
+    { "index": "07", "tag": "组件", "title": "Row", "desc": "横向容器的全部属性", "page": "row" },
+    { "index": "08", "tag": "组件", "title": "Text", "desc": "文案、颜色、字号和对齐", "page": "text" },
+    { "index": "09", "tag": "组件", "title": "Image", "desc": "本地图和网络图", "page": "image" },
+    { "index": "10", "tag": "组件", "title": "Spacer", "desc": "留白、分割线和圆角", "page": "spacer" },
+    { "index": "11", "tag": "组件", "title": "List", "desc": "纵向和横向都能滚很长", "page": "list" },
+    { "index": "12", "tag": "组件", "title": "Progress", "desc": "区间、颜色和动画", "page": "progress" },
+    { "index": "13", "tag": "组件", "title": "Lottie", "desc": "资源、重复和播放方式", "page": "lottie" },
+    { "index": "14", "tag": "组件", "title": "Input", "desc": "文案、占位、键盘和字数", "page": "input" },
+    { "index": "15", "tag": "组件", "title": "CheckBox", "desc": "选中、颜色、全选和全不选", "page": "checkbox" },
+    { "index": "16", "tag": "组件", "title": "Radio", "desc": "同组互斥、标签和颜色", "page": "radio" },
+    { "index": "17", "tag": "组件", "title": "Switch", "desc": "开关、标签和颜色", "page": "switch" }
   ]
 }

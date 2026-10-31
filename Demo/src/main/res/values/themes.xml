@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SenseDyne" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Otter" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/page</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.SenseDyne" parent="Base.Theme.SenseDyne" />
+    <style name="Theme.Otter" parent="Base.Theme.Otter" />
 </resources>

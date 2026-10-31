@@ -3,12 +3,16 @@ package com.dynamic.otter.render.node
 import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.data.TemplateKey
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
+import com.dynamic.otter.render.view.attr.CheckBoxAttr
 import com.dynamic.otter.render.view.attr.ColumnAttr
 import com.dynamic.otter.render.view.attr.ImageAttr
+import com.dynamic.otter.render.view.attr.InputAttr
 import com.dynamic.otter.render.view.attr.OTListAttr
 import com.dynamic.otter.render.view.attr.ProgressAttr
+import com.dynamic.otter.render.view.attr.RadioAttr
 import com.dynamic.otter.render.view.attr.RowAttr
 import com.dynamic.otter.render.view.attr.SpacerAttr
+import com.dynamic.otter.render.view.attr.SwitchAttr
 import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.template.json.ParsedNode
@@ -47,6 +51,10 @@ class VDomNode(
             TemplateKey.OT_LIST -> OTListAttr.create(attrs, scope)
             TemplateKey.PROGRESS -> ProgressAttr.create(attrs, scope)
             TemplateKey.ANIMATION -> AnimationViewAttr.create(attrs, scope)
+            TemplateKey.INPUT -> InputAttr.create(attrs, scope)
+            TemplateKey.CHECKBOX -> CheckBoxAttr.create(attrs, scope)
+            TemplateKey.RADIO -> RadioAttr.create(attrs, scope)
+            TemplateKey.SWITCH -> SwitchAttr.create(attrs, scope)
             else -> null
         }
     }

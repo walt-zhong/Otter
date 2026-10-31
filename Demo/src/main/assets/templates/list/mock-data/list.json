@@ -1,0 +1,144 @@
+{
+  "days": [
+    {
+      "title": "海岸清晨",
+      "note": "风很小，光还没热",
+      "img": "res:ic_scene_coast"
+    },
+    {
+      "title": "街角咖啡",
+      "note": "靠窗的那张桌子",
+      "img": "res:ic_scene_coffee"
+    },
+    {
+      "title": "雨后的路",
+      "note": "积水把天空接住了",
+      "img": "res:ic_scene_rain"
+    },
+    {
+      "title": "旧书店",
+      "note": "二楼靠墙的诗集",
+      "img": "res:ic_scene_book"
+    },
+    {
+      "title": "午后电车",
+      "note": "第三站下车",
+      "img": "res:ic_scene_tram"
+    },
+    {
+      "title": "菜场门口",
+      "note": "番茄还带着水",
+      "img": "res:ic_scene_market"
+    },
+    {
+      "title": "河边长椅",
+      "note": "有人在喂鸽子",
+      "img": "res:ic_scene_bench"
+    },
+    {
+      "title": "工作室",
+      "note": "灯先于人亮起来",
+      "img": "res:ic_scene_lamp"
+    },
+    {
+      "title": "傍晚回家",
+      "note": "楼梯间有饭菜味",
+      "img": "res:ic_scene_coast"
+    },
+    {
+      "title": "夜跑",
+      "note": "只绕湖一圈",
+      "img": "res:ic_scene_coffee"
+    },
+    {
+      "title": "唱片店",
+      "note": "试听位是空的",
+      "img": "res:ic_scene_rain"
+    },
+    {
+      "title": "天台",
+      "note": "风比想象里大",
+      "img": "res:ic_scene_book"
+    },
+    {
+      "title": "深夜厨房",
+      "note": "只煮一碗面",
+      "img": "res:ic_scene_tram"
+    },
+    {
+      "title": "末班地铁",
+      "note": "车厢几乎是空的",
+      "img": "res:ic_scene_market"
+    },
+    {
+      "title": "旅馆走廊",
+      "note": "地毯吞掉脚步",
+      "img": "res:ic_scene_bench"
+    },
+    {
+      "title": "清晨闹钟",
+      "note": "比约定早了十分钟",
+      "img": "res:ic_scene_lamp"
+    },
+    {
+      "title": "火车站",
+      "note": "站台在最远处",
+      "img": "res:ic_scene_coast"
+    },
+    {
+      "title": "回程",
+      "note": "窗外开始下雨",
+      "img": "res:ic_scene_coffee"
+    }
+  ],
+  "hours": [
+    {
+      "title": "06"
+    },
+    {
+      "title": "07"
+    },
+    {
+      "title": "08"
+    },
+    {
+      "title": "09"
+    },
+    {
+      "title": "10"
+    },
+    {
+      "title": "11"
+    },
+    {
+      "title": "12"
+    },
+    {
+      "title": "13"
+    },
+    {
+      "title": "14"
+    },
+    {
+      "title": "15"
+    },
+    {
+      "title": "16"
+    },
+    {
+      "title": "17"
+    },
+    {
+      "title": "18"
+    },
+    {
+      "title": "19"
+    },
+    {
+      "title": "20"
+    },
+    {
+      "title": "21"
+    }
+  ]
+}

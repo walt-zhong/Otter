@@ -7,54 +7,129 @@
   "temTip": "这天气太TM热了",
   "weatherData24": [
     {
+      "time": "00时",
+      "img": "res:ic_cloudy",
+      "degree": "22°"
+    },
+    {
+      "time": "01时",
+      "img": "res:ic_sunny",
+      "degree": "25°"
+    },
+    {
+      "time": "02时",
+      "img": "res:ic_fog",
+      "degree": "28°"
+    },
+    {
+      "time": "03时",
+      "img": "res:ic_shower",
+      "degree": "31°"
+    },
+    {
+      "time": "04时",
+      "img": "res:ic_rainstorm",
+      "degree": "22°"
+    },
+    {
+      "time": "05时",
+      "img": "res:ic_cloudy",
+      "degree": "25°"
+    },
+    {
+      "time": "06时",
+      "img": "res:ic_sunny",
+      "degree": "28°"
+    },
+    {
+      "time": "07时",
+      "img": "res:ic_fog",
+      "degree": "31°"
+    },
+    {
+      "time": "08时",
+      "img": "res:ic_shower",
+      "degree": "22°"
+    },
+    {
+      "time": "09时",
+      "img": "res:ic_rainstorm",
+      "degree": "25°"
+    },
+    {
       "time": "10时",
       "img": "res:ic_cloudy",
-      "degree": "29°"
+      "degree": "28°"
     },
     {
       "time": "11时",
-      "img": "res:ic_cloudy",
-      "degree": "32°"
+      "img": "res:ic_sunny",
+      "degree": "31°"
     },
     {
       "time": "12时",
-      "img": "res:ic_cloudy",
-      "degree": "33°"
+      "img": "res:ic_fog",
+      "degree": "22°"
     },
     {
       "time": "13时",
-      "img": "res:ic_cloudy",
-      "degree": "29°"
+      "img": "res:ic_shower",
+      "degree": "25°"
     },
     {
       "time": "14时",
-      "img": "res:ic_cloudy",
-      "degree": "29°"
+      "img": "res:ic_rainstorm",
+      "degree": "28°"
     },
     {
       "time": "15时",
       "img": "res:ic_cloudy",
-      "degree": "29°"
+      "degree": "31°"
     },
     {
       "time": "16时",
-      "img": "res:ic_cloudy",
-      "degree": "29°"
+      "img": "res:ic_sunny",
+      "degree": "22°"
     },
     {
       "time": "17时",
-      "img": "res:ic_cloudy",
-      "degree": "29°"
+      "img": "res:ic_fog",
+      "degree": "25°"
     },
     {
       "time": "18时",
+      "img": "res:ic_shower",
+      "degree": "28°"
+    },
+    {
+      "time": "19时",
+      "img": "res:ic_rainstorm",
+      "degree": "31°"
+    },
+    {
+      "time": "20时",
       "img": "res:ic_cloudy",
-      "degree": "29°"
+      "degree": "22°"
+    },
+    {
+      "time": "21时",
+      "img": "res:ic_sunny",
+      "degree": "25°"
+    },
+    {
+      "time": "22时",
+      "img": "res:ic_fog",
+      "degree": "28°"
+    },
+    {
+      "time": "23时",
+      "img": "res:ic_shower",
+      "degree": "31°"
     }
   ],
   "weatherDataWeek": [
     {
-      "week": "星期一",
+      "week": "周一",
       "img": "res:ic_cloudy",
       "degreeMin": "29°",
       "degreeMax": "32°",
@@ -64,7 +139,7 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期二",
+      "week": "周二",
       "img": "res:ic_sunny",
       "degreeMin": "31°",
       "degreeMax": "35°",
@@ -74,7 +149,7 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期三",
+      "week": "周三",
       "img": "res:ic_fog",
       "degreeMin": "26°",
       "degreeMax": "29°",
@@ -84,7 +159,7 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期四",
+      "week": "周四",
       "img": "res:ic_rainstorm",
       "degreeMin": "25°",
       "degreeMax": "29°",
@@ -94,7 +169,7 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期五",
+      "week": "周五",
       "img": "res:ic_shower",
       "degreeMin": "24°",
       "degreeMax": "32°",
@@ -104,7 +179,7 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期六",
+      "week": "周六",
       "img": "res:ic_sunny",
       "degreeMin": "24°",
       "degreeMax": "29°",
@@ -114,7 +189,77 @@
       "trailColor": "#F2C14E"
     },
     {
-      "week": "星期日",
+      "week": "周日",
+      "img": "res:ic_cloudy",
+      "degreeMin": "24°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.1",
+      "curDegreeMaxPercent": "0.6",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周一",
+      "img": "res:ic_cloudy",
+      "degreeMin": "29°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.6",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周二",
+      "img": "res:ic_sunny",
+      "degreeMin": "31°",
+      "degreeMax": "35°",
+      "curDegreeMinPercent": "0.4",
+      "curDegreeMaxPercent": "0.8",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周三",
+      "img": "res:ic_fog",
+      "degreeMin": "26°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.1",
+      "curDegreeMaxPercent": "0.7",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周四",
+      "img": "res:ic_rainstorm",
+      "degreeMin": "25°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.8",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周五",
+      "img": "res:ic_shower",
+      "degreeMin": "24°",
+      "degreeMax": "32°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.9",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周六",
+      "img": "res:ic_sunny",
+      "degreeMin": "24°",
+      "degreeMax": "29°",
+      "curDegreeMinPercent": "0.2",
+      "curDegreeMaxPercent": "0.7",
+      "strokeColor": "#4E6E76",
+      "trailColor": "#F2C14E"
+    },
+    {
+      "week": "下周日",
       "img": "res:ic_cloudy",
       "degreeMin": "24°",
       "degreeMax": "32°",

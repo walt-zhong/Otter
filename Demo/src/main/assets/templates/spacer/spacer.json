@@ -1,0 +1,97 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "SPACER", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#C45C26", "fontSize": 12 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "间距", "layout": { "width": "fill", "height": 30 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "没有 children。用宽高占位，也可以带背景和圆角。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 13 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "width / height", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "width 拉开左右，height 拉开上下。fill 会占满这一侧。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "row", "layout": { "width": "fill", "height": 28, "align": "center" }, "children": [
+                  { "type": "text", "text": "左", "layout": { "width": 24, "height": 22 }, "style": { "color": "#1F1A17", "fontSize": 14 } },
+                  { "type": "spacer", "layout": { "width": 24, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "text", "text": "右", "layout": { "width": 24, "height": 22 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+                { "type": "text", "text": "上", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 16 }, "style": { "background": "#1F6F6A" } },
+                { "type": "text", "text": "下", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "padding / background / radius / border", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "padding 算进占位。背景、圆角、描边用来做成细线和圆点。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": 72, "height": 12, "padding": { "start": 8, "end": 8, "top": 4, "bottom": 4 } }, "style": { "background": "#F3E2D4", "radius": 6, "border": { "color": "#C45C26", "width": 1 } } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 1 }, "style": { "background": "#E7E1D8" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+                { "type": "spacer", "layout": { "width": 12, "height": 12 }, "style": { "background": "#C45C26", "radius": 6 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "占位块也可以有名字和点击。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "spacer", "id": "tap_gap", "layout": { "width": "fill", "height": 36 }, "style": { "background": "#1F1A17", "radius": 10 }, "onClick": ["showClick"] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showClick": { "action": "toast", "message": "点到了 spacer tap_gap" }
+  }
+}

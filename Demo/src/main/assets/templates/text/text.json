@@ -1,0 +1,123 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "TEXT", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#C45C26", "fontSize": 12 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "文字", "layout": { "width": "fill", "height": 30 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "必填 text。其余属性都写在 layout 和 style 里。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 13 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "text", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "直接写文案，或以 $ 从数据取值。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "id": "literal", "text": "这是写死的句子", "layout": { "width": "fill", "height": 24 }, "style": { "color": "#1F1A17", "fontSize": 16 } },
+                { "type": "text", "id": "bound", "text": "$sample", "layout": { "width": "fill", "height": 24 }, "style": { "color": "#1F6F6A", "fontSize": 16 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "color / fontSize", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "color 是文字颜色。fontSize 是字号，单位跟尺寸一样按窗口缩放。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "text", "text": "12", "layout": { "width": "fill", "height": 18 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "text", "text": "18", "layout": { "width": "fill", "height": 26 }, "style": { "color": "#1F1A17", "fontSize": 18 } },
+                { "type": "text", "text": "28", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#C45C26", "fontSize": 28 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "align", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "文字在自己的盒子里对齐：start、center、end。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "text": "靠左", "layout": { "width": "fill", "height": 32 }, "style": { "background": "#F6F1EA", "radius": 8, "color": "#1F1A17", "fontSize": 14, "align": "start" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "居中", "layout": { "width": "fill", "height": 32 }, "style": { "background": "#F6F1EA", "radius": 8, "color": "#1F1A17", "fontSize": 14, "align": "center" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "靠右", "layout": { "width": "fill", "height": 32 }, "style": { "background": "#F6F1EA", "radius": 8, "color": "#1F1A17", "fontSize": 14, "align": "end" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "layout / background / radius / border", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "width、height、padding 控制盒子。背景、圆角、描边和容器相同。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "text", "text": "带内边距的文字", "layout": { "width": "fill", "height": 56, "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 } }, "style": { "background": { "direction": "right", "colors": ["#1F6F6A", "#3E6B73"] }, "radius": 14, "border": { "color": "#F6E7C1", "width": 1 }, "color": "#F4FBF8", "fontSize": 15 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "点击后可以用 setText 改文案，用 setTextStyle 改字号和颜色。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "text", "id": "rewrite", "text": "点我会被改写", "layout": { "width": "fill", "height": 48 }, "style": { "background": "#1F1A17", "radius": 12, "color": "#F3EFE7", "fontSize": 15, "align": "center" }, "onClick": ["rewrite"] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "rewrite": {
+      "action": "setTextStyle",
+      "target": "rewrite",
+      "fontSize": 18,
+      "color": "#F6E7C1",
+      "text": "已经改过"
+    }
+  }
+}

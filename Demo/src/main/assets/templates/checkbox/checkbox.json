@@ -1,0 +1,145 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "CHECKBOX", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#C45C26", "fontSize": 12 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "勾选", "layout": { "width": "fill", "height": 30 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "checked 决定选中，label 是旁边的字。一组勾选可以全选或全不选。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 13 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "全选 / 全不选", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "一次改这一组里的每一个勾选。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "id": "box_a", "checked": true, "label": "封面", "layout": { "width": "fill", "height": 44, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "id": "box_b", "checked": false, "label": "目录", "layout": { "width": "fill", "height": 44, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "id": "box_c", "checked": true, "label": "正文", "layout": { "width": "fill", "height": 44, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "id": "box_d", "checked": false, "label": "附录", "layout": { "width": "fill", "height": 44, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": 44, "justify": "spaceBetween" },
+                  "children": [
+                    { "type": "text", "text": "全选", "layout": { "width": 140, "height": 44 }, "style": { "background": "#1F6F6A", "radius": 12, "color": "#F4FBF8", "fontSize": 15, "align": "center" }, "onClick": ["selectAll"] },
+                    { "type": "text", "text": "全不选", "layout": { "width": 140, "height": 44 }, "style": { "background": "#1F1A17", "radius": 12, "color": "#F3EFE7", "fontSize": 15, "align": "center" }, "onClick": ["selectNone"] }
+                  ]
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "checked", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "true 是选中，false 是未选。不写则默认未选。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": true, "label": "已经选中", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": false, "label": "没有选中", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "label": "不写则未选", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "checked / label", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "选中和标签都可以用 $ 从数据取值。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": "$agreed", "label": "$agreeLabel", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": "$declined", "label": "$declineLabel", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "tint / color / fontSize", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "tint 是勾选框颜色，color 和 fontSize 管标签。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": true, "label": "勾选框是强调色", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#C45C26", "color": "#1F1A17", "fontSize": 14 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": true, "label": "标签是青绿大字", "layout": { "width": "fill", "height": 52, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#1F6F6A", "color": "#1F6F6A", "fontSize": 18 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "checked": true, "label": "颜色来自数据", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "$boxTint", "color": "$labelColor", "fontSize": 16 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "点击后用 setChecked 改带 id 的勾选。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "checkbox", "id": "choice", "checked": false, "label": "等待改选", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#C45C26", "color": "#1F1A17", "fontSize": 15 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "text": "改为选中", "layout": { "width": "fill", "height": 48 }, "style": { "background": "#1F6F6A", "radius": 12, "color": "#F4FBF8", "fontSize": 15, "align": "center" }, "onClick": ["mark"] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "text": "改为未选", "layout": { "width": "fill", "height": 48 }, "style": { "background": "#1F1A17", "radius": 12, "color": "#F3EFE7", "fontSize": 15, "align": "center" }, "onClick": ["clear"] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "mark": { "action": "setChecked", "target": "choice", "value": true },
+    "clear": { "action": "setChecked", "target": "choice", "value": false },
+    "selectAll": { "action": "setChecked", "target": ["box_a", "box_b", "box_c", "box_d"], "value": true },
+    "selectNone": { "action": "setChecked", "target": ["box_a", "box_b", "box_c", "box_d"], "value": false },
+    "goBack": { "action": "back" }
+  }
+}

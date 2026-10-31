@@ -1,0 +1,129 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "RADIO", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#C45C26", "fontSize": 12 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "单选", "layout": { "width": "fill", "height": 30 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "同一个 group 里只能选中一个。checked 决定初始选中，label 是旁边的字。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 13 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "group / checked", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "点任意一项，同组其他项会取消。再点已选项不会取消。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "radio", "group": "size", "checked": false, "label": "小杯", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "size", "checked": true, "label": "中杯", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "size", "label": "大杯", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "另一组互不影响", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "group 不同，就不会互相取消。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "radio", "group": "pay", "checked": true, "label": "到店付", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#C45C26" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "pay", "checked": false, "label": "线上付", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#C45C26" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "checked / label / group", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "可以用 $ 从数据取值。这一组的 group 也来自数据。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "radio", "group": "$bundle", "checked": "$small", "label": "$smallLabel", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "$bundle", "checked": "$medium", "label": "$mediumLabel", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "color": "#1F1A17", "fontSize": 15, "tint": "#1F6F6A" } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "tint / color / fontSize", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "tint 是圆点颜色，color 和 fontSize 管标签。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "radio", "group": "tone", "checked": true, "label": "强调色圆点", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#C45C26", "color": "#1F1A17", "fontSize": 14 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "toneLabel", "checked": true, "label": "青绿大字", "layout": { "width": "fill", "height": 52, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#1F6F6A", "color": "#1F6F6A", "fontSize": 18 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "group": "toneData", "checked": true, "label": "颜色来自数据", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "$choiceTint", "color": "$labelColor", "fontSize": 16 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "setChecked 选中某一项时，同组其他项会一起取消。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "radio", "id": "dine", "group": "meal", "checked": true, "label": "堂食", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#1F6F6A", "color": "#1F1A17", "fontSize": 15 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "radio", "id": "takeout", "group": "meal", "checked": false, "label": "外带", "layout": { "width": "fill", "height": 48, "padding": { "start": 12, "end": 12 } }, "style": { "background": "#F6F1EA", "radius": 10, "tint": "#1F6F6A", "color": "#1F1A17", "fontSize": 15 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "text": "改为外带", "layout": { "width": "fill", "height": 48 }, "style": { "background": "#1F6F6A", "radius": 12, "color": "#F4FBF8", "fontSize": 15, "align": "center" }, "onClick": ["selectTakeout"] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "selectTakeout": { "action": "setChecked", "target": "takeout", "value": true },
+    "goBack": { "action": "back" }
+  }
+}

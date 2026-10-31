@@ -1,0 +1,188 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "align": "center" },
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_ava_a",
+            "layout": { "width": 44, "height": 44 },
+            "style": { "radius": 22 }
+          },
+          { "type": "spacer", "layout": { "width": 12, "height": 44 } },
+          {
+            "type": "column",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "children": [
+              {
+                "type": "text",
+                "text": "林夏",
+                "layout": { "width": 180, "height": 24 },
+                "style": { "color": "#1F1A17", "fontSize": 18 }
+              },
+              {
+                "type": "text",
+                "text": "在线 · 刚刚看过稿子",
+                "layout": { "width": 180, "height": 18 },
+                "style": { "color": "#1F6F6A", "fontSize": 12 }
+              }
+            ]
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 14 } },
+      {
+        "type": "text",
+        "text": "今天",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#8A8178", "fontSize": 11, "align": "center" }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+      {
+        "type": "list",
+        "id": "chat_list",
+        "data": "$messages",
+        "direction": "vertical",
+        "gap": 10,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 64,
+            "align": "center",
+            "justify": "$side"
+          },
+          "onClick": ["readMessage"],
+          "children": [
+            {
+              "type": "image",
+              "src": "$avatar",
+              "layout": { "width": 36, "height": 36 },
+              "style": { "radius": 18 }
+            },
+            { "type": "spacer", "layout": { "width": 8, "height": 36 } },
+            {
+              "type": "column",
+              "layout": {
+                "width": 220,
+                "height": "wrap",
+                "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+              },
+              "style": { "background": "$bubble", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$name",
+                  "layout": { "width": 196, "height": 14 },
+                  "style": { "color": "$nameColor", "fontSize": 11 }
+                },
+                { "type": "spacer", "layout": { "width": 196, "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$body",
+                  "layout": { "width": 196, "height": 20 },
+                  "style": { "color": "$bodyColor", "fontSize": 14 }
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": 8, "height": 16 } },
+            {
+              "type": "text",
+              "text": "$time",
+              "layout": { "width": 40, "height": 16 },
+              "style": { "color": "#8A8178", "fontSize": 11, "align": "end" }
+            }
+          ]
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 44, "align": "center" },
+        "children": [
+          {
+            "type": "input",
+            "id": "composer",
+            "hint": "写一句",
+            "layout": {
+              "width": 250,
+              "height": 44,
+              "padding": { "start": 16, "end": 16 }
+            },
+            "style": {
+              "background": "#FFFCF8",
+              "radius": 22,
+              "color": "#1F1A17",
+              "fontSize": 14,
+              "hintColor": "#8A8178"
+            }
+          },
+          { "type": "spacer", "layout": { "width": 8, "height": 44 } },
+          {
+            "type": "column",
+            "layout": {
+              "width": 64,
+              "height": 44,
+              "justify": "center",
+              "align": "center"
+            },
+            "style": { "background": "#C45C26", "radius": 22 },
+            "onClick": ["sendMessage"],
+            "children": [
+              {
+                "type": "text",
+                "text": "发送",
+                "layout": { "width": 40, "height": 20 },
+                "style": { "color": "#FFFFFF", "fontSize": 14, "align": "center" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "readMessage": { "action": "toast", "message": "$body" },
+    "sendMessage": {
+      "action": "append",
+      "list": "chat_list",
+      "from": "composer",
+      "field": "body",
+      "data": "messages",
+      "empty": "先写一句",
+      "item": {
+        "name": "我",
+        "time": "刚刚",
+        "avatar": "res:ic_ava_e",
+        "bubble": "#C45C26",
+        "nameColor": "#F6E7C1",
+        "bodyColor": "#FFFFFF",
+        "side": "end"
+      }
+    }
+  }
+}

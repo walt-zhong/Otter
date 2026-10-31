@@ -342,16 +342,17 @@ Java_com_dynamic_otter_expression_analyze_OTAnalyze_initNative(JNIEnv *env, jobj
 extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_dynamic_otter_expression_analyze_OTAnalyze_00024Companion_getValueBoolean(JNIEnv *env,
-                                                                                   jobject thiz,jlong value) {
-    OTValue *result = new OTValue(OT_TAG_BOOL, value);
-    return (jlong) result;
+                                                                                   jobject thiz,
+                                                                                   jlong value) {
+    OTValue *val = (OTValue *) value;
+    return GX_VALUE_GET_BOOL(*val) ? JNI_TRUE : JNI_FALSE;
 }
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_dynamic_otter_expression_analyze_OTAnalyze_00024Companion_createValueBool(JNIEnv *env,
                                                                                    jobject thiz,
                                                                                    jboolean value) {
-    OTValue *result = new OTValue(OT_TAG_BOOL, (int64_t) value);
+    OTValue *result = new OTValue(OT_TAG_BOOL, (int32_t) (value ? 1 : 0));
     return (jlong) result;
 }
 

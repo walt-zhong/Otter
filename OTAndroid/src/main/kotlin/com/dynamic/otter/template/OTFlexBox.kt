@@ -16,7 +16,8 @@ data class OTFlexBox(
     internal var alignItems: AlignItems? = null,
     internal var justifyContent: JustifyContent? = null,
     internal var padding: Rect<OTSize?>? = null,
-    internal var size: Size<OTSize?>? = null
+    internal var size: Size<OTSize?>? = null,
+    internal var flexGrow: Float = 0f
 ) {
     val sizeForDimension: Size<Dimension>?
         get() {
@@ -42,7 +43,8 @@ data class OTFlexBox(
                     OTSize.create(viewAttr.width),
                     OTSize.create(viewAttr.height)
                 ),
-                padding = StyleConverter.padding(viewAttr)
+                padding = StyleConverter.padding(viewAttr),
+                flexGrow = viewAttr.flexGrow
             )
             if (viewAttr is ContainerAttr) {
                 flexBox.flexDirection = viewAttr.flexDirection

@@ -42,6 +42,7 @@ object TemplateJsonParser {
         "stretch" to "stretch"
     )
     private val textAlignValues = setOf("start", "center", "end")
+    private val keyboardValues = setOf("text", "number", "password", "email", "phone")
     private val gradientDirections = mapOf(
         "bottom" to "to bottom",
         "top" to "to top",
@@ -60,7 +61,11 @@ object TemplateJsonParser {
         "spacer" to TemplateKey.SPACER,
         "list" to TemplateKey.OT_LIST,
         "progress" to TemplateKey.PROGRESS,
-        "lottie" to TemplateKey.ANIMATION
+        "lottie" to TemplateKey.ANIMATION,
+        "input" to TemplateKey.INPUT,
+        "checkbox" to TemplateKey.CHECKBOX,
+        "radio" to TemplateKey.RADIO,
+        "switch" to TemplateKey.SWITCH
     )
 
     fun parse(json: String): ParsedTemplate {
@@ -86,9 +91,14 @@ object TemplateJsonParser {
             }
         }
         events.forEach { (name, event) ->
-            val target = event.getJSONObject("params")?.getString("id") ?: return@forEach
-            if (target !in ids) {
-                throw TemplateParseException("事件 $name 的 target「$target」在模版中不存在")
+            val params = event.getJSONObject("params") ?: return@forEach
+            val targets = mutableListOf<String>()
+            params.getString("id")?.split(",")?.let { targets.addAll(it) }
+            params.getString("from")?.let { targets.add(it) }
+            targets.forEach { id ->
+                if (id.isNotEmpty() && id !in ids) {
+                    throw TemplateParseException("事件 $name 的 target「$id」在模版中不存在")
+                }
             }
         }
         return ParsedTemplate(layout, events)
@@ -166,6 +176,23 @@ object TemplateJsonParser {
                 )
             }
 
+            "setChecked" -> {
+                requireKeys(
+                    event,
+                    path,
+                    allowed = setOf("action", "target", "value"),
+                    required = setOf("action", "target", "value")
+                )
+                val targets = targetList(event.get("target"), "$path.target")
+                viewEvent(
+                    key = "setChecked",
+                    target = targets.joinToString(","),
+                    value = checkedValue(event.get("value"), "$path.value")
+                )
+            }
+
+            "append" -> parseAppendEvent(event, path)
+
             "open" -> {
                 requireKeys(event, path, allowed = setOf("action", "page"), required = setOf("action", "page"))
                 val page = requireString(event.get("page"), "$path.page")
@@ -178,8 +205,45 @@ object TemplateJsonParser {
                 )
             }
 
-            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle、open")
+            "back" -> {
+                requireKeys(event, path, allowed = setOf("action"), required = setOf("action"))
+                jsonObject(
+                    "class" to "nav",
+                    "params" to jsonObject("fun" to "back")
+                )
+            }
+
+            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle、setChecked、append、open、back")
         }
+    }
+
+    private fun parseAppendEvent(event: JSONObject, path: String): JSONObject {
+        requireKeys(
+            event,
+            path,
+            allowed = setOf("action", "list", "from", "field", "data", "item", "empty"),
+            required = setOf("action", "list", "from", "field", "data", "item")
+        )
+        val item = requireObject(event.get("item"), "$path.item")
+        val fields = JSONObject()
+        item.keys.forEach { key ->
+            if (!namePattern.matches(key)) {
+                throw TemplateParseException("$path.item.$key 不是这里能写的字段")
+            }
+            fields[key] = requireString(item.get(key), "$path.item.$key")
+        }
+        val params = jsonObject(
+            "fun" to "append",
+            "id" to requireName(event.get("list"), "$path.list"),
+            "from" to requireName(event.get("from"), "$path.from"),
+            "field" to requireName(event.get("field"), "$path.field"),
+            "data" to requireName(event.get("data"), "$path.data"),
+            "item" to fields
+        )
+        if (event.containsKey("empty")) {
+            params["empty"] = requireString(event.get("empty"), "$path.empty")
+        }
+        return jsonObject("class" to "list", "params" to params)
     }
 
     private fun viewEvent(key: String, target: String, value: Any): JSONObject {
@@ -226,6 +290,12 @@ object TemplateJsonParser {
                 allowed.addAll(listOf("src", "repeat", "mode", "autoPlay"))
                 required.add("src")
             }
+            "input" -> allowed.addAll(listOf("value", "hint", "keyboard", "maxLength"))
+            "checkbox", "switch" -> allowed.addAll(listOf("checked", "label"))
+            "radio" -> {
+                allowed.addAll(listOf("checked", "label", "group"))
+                required.add("group")
+            }
         }
         requireKeys(node, path, allowed, required)
 
@@ -261,6 +331,9 @@ object TemplateJsonParser {
             "list" -> parseListFields(node, path, attrs)
             "progress" -> parseProgressFields(node, path, attrs)
             "lottie" -> parseLottieFields(node, path, attrs)
+            "input" -> parseInputFields(node, path, attrs)
+            "checkbox", "switch" -> parseCheckBoxFields(node, path, attrs)
+            "radio" -> parseRadioFields(node, path, attrs)
         }
 
         val children = if (isContainer && node.containsKey("children")) {
@@ -285,7 +358,7 @@ object TemplateJsonParser {
         isContainer: Boolean,
         attrs: MutableMap<String, String>
     ) {
-        val allowed = linkedSetOf("width", "height", "padding")
+        val allowed = linkedSetOf("width", "height", "padding", "grow")
         if (isContainer) {
             allowed.add("justify")
             allowed.add("align")
@@ -296,8 +369,11 @@ object TemplateJsonParser {
         if (layout.containsKey("padding")) {
             parsePadding(layout.get("padding"), "$path.padding", attrs)
         }
+        if (layout.containsKey("grow")) {
+            attrs[TemplateKey.ATTR_FLEX_GROW] = plainNumber(layout.get("grow"), "$path.grow")
+        }
         if (layout.containsKey("justify")) {
-            attrs[TemplateKey.FLEXBOX_ATTR_JUSTIFY_CONTENT] = enumValue(
+            attrs[TemplateKey.FLEXBOX_ATTR_JUSTIFY_CONTENT] = flexValue(
                 layout.get("justify"),
                 "$path.justify",
                 justifyValues
@@ -350,6 +426,8 @@ object TemplateJsonParser {
         val allowed = linkedSetOf("background", "radius", "border")
         when (type) {
             "text" -> allowed.addAll(listOf("color", "fontSize", "align"))
+            "input" -> allowed.addAll(listOf("color", "fontSize", "align", "hintColor"))
+            "checkbox", "radio", "switch" -> allowed.addAll(listOf("color", "fontSize", "tint"))
             "progress" -> allowed.addAll(listOf("track", "bar"))
         }
         requireKeys(style, path, allowed, required = emptySet())
@@ -378,11 +456,17 @@ object TemplateJsonParser {
             }
             attrs[TemplateKey.ATTR_TEXT_ALIGN] = align
         }
+        if (style.containsKey("hintColor")) {
+            attrs[TemplateKey.ATTR_HINT_COLOR] = colorValue(style.get("hintColor"), "$path.hintColor")
+        }
+        if (style.containsKey("tint")) {
+            attrs[TemplateKey.ATTR_TINT] = colorValue(style.get("tint"), "$path.tint")
+        }
         if (style.containsKey("track")) {
-            attrs[TemplateKey.ATTR_STROKE_COLOR] = colorValue(style.get("track"), "$path.track")
+            attrs[TemplateKey.ATTR_STROKE_COLOR] = paintValue(style.get("track"), "$path.track")
         }
         if (style.containsKey("bar")) {
-            attrs[TemplateKey.ATTR_TRAIL_COLOR] = colorValue(style.get("bar"), "$path.bar")
+            attrs[TemplateKey.ATTR_TRAIL_COLOR] = paintValue(style.get("bar"), "$path.bar")
         }
     }
 
@@ -444,6 +528,43 @@ object TemplateJsonParser {
         if (node.containsKey("animate")) {
             attrs[TemplateKey.ATTR_ANIMATE_ENABLE] = boolString(node.get("animate"), "$path.animate")
         }
+    }
+
+    private fun parseInputFields(node: JSONObject, path: String, attrs: MutableMap<String, String>) {
+        if (node.containsKey("value")) {
+            attrs[TemplateKey.ATTR_TEXT] = requireString(node.get("value"), "$path.value")
+        }
+        if (node.containsKey("hint")) {
+            attrs[TemplateKey.ATTR_HINT] = requireString(node.get("hint"), "$path.hint")
+        }
+        val keyboard = if (node.containsKey("keyboard")) {
+            requireString(node.get("keyboard"), "$path.keyboard")
+        } else {
+            "text"
+        }
+        if (keyboard !in keyboardValues) {
+            throw TemplateParseException("$path.keyboard 只能是 text、number、password、email、phone")
+        }
+        attrs[TemplateKey.ATTR_INPUT_TYPE] = keyboard
+        if (node.containsKey("maxLength")) {
+            attrs[TemplateKey.ATTR_MAX_LENGTH] = nonNegativeInt(node.get("maxLength"), "$path.maxLength")
+        }
+    }
+
+    private fun parseCheckBoxFields(node: JSONObject, path: String, attrs: MutableMap<String, String>) {
+        attrs[TemplateKey.ATTR_CHECKED] = if (node.containsKey("checked")) {
+            checkedValue(node.get("checked"), "$path.checked")
+        } else {
+            "false"
+        }
+        if (node.containsKey("label")) {
+            attrs[TemplateKey.ATTR_TEXT] = requireString(node.get("label"), "$path.label")
+        }
+    }
+
+    private fun parseRadioFields(node: JSONObject, path: String, attrs: MutableMap<String, String>) {
+        parseCheckBoxFields(node, path, attrs)
+        attrs[TemplateKey.ATTR_GROUP] = groupValue(node.get("group"), "$path.group")
     }
 
     private fun parseLottieFields(node: JSONObject, path: String, attrs: MutableMap<String, String>) {
@@ -512,6 +633,13 @@ object TemplateJsonParser {
         }
     }
 
+    private fun paintValue(value: Any?, path: String): String {
+        return when (value) {
+            is JSONObject -> backgroundValue(value, path)
+            else -> colorValue(value, path)
+        }
+    }
+
     private fun colorValue(value: Any?, path: String): String {
         val color = requireString(value, path)
         if (color == "transparent" || color.startsWith("$") || colorPattern.matches(color)) {
@@ -559,6 +687,27 @@ object TemplateJsonParser {
         return mapping[name] ?: throw TemplateParseException("$path「$name」不在允许的取值里")
     }
 
+    private fun flexValue(value: Any?, path: String, mapping: Map<String, String>): String {
+        val name = requireString(value, path)
+        if (name.startsWith("$")) {
+            return name
+        }
+        return mapping[name] ?: throw TemplateParseException("$path「$name」不在允许的取值里")
+    }
+
+    private fun targetList(value: Any?, path: String): List<String> {
+        val names = when (value) {
+            is JSONArray -> value.mapIndexed { index, item ->
+                requireName(item, "$path[$index]")
+            }
+            else -> listOf(requireName(value, path))
+        }
+        if (names.isEmpty()) {
+            throw TemplateParseException("$path 不能是空数组")
+        }
+        return names
+    }
+
     private fun plainNumber(value: Any?, path: String): String {
         val number = value as? Number ?: throw TemplateParseException("$path 必须是数字")
         val decimal = when (number) {
@@ -574,6 +723,34 @@ object TemplateJsonParser {
     private fun boolString(value: Any?, path: String): String {
         val bool = value as? Boolean ?: throw TemplateParseException("$path 必须是布尔值")
         return bool.toString()
+    }
+
+    private fun groupValue(value: Any?, path: String): String {
+        val name = requireString(value, path)
+        if (name.startsWith("$") || namePattern.matches(name)) {
+            return name
+        }
+        throw TemplateParseException("$path「$name」必须是字母或下划线开头的标识符，或以 \$ 开头")
+    }
+
+    private fun checkedValue(value: Any?, path: String): String {
+        return when (value) {
+            is Boolean -> value.toString()
+            is String -> if (value.startsWith("$")) {
+                value
+            } else {
+                throw TemplateParseException("$path 必须是布尔值或以 \$ 开头")
+            }
+            else -> throw TemplateParseException("$path 必须是布尔值或以 \$ 开头")
+        }
+    }
+
+    private fun nonNegativeInt(value: Any?, path: String): String {
+        val number = plainNumber(value, path)
+        if (number.contains('.')) {
+            throw TemplateParseException("$path 只能是非负整数")
+        }
+        return number
     }
 
     private fun requireObject(value: Any?, path: String): JSONObject {

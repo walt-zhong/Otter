@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.view.View
 import android.view.ViewOutlineProvider
+import android.widget.TextView
 import com.dynamic.otter.data.OTHelper
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.Text
@@ -63,7 +64,7 @@ fun Text.setTextBackground(backgroundDrawable: OTLinearColor?) {
     }
 }
 
-fun Text.setTextAlign(alignStr: String) {
+fun TextView.setTextAlign(alignStr: String) {
     val textAlign = StyleConverter.textAlign(alignStr)
     if (textAlign != null) {
         this.gravity = Gravity.CENTER_VERTICAL.or(textAlign)

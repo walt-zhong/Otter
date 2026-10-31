@@ -4,14 +4,27 @@
     "id": "home",
     "layout": {
       "width": "fill",
-      "height": "wrap",
-      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 16 }
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 12 }
     },
+    "style": { "background": "#F3EFE7" },
     "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 4, "height": 18 } },
+          { "type": "text", "text": "返回", "layout": { "width": 40, "height": 20 }, "style": { "color": "#1F1A17", "fontSize": 14 } }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
       {
         "type": "text",
         "id": "eyebrow",
-        "text": "OTTER",
+        "text": "组件",
         "layout": { "width": "fill", "height": 16 },
         "style": { "color": "#C45C26", "fontSize": 11 }
       },
@@ -22,7 +35,7 @@
       {
         "type": "text",
         "id": "title",
-        "text": "动态模版",
+        "text": "Otter",
         "layout": { "width": "fill", "height": 34 },
         "style": { "color": "#1F1A17", "fontSize": 28 }
       },
@@ -33,7 +46,7 @@
       {
         "type": "text",
         "id": "subtitle",
-        "text": "同一份 JSON，按当前窗口宽度排版。",
+        "text": "全屏模版。往下是场景，再往下是组件。",
         "layout": { "width": "fill", "height": 22 },
         "style": { "color": "#8A8178", "fontSize": 14 }
       },
@@ -47,7 +60,7 @@
         "data": "$demos",
         "direction": "vertical",
         "gap": 12,
-        "layout": { "width": "fill", "height": 460 },
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
         "item": {
           "type": "column",
           "layout": {
@@ -63,20 +76,33 @@
               "layout": {
                 "width": "fill",
                 "height": "wrap",
-                "align": "center"
+                "align": "center",
+                "justify": "spaceBetween"
               },
               "children": [
                 {
-                  "type": "text",
-                  "text": "$index",
-                  "layout": { "width": 28, "height": 22 },
-                  "style": { "color": "#C45C26", "fontSize": 13 }
+                  "type": "row",
+                  "layout": { "width": "wrap", "height": "wrap", "align": "center" },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "$index",
+                      "layout": { "width": 28, "height": 22 },
+                      "style": { "color": "#C45C26", "fontSize": 13 }
+                    },
+                    {
+                      "type": "text",
+                      "text": "$title",
+                      "layout": { "width": 180, "height": 24 },
+                      "style": { "color": "#1F1A17", "fontSize": 17 }
+                    }
+                  ]
                 },
                 {
                   "type": "text",
-                  "text": "$title",
-                  "layout": { "width": 240, "height": 24 },
-                  "style": { "color": "#1F1A17", "fontSize": 17 }
+                  "text": "$tag",
+                  "layout": { "width": 40, "height": 20 },
+                  "style": { "color": "#1F6F6A", "fontSize": 12, "align": "end" }
                 }
               ]
             },
@@ -106,6 +132,7 @@
     ]
   },
   "events": {
+    "goBack": { "action": "back" },
     "openPage": {
       "action": "open",
       "page": "$page"

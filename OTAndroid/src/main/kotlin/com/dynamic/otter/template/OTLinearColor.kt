@@ -10,12 +10,17 @@ class OTLinearColor(
     val colors: MutableList<OTColor>
 ) {
     fun createShader(view: TextView): Shader? {
-        return StyleConverter.createLinearGradient(
+        return createShader(
             view.layoutParams.width.toFloat(),
-            view.layoutParams.height.toFloat(),
-            direction,
-            colorArray()
+            view.layoutParams.height.toFloat()
         )
+    }
+
+    fun createShader(width: Float, height: Float): Shader? {
+        if (width <= 0f || height <= 0f) {
+            return null
+        }
+        return StyleConverter.createLinearGradient(width, height, direction, colorArray())
     }
 
     fun createDrawable() = LinearColorGradientDrawable(direction, colorArray())

@@ -1,0 +1,13 @@
+{
+  "sheet": [
+    {
+      "small": false,
+      "medium": true,
+      "smallLabel": "小杯，来自数据",
+      "mediumLabel": "中杯，来自数据",
+      "bundle": "cup",
+      "choiceTint": "#C45C26",
+      "labelColor": "#1F6F6A"
+    }
+  ]
+}

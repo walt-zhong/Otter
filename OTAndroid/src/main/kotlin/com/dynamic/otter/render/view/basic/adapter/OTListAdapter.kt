@@ -70,4 +70,25 @@ class OTListAdapter(
         listData = data
         notifyDataSetChanged()
     }
+
+    fun appendItem(item: JSONObject) {
+        listData.add(item)
+        notifyItemInserted(listData.size - 1)
+    }
+
+    fun itemField(index: Int, key: String): String {
+        if (index !in 0 until listData.size) {
+            return ""
+        }
+        return (listData[index] as? JSONObject)?.getString(key).orEmpty()
+    }
+
+    fun updateItem(index: Int, fields: Map<String, String>) {
+        if (index !in 0 until listData.size) {
+            return
+        }
+        val item = listData[index] as? JSONObject ?: return
+        fields.forEach { (key, value) -> item[key] = value }
+        notifyItemChanged(index)
+    }
 }

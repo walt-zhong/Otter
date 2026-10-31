@@ -2,9 +2,12 @@ package com.dynamic.otter.render.view.worker
 
 import android.view.View
 import com.alibaba.fastjson.JSONObject
+import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
+import com.dynamic.otter.render.view.basic.Input
 import com.dynamic.otter.render.view.basic.OTAbsoluteLayout
 import com.dynamic.otter.render.view.basic.Text
-import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
+import com.dynamic.otter.render.view.basic.capability.ICheckable
+import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 
 class ViewEventWorker private constructor() : IEventWorker {
     override fun handleEvent(
@@ -20,21 +23,41 @@ class ViewEventWorker private constructor() : IEventWorker {
         }
         val targetId = viewIds[paramJsonObj["id"]]
         val targetView = resolveTargetView(clickedView, rootView, targetId)
-        if (targetView !is Text) {
-            return
-        }
         when (paramJsonObj["key"]) {
             "setText" -> {
+                if (targetView == null || (targetView !is Text && targetView !is Input)) {
+                    return
+                }
                 val value = paramJsonObj["value"]
                 val text = if (value is String) {
                     value.extractExpValue(itemData ?: pageData)
                 } else {
                     value?.toString().orEmpty()
                 }
-                targetView.onBindData(text)
+                (targetView as IDataBindingCapability).onBindData(text)
             }
 
-            "setTextStyle" -> targetView.onBindData(paramJsonObj["value"])
+            "setTextStyle" -> {
+                if (targetView == null || (targetView !is Text && targetView !is Input)) {
+                    return
+                }
+                (targetView as IDataBindingCapability).onBindData(paramJsonObj["value"])
+            }
+
+            "setChecked" -> {
+                val value = paramJsonObj["value"]
+                val resolved = if (value is String) {
+                    value.extractExpValue(itemData ?: pageData)
+                } else {
+                    value
+                }
+                paramJsonObj["id"].toString().split(",").forEach { name ->
+                    val box = resolveTargetView(clickedView, rootView, viewIds[name.trim()])
+                    if (box is ICheckable) {
+                        box.onBindData(resolved)
+                    }
+                }
+            }
         }
     }
 
