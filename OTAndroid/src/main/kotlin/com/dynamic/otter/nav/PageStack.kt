@@ -127,6 +127,7 @@ class PageStack private constructor(
                 context.data = created
             }
         }
+        PageForm.snapshot(frame.templateContext?.rootView, frame.data)
         block(frame.data!!)
     }
 
@@ -143,6 +144,7 @@ class PageStack private constructor(
             return
         }
         OTEngine.instance.rebind(context)
+        PageForm.restore(context.rootView, stack.lastOrNull()?.data)
     }
 
     internal fun pop(rawParams: JSONObject?): Boolean {

@@ -26,7 +26,7 @@
         "children": [
           {
             "type": "image",
-            "src": "res:ic_ava_c",
+            "src": "$avatar",
             "layout": { "width": 64, "height": 64 },
             "style": {
               "radius": 32,
@@ -58,6 +58,23 @@
                 "text": "南市常客",
                 "layout": { "width": "fill", "height": "wrap" },
                 "style": { "color": "#8A8178", "fontSize": 13 }
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": "fill", "height": 4 }
+              },
+              {
+                "type": "text",
+                "text": "换一张",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#8B572A", "fontSize": 13, "fontWeight": "medium" },
+                "onClick": ["askPhotos"]
+              },
+              {
+                "type": "text",
+                "text": "$photosStatusText",
+                "layout": { "width": "fill", "height": "wrap", "margin": { "top": 2 } },
+                "style": { "color": "#8A8178", "fontSize": 12 }
               }
             ]
           }
@@ -178,6 +195,240 @@
       },
       {
         "type": "text",
+        "text": "这一台手机",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "取餐通知",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+      },
+      {
+        "type": "text",
+        "text": "$notificationsStatusText",
+        "layout": { "width": "fill", "height": "wrap", "margin": { "top": 4 } },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center", "margin": { "top": 8 } },
+        "children": [
+          {
+            "type": "text",
+            "text": "开启通知",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": {
+              "background": "#8B572A",
+              "radius": 10,
+              "color": "#F6F1EA",
+              "fontSize": 14,
+              "fontWeight": "medium"
+            },
+            "onClick": ["askNotifications"]
+          },
+          {
+            "type": "spacer",
+            "visible": "$notificationsShowSettings",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "去设置",
+            "visible": "$notificationsShowSettings",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+            "onClick": ["notificationSettings"]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "走到巷口",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+      },
+      {
+        "type": "text",
+        "text": "$locationStatusText",
+        "layout": { "width": "fill", "height": "wrap", "margin": { "top": 4 } },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center", "margin": { "top": 8 } },
+        "children": [
+          {
+            "type": "text",
+            "text": "看我在不在",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": {
+              "background": "#8B572A",
+              "radius": 10,
+              "color": "#F6F1EA",
+              "fontSize": 14,
+              "fontWeight": "medium"
+            },
+            "onClick": ["askLocation"]
+          },
+          {
+            "type": "spacer",
+            "visible": "$locationShowSettings",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "去设置",
+            "visible": "$locationShowSettings",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+            "onClick": ["locationSettings"]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "拍菜单",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+      },
+      {
+        "type": "text",
+        "text": "$cameraStatusText",
+        "layout": { "width": "fill", "height": "wrap", "margin": { "top": 4 } },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center", "margin": { "top": 8 } },
+        "children": [
+          {
+            "type": "text",
+            "text": "允许相机",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": {
+              "background": "#8B572A",
+              "radius": 10,
+              "color": "#F6F1EA",
+              "fontSize": 14,
+              "fontWeight": "medium"
+            },
+            "onClick": ["askCamera"]
+          },
+          {
+            "type": "spacer",
+            "visible": "$cameraShowSettings",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "去设置",
+            "visible": "$cameraShowSettings",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+            "onClick": ["cameraSettings"]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "留一句语音",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+      },
+      {
+        "type": "text",
+        "text": "$microphoneStatusText",
+        "layout": { "width": "fill", "height": "wrap", "margin": { "top": 4 } },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center", "margin": { "top": 8 } },
+        "children": [
+          {
+            "type": "text",
+            "text": "允许麦克风",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": {
+              "background": "#8B572A",
+              "radius": 10,
+              "color": "#F6F1EA",
+              "fontSize": 14,
+              "fontWeight": "medium"
+            },
+            "onClick": ["askMicrophone"]
+          },
+          {
+            "type": "spacer",
+            "visible": "$microphoneShowSettings",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "去设置",
+            "visible": "$microphoneShowSettings",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+            },
+            "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+            "onClick": ["microphoneSettings"]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
         "text": "保存偏好",
         "layout": {
           "width": "fill",
@@ -197,6 +448,51 @@
     ]
   },
   "events": {
-    "savePrefs": { "action": "toast", "message": "偏好已保存" }
+    "savePrefs": { "action": "toast", "message": "偏好已保存" },
+    "askPhotos": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "photos" }
+    },
+    "askNotifications": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "notifications" }
+    },
+    "notificationSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "notifications" }
+    },
+    "askLocation": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "locationSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "askCamera": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "camera" }
+    },
+    "cameraSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "camera" }
+    },
+    "askMicrophone": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "microphone" }
+    },
+    "microphoneSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "microphone" }
+    }
   }
 }

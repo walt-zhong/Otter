@@ -250,6 +250,102 @@
       },
       {
         "type": "text",
+        "text": "$cameraStatusText",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "拍一张菜单",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askCamera"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开相机",
+        "visible": "$cameraShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["cameraSettings"]
+      },
+      {
+        "type": "text",
+        "text": "$microphoneStatusText",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "留一句语音",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askMicrophone"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开麦克风",
+        "visible": "$microphoneShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["microphoneSettings"]
+      },
+      {
+        "type": "text",
         "text": "加入购物车",
         "layout": {
           "width": "fill",
@@ -275,6 +371,26 @@
       "action": "host",
       "name": "call",
       "params": { "phone": "$phone" }
+    },
+    "askCamera": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "camera" }
+    },
+    "cameraSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "camera" }
+    },
+    "askMicrophone": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "microphone" }
+    },
+    "microphoneSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "microphone" }
     },
     "inCart": { "action": "toast", "message": "已在购物车中" },
     "openCart": { "action": "open", "page": "cart" }

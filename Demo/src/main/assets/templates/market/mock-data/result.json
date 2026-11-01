@@ -1,4 +1,6 @@
 {
   "orderNo": "NS000000",
-  "amount": "48 元"
+  "amount": "48 元",
+  "notificationsStatusText": "还没问过",
+  "notificationsShowSettings": false
 }

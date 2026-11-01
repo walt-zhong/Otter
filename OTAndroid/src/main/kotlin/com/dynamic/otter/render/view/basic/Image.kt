@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.annotation.Keep
@@ -61,7 +62,8 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
         val placeholder = placeholderDrawable()
         when {
             src.isBlank() -> showPlaceholder(placeholder)
-            OTHelper.isNetSrc(src) -> loadNet(src, placeholder)
+            OTHelper.isNetSrc(src) -> loadModel(src, placeholder)
+            OTHelper.isContentSrc(src) -> loadModel(Uri.parse(src), placeholder)
             OTHelper.isResSrc(src) -> bindRes(getResSrc(src), placeholder)
         }
     }
@@ -74,9 +76,9 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
         }
     }
 
-    private fun loadNet(src: String, placeholder: ColorDrawable?) {
+    private fun loadModel(model: Any, placeholder: ColorDrawable?) {
         try {
-            val request = Glide.with(context).load(src)
+            val request = Glide.with(context).load(model)
             if (placeholder != null) {
                 request.placeholder(ColorDrawable(placeholder.color))
                     .error(ColorDrawable(placeholder.color))

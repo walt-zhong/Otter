@@ -3,11 +3,14 @@ package com.dynamic.otter.data
 object OTHelper {
     private const val HTTP_PREFIX = "http:"
     private const val HTTPS_PREFIX = "https:"
+    private const val CONTENT_PREFIX = "content:"
     private const val RES_PREFIX = "res:"
     private const val ASSET_PREFIX = "assets:"
 
     fun isNetSrc(url: String) =
         (url.startsWith(HTTP_PREFIX) || url.startsWith(HTTPS_PREFIX))
+
+    fun isContentSrc(url: String) = url.startsWith(CONTENT_PREFIX)
 
     fun isResSrc(url: String) = url.startsWith(RES_PREFIX)
 

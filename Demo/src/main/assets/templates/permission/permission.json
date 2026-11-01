@@ -1,0 +1,695 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "permission",
+    "scroll": true,
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 20 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_back",
+            "layout": { "width": 18, "height": 18 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 4, "height": 18 }
+          },
+          {
+            "type": "text",
+            "text": "返回",
+            "layout": { "width": 40, "height": 20 },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "权限",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 6 }
+      },
+      {
+        "type": "text",
+        "text": "五张卡片各申请一项。点之前的说明由应用写死，这一页只写能力名。",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "相机",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 4 }
+          },
+          {
+            "type": "text",
+            "text": "先看应用里的说明，再看系统对话框。拒绝并不再询问之后，只能去设置。",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$cameraStatusText",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center" },
+            "children": [
+              {
+                "type": "text",
+                "text": "查看",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#1F1A17",
+                  "fontSize": 14
+                },
+                "onClick": ["checkCamera"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "申请",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#8B572A",
+                  "radius": 10,
+                  "color": "#F6F1EA",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["requestCamera"]
+              },
+              {
+                "type": "spacer",
+                "visible": "$cameraShowSettings",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "去设置",
+                "visible": "$cameraShowSettings",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#8B572A",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["settingsCamera"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "麦克风",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 4 }
+          },
+          {
+            "type": "text",
+            "text": "和相机同一条路径。这次只确认允不允许，不会开始录音。",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$microphoneStatusText",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center" },
+            "children": [
+              {
+                "type": "text",
+                "text": "查看",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#1F1A17",
+                  "fontSize": 14
+                },
+                "onClick": ["checkMicrophone"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "申请",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#8B572A",
+                  "radius": 10,
+                  "color": "#F6F1EA",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["requestMicrophone"]
+              },
+              {
+                "type": "spacer",
+                "visible": "$microphoneShowSettings",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "去设置",
+                "visible": "$microphoneShowSettings",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#8B572A",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["settingsMicrophone"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "位置",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 4 }
+          },
+          {
+            "type": "text",
+            "text": "只在使用时询问。可以只给大致位置，状态会写成「只给了大致位置」。",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$locationStatusText",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center" },
+            "children": [
+              {
+                "type": "text",
+                "text": "查看",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#1F1A17",
+                  "fontSize": 14
+                },
+                "onClick": ["checkLocation"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "申请",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#8B572A",
+                  "radius": 10,
+                  "color": "#F6F1EA",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["requestLocation"]
+              },
+              {
+                "type": "spacer",
+                "visible": "$locationShowSettings",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "去设置",
+                "visible": "$locationShowSettings",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#8B572A",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["settingsLocation"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "相册",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 4 }
+          },
+          {
+            "type": "text",
+            "text": "打开系统选图。只会拿到选中的那张，不申请读取整个相册。",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "image",
+            "src": "$photoSrc",
+            "visible": "$photoVisible",
+            "layout": { "width": "fill", "height": 160 },
+            "style": { "radius": 12, "fit": "cover", "placeholder": "#E6DDD2" }
+          },
+          {
+            "type": "spacer",
+            "visible": "$photoVisible",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$photosStatusText",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center" },
+            "children": [
+              {
+                "type": "text",
+                "text": "查看",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#1F1A17",
+                  "fontSize": 14
+                },
+                "onClick": ["checkPhotos"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "选一张",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#8B572A",
+                  "radius": 10,
+                  "color": "#F6F1EA",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["requestPhotos"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "通知",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 4 }
+          },
+          {
+            "type": "text",
+            "text": "Android 13 起才会弹出系统对话框。更早的系统直接是已允许。",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 13 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$notificationsStatusText",
+            "layout": { "width": "fill", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": "fill", "height": 10 }
+          },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": "wrap", "wrap": true, "align": "center" },
+            "children": [
+              {
+                "type": "text",
+                "text": "查看",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#1F1A17",
+                  "fontSize": 14
+                },
+                "onClick": ["checkNotifications"]
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "申请",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#8B572A",
+                  "radius": 10,
+                  "color": "#F6F1EA",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["requestNotifications"]
+              },
+              {
+                "type": "spacer",
+                "visible": "$notificationsShowSettings",
+                "layout": { "width": 8, "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "去设置",
+                "visible": "$notificationsShowSettings",
+                "layout": {
+                  "width": "wrap",
+                  "height": "wrap",
+                  "padding": { "start": 12, "end": 12, "top": 8, "bottom": 8 }
+                },
+                "style": {
+                  "background": "#F6F1EA",
+                  "radius": 10,
+                  "color": "#8B572A",
+                  "fontSize": 14,
+                  "fontWeight": "medium"
+                },
+                "onClick": ["settingsNotifications"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "checkCamera": {
+      "action": "host",
+      "name": "permissionCheck",
+      "params": { "capability": "camera" }
+    },
+    "requestCamera": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "camera" }
+    },
+    "settingsCamera": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "camera" }
+    },
+    "checkMicrophone": {
+      "action": "host",
+      "name": "permissionCheck",
+      "params": { "capability": "microphone" }
+    },
+    "requestMicrophone": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "microphone" }
+    },
+    "settingsMicrophone": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "microphone" }
+    },
+    "checkLocation": {
+      "action": "host",
+      "name": "permissionCheck",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "requestLocation": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "settingsLocation": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "checkPhotos": {
+      "action": "host",
+      "name": "permissionCheck",
+      "params": { "capability": "photos" }
+    },
+    "requestPhotos": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "photos" }
+    },
+    "checkNotifications": {
+      "action": "host",
+      "name": "permissionCheck",
+      "params": { "capability": "notifications" }
+    },
+    "requestNotifications": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "notifications" }
+    },
+    "settingsNotifications": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "notifications" }
+    }
+  }
+}

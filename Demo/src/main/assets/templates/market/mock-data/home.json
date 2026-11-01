@@ -2,6 +2,8 @@
   "query": "",
   "hasClosed": true,
   "noResult": false,
+  "locationStatusText": "还没问过",
+  "locationShowSettings": false,
   "shops": [
     {
       "id": "coffee",

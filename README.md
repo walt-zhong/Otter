@@ -182,6 +182,26 @@ ExpansionCenter.instance.registerPageOpener { context, page ->
 
 `message`、`value`、`text`、`page`、`index`、`name` 都可以写 `$` 表达式。比较和缺省沿用 `"$week != null ? $week : '暂无'"` 这种写法。
 
+## 权限
+
+模版不写系统权限名。宿主在当前 `Activity` 上调用 `AndroidPermissionCenter.install` 之后，模版可以用三个 host：
+
+| name | 作用 |
+| --- | --- |
+| `permissionCheck` | 只查询，不弹窗 |
+| `permissionRequest` | 先显示宿主写死的说明，再走系统申请。相册打开系统选图 |
+| `permissionOpenSettings` | 打开应用设置，返回后重新查询 |
+
+`params.capability` 只能是 `camera`、`microphone`、`location.whenInUse`、`photos`、`notifications`。没在安装包里声明的权限，状态是「当前版本没有这项」。
+
+结果写进当前页：`cameraStatus`、`cameraStatusText`、`cameraShowSettings`。麦克风、定位、相册、通知用同样的前缀。定位给了精确位置时文案是「已允许，精确位置」，只给大致位置时是「只给了大致位置」。`cameraShowSettings` 为 true 表示系统不会再弹框。相册选中一张后额外写 `photoSrc` 和 `avatar`，图片地址可以是 `content:`。
+
+相册不申请读取整个相册。通知在 Android 13 以下视为已允许。说明文案用 `PermissionPrompts` 或宿主自己的表，不要从模版里取。
+
+这一版实现的是 Android。能力名、三种动作和写回的字段是 iOS、HarmonyOS 可以沿用的同一份约定。
+
+南市在 `MarketActivity` 里装了自己的说明：首页问定位，店铺问相机和麦克风，支付成功页问通知，我的可以换头像，并在打开时刷新五项状态。首页「权限」把五项各放成一张卡片，每张都有查看、申请和去设置。
+
 ## 一次渲染做了什么
 
 1. `TemplateJsonParser` 把 JSON 收成节点树和事件表。未知字段、未知 `type`、悬空的 `onClick` 或 `target` 会直接抛 `TemplateParseException`。
@@ -253,7 +273,7 @@ val stack = PageStack.attach(
 - 恢复下来的是页面 JSON、带 `id` 的表单值和列表的滚动位置。列表项里面的输入和勾选不会写回那一项。`column` 写了 `scroll: true` 时，子节点在列内滚动，这个滚动位置不记。焦点、输入法、`setText` 改过的普通文本、进度和 Lottie 帧都不记。
 - 状态放不进 Bundle 时，旋转或进程重启后从 `start` 重开。不是 `ComponentActivity` 的壳拿不到系统返回键和恢复。
 - 重复打开只比较栈顶。下面已经有同名页面时，仍会再压一层。模版可以写 `popTo` 指定要回到的页面名。业务 id 和模版 id 在 `attach` 时定死。
-- 节点仍然只有 `column`、`row`、`text`、`image`、`spacer`、`list`、`progress`、`lottie`、`input`、`checkbox`、`radio`、`switch`。没有权限、地图、支付、网页、音视频，也不能从模版再启动一个 Activity。
+- 节点仍然只有 `column`、`row`、`text`、`image`、`spacer`、`list`、`progress`、`lottie`、`input`、`checkbox`、`radio`、`switch`。没有地图、支付、网页、音视频，也不能从模版再启动一个 Activity。权限不是节点，走 host。
 
 ## Demo 页面
 
@@ -261,7 +281,8 @@ val stack = PageStack.attach(
 
 | page | 模版 |
 | --- | --- |
-| `market` | 南市。底栏三个原生 Tab 各有自己的栈：首页 `templates/market/routes.json`（店铺、购物车、支付），订单 `routes-orders.json`，我的 `routes-mine.json` |
+| `permission` | `templates/permission/routes.json`。相机、麦克风、位置、相册、通知，每项可以查看、申请、去设置 |
+| `market` | 南市。底栏三个原生 Tab 各有自己的栈：首页 `templates/market/routes.json`（店铺、购物车、支付，首页问定位，店铺问相机和麦克风，支付成功问通知），订单 `routes-orders.json`，我的 `routes-mine.json`（换头像，并查看五项状态） |
 | `stack` | `templates/stack/routes.json`。四站共用地点模版，看点的勾选写回那一项，备忘的句子回到地点页 |
 | `weather` | `templates/weather-card-demo/weather-card.json` |
 | `column` `row` `text` `image` `spacer` | 对应基础组件 |

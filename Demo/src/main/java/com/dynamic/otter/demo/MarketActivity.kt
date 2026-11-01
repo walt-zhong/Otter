@@ -19,10 +19,13 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.ExpansionCenter
 import com.dynamic.otter.nav.PageStack
+import com.dynamic.otter.permission.AndroidPermissionCenter
+import com.dynamic.otter.permission.PermissionActions
 import com.dynamic.otter.utils.AssetsUtils
 
 class MarketActivity : AppCompatActivity() {
     private val session = MarketSession()
+    private var permissions: AndroidPermissionCenter? = null
     private lateinit var tabLabels: List<TextView>
     private lateinit var tabMarks: List<View>
     private lateinit var containers: Map<String, View>
@@ -30,6 +33,7 @@ class MarketActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        permissions = AndroidPermissionCenter.install(this, NanshiPermissions.prompts)
         enableEdgeToEdge()
         setContentView(R.layout.activity_market)
         tabLabels = listOf(
@@ -108,6 +112,8 @@ class MarketActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        permissions?.release()
+        permissions = null
         session.release()
         super.onDestroy()
     }
@@ -130,6 +136,9 @@ class MarketActivity : AppCompatActivity() {
         }
         selectedIndex = index
         selectTab(index)
+        if (page == "mine") {
+            PermissionActions.publishAll(this)
+        }
     }
 
     private fun selectTab(index: Int) {

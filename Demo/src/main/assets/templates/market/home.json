@@ -38,6 +38,31 @@
                 "text": "巷口四家店，今天都在。",
                 "layout": { "width": "fill", "height": "wrap" },
                 "style": { "color": "#8A8178", "fontSize": 14 }
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": "fill", "height": 8 }
+              },
+              {
+                "type": "text",
+                "text": "$locationStatusText",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#8A8178", "fontSize": 13 }
+              },
+              {
+                "type": "text",
+                "text": "我在这条巷吗",
+                "layout": { "width": "wrap", "height": "wrap", "margin": { "top": 4 } },
+                "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+                "onClick": ["askLocation"]
+              },
+              {
+                "type": "text",
+                "text": "去设置",
+                "visible": "$locationShowSettings",
+                "layout": { "width": "wrap", "height": "wrap", "margin": { "top": 4 } },
+                "style": { "color": "#8B572A", "fontSize": 14, "fontWeight": "medium" },
+                "onClick": ["locationSettings"]
               }
             ]
           },
@@ -255,6 +280,16 @@
   },
   "events": {
     "openCart": { "action": "open", "page": "cart" },
+    "askLocation": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "location.whenInUse" }
+    },
+    "locationSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "location.whenInUse" }
+    },
     "filterShops": {
       "action": "host",
       "name": "filter",

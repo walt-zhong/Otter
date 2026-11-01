@@ -214,6 +214,7 @@
 - `open`、`replace`、`popTo` 必填 `page`。`page` 是页面名或以 `$` 开头。可以再写 `params`。`params` 里的值可以是字符串、数字、布尔、对象或数组。
 - `back` 可以只写 `action`，也可以再写和 `open` 一样的 `params`。
 - `host` 必填 `name`。`name` 是标识符或以 `$` 开头。可以再写和 `open` 一样的 `params`。
+- 权限用这三个 host：`permissionCheck`、`permissionRequest`、`permissionOpenSettings`。`params.capability` 只能是 `camera`、`microphone`、`location.whenInUse`、`photos`、`notifications`。说明文案由宿主写死。结果写回当前页，例如 `cameraStatus`、`cameraStatusText`、`cameraShowSettings`，另外四项用同样的前缀。相册选中后还会写 `photoSrc` 和 `avatar`。
 
 ## 不要写的东西
 
@@ -226,7 +227,7 @@
 - `local:` 图片地址
 - 颜色名，例如 `red`、`white`。只用十六进制或 `transparent`
 - 渐变停靠百分比
-- 网络请求、Tab、底部导航、权限、地图、支付、网页
+- 网络请求、Tab、底部导航、地图、支付、网页。不要写系统权限名，权限走上面的 host
 - 未知 `type` 或未知字段
 
 ## 完整例子

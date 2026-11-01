@@ -2,6 +2,7 @@
   "layout": {
     "type": "column",
     "id": "result",
+    "scroll": true,
     "layout": {
       "width": "fill",
       "height": "fill",
@@ -68,6 +69,57 @@
       },
       {
         "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "$notificationsStatusText",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "做好了通知我",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askNotifications"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开通知",
+        "visible": "$notificationsShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["notificationSettings"]
+      },
+      {
+        "type": "spacer",
         "layout": { "width": "fill", "height": 24 }
       },
       {
@@ -115,6 +167,16 @@
   },
   "events": {
     "goHome": { "action": "popTo", "page": "home" },
+    "askNotifications": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "notifications" }
+    },
+    "notificationSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "notifications" }
+    },
     "openOrders": { "action": "host", "name": "openTab", "params": { "page": "orders" } }
   }
 }

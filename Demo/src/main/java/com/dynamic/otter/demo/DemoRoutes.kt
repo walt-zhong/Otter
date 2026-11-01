@@ -14,6 +14,10 @@ object DemoRoutes {
             context.startActivity(Intent(context, MarketActivity::class.java))
             return
         }
+        if (page == "permission") {
+            context.startActivity(Intent(context, PermissionActivity::class.java))
+            return
+        }
         if (page == "weather") {
             context.startActivity(Intent(context, WeatherCardTemplateActivity::class.java))
             return

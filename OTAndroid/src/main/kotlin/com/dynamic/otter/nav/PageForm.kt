@@ -6,6 +6,7 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
+import com.dynamic.otter.render.view.OTViewTreeCreator
 import com.dynamic.otter.render.view.basic.Input
 import com.dynamic.otter.render.view.basic.OTItemView
 import com.dynamic.otter.render.view.basic.capability.ICheckable
@@ -75,7 +76,9 @@ internal object PageForm {
         if (!id.isNullOrEmpty() && data.containsKey(id)) {
             val value = data.get(id)
             when {
-                view is Input && value is String -> view.onBindData(value)
+                view is Input && value is String -> OTViewTreeCreator.suppressInputChange(view) {
+                    view.onBindData(value)
+                }
                 view is ICheckable && value is Boolean -> view.onBindData(value)
             }
         }
