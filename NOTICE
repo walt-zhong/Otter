@@ -1,0 +1,47 @@
+Otter contains the third-party components listed below.
+Their copyright notices and license terms are retained here.
+
+========================================================================
+GaiaX
+Ali-GaiaX-Project is a high-performance of the template dynamic develop solutions, there is provided a new way of developing, at the same time be able to have cross-side, improve the development efficiency, guarantee of Native ahead-of-time of performance and experience, and to dynamically publish boost demand iteration response speed capabilities such.
+Copyright (c) 2021, Alibaba Group Holding Limited
+Licensed under the Apache License, Version 2.0.
+https://github.com/alibaba/GaiaX
+https://github.com/alibaba/GaiaX/blob/main/LICENSE
+https://github.com/alibaba/GaiaX/blob/main/NOTICE
+
+Otter uses two components from GaiaX:
+
+1. Flexbox layout engine, from GaiaXStretch:
+   https://github.com/alibaba/GaiaX/tree/main/GaiaXStretch
+   Kotlin bindings:
+   https://github.com/alibaba/GaiaX/tree/main/GaiaXStretch/bindings/kotlin
+   Local copies:
+   OTAndroid/src/main/jniLibs/arm64-v8a/libstretch.so
+   OTAndroid/src/main/kotlin/app/visly/stretch/
+
+2. Expression engine, from GaiaXAnalyze:
+   https://github.com/alibaba/GaiaX/tree/main/GaiaXAnalyze
+   Core:
+   https://github.com/alibaba/GaiaX/tree/main/GaiaXAnalyze/GXAnalyzeCore
+   Android JNI:
+   https://github.com/alibaba/GaiaX/tree/main/GaiaXAnalyze/GXAnalyzeAndroid
+   Local copies were renamed from GX* to OT* and adapted for this SDK:
+   OTAndroid/src/main/cpp/OTAnalyze.h
+   OTAndroid/src/main/cpp/OTAnalyze.cpp
+   OTAndroid/src/main/cpp/OTWordAnalyze.h
+   OTAndroid/src/main/cpp/OTWordAnalyze.cpp
+   OTAndroid/src/main/cpp/OTATSNode.h
+   OTAndroid/src/main/cpp/OTATSNode.cpp
+   OTAndroid/src/main/cpp/OTValue.h
+   OTAndroid/src/main/cpp/OTJniAnalyze.cpp
+   OTAndroid/src/main/kotlin/com/dynamic/otter/expression/analyze/
+
+========================================================================
+stretch
+Copyright (c) 2018 Visly Inc.
+Licensed under the MIT license.
+https://github.com/alibaba/GaiaX/blob/main/GaiaXStretch/LICENSE
+
+GaiaXStretch is GaiaX's maintained copy of Stretch. The Stretch copyright
+and MIT license remain with Visly Inc., as stated in the GaiaX NOTICE.

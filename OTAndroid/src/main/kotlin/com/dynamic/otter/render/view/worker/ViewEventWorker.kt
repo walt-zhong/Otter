@@ -2,6 +2,7 @@ package com.dynamic.otter.render.view.worker
 
 import android.view.View
 import com.alibaba.fastjson.JSONObject
+import com.dynamic.otter.nav.PageParams
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 import com.dynamic.otter.render.view.basic.Input
 import com.dynamic.otter.render.view.basic.OTAbsoluteLayout
@@ -21,6 +22,7 @@ class ViewEventWorker private constructor() : IEventWorker {
         if (paramJsonObj["fun"] != "changeAttributes") {
             return
         }
+        val scope = PageParams.merge(pageData, itemData)
         val targetId = viewIds[paramJsonObj["id"]]
         val targetView = resolveTargetView(clickedView, rootView, targetId)
         when (paramJsonObj["key"]) {
@@ -30,7 +32,7 @@ class ViewEventWorker private constructor() : IEventWorker {
                 }
                 val value = paramJsonObj["value"]
                 val text = if (value is String) {
-                    value.extractExpValue(itemData ?: pageData)
+                    value.extractExpValue(scope)
                 } else {
                     value?.toString().orEmpty()
                 }
@@ -47,7 +49,7 @@ class ViewEventWorker private constructor() : IEventWorker {
             "setChecked" -> {
                 val value = paramJsonObj["value"]
                 val resolved = if (value is String) {
-                    value.extractExpValue(itemData ?: pageData)
+                    value.extractExpValue(scope)
                 } else {
                     value
                 }

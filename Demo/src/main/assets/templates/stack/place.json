@@ -1,0 +1,241 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "place",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 16 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center", "justify": "spaceBetween" },
+        "children": [
+          {
+            "type": "row",
+            "layout": { "width": 88, "height": 36, "align": "center" },
+            "onClick": ["goBack"],
+            "children": [
+              { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+              { "type": "spacer", "layout": { "width": 6, "height": 18 } },
+              {
+                "type": "text",
+                "text": "四站",
+                "layout": { "width": 40, "height": 20 },
+                "style": { "color": "#1F1A17", "fontSize": 14 }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "记一句",
+            "layout": { "width": 64, "height": 32 },
+            "style": {
+              "background": "#1F1A17",
+              "radius": 16,
+              "color": "#F6E7C1",
+              "fontSize": 13,
+              "align": "center"
+            },
+            "onClick": ["openMemo"]
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 76, "align": "center" },
+        "children": [
+          {
+            "type": "image",
+            "id": "cover",
+            "src": "$cover",
+            "layout": { "width": 76, "height": 76 },
+            "style": { "radius": 22 }
+          },
+          { "type": "spacer", "layout": { "width": 14, "height": 76 } },
+          {
+            "type": "column",
+            "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+            "children": [
+              {
+                "type": "text",
+                "id": "area",
+                "text": "$area",
+                "layout": { "width": "fill", "height": 16 },
+                "style": { "color": "$ink", "fontSize": 12 }
+              },
+              { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+              {
+                "type": "text",
+                "id": "title",
+                "text": "$title",
+                "layout": { "width": "fill", "height": 30 },
+                "style": { "color": "#1F1A17", "fontSize": 24 }
+              },
+              { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+              {
+                "type": "text",
+                "id": "hours",
+                "text": "$hours",
+                "layout": { "width": "fill", "height": 18 },
+                "style": { "color": "#8A8178", "fontSize": 13 }
+              }
+            ]
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 14 } },
+      {
+        "type": "text",
+        "id": "lead",
+        "text": "$lead",
+        "layout": { "width": "fill", "height": 44 },
+        "style": { "color": "#1F1A17", "fontSize": 15 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 20, "align": "center", "justify": "spaceBetween" },
+        "children": [
+          {
+            "type": "text",
+            "text": "这一站",
+            "layout": { "width": 64, "height": 20 },
+            "style": { "color": "#1F1A17", "fontSize": 15 }
+          },
+          {
+            "type": "text",
+            "text": "点开看",
+            "layout": { "width": 56, "height": 18 },
+            "style": { "color": "#8A8178", "fontSize": 12, "align": "end" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+      {
+        "type": "list",
+        "id": "stops",
+        "data": "$stops",
+        "direction": "vertical",
+        "gap": 10,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 78,
+            "padding": { "start": 14, "end": 14, "top": 12, "bottom": 12 },
+            "align": "center"
+          },
+          "style": { "background": "#FFFCF8", "radius": 18 },
+          "onClick": ["openStop"],
+          "children": [
+            {
+              "type": "spacer",
+              "layout": { "width": 4, "height": 36 },
+              "style": { "background": "$wash", "radius": 2 }
+            },
+            { "type": "spacer", "layout": { "width": 12, "height": 36 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$when",
+                  "layout": { "width": "fill", "height": 16 },
+                  "style": { "color": "$ink", "fontSize": 12 }
+                },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$name",
+                  "layout": { "width": "fill", "height": 24 },
+                  "style": { "color": "#1F1A17", "fontSize": 17 }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "看",
+              "layout": { "width": 20, "height": 20 },
+              "style": { "color": "#C45C26", "fontSize": 14, "align": "end" }
+            }
+          ]
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "text",
+        "text": "记下的",
+        "layout": { "width": "fill", "height": 18 },
+        "style": { "color": "#8A8178", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "list",
+        "id": "memos",
+        "data": "$memos",
+        "direction": "vertical",
+        "gap": 8,
+        "layout": { "width": "fill", "height": 96 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 44,
+            "padding": { "start": 12, "end": 12 },
+            "align": "center"
+          },
+          "style": { "background": "#FFFCF8", "radius": 14 },
+          "children": [
+            {
+              "type": "spacer",
+              "layout": { "width": 8, "height": 8 },
+              "style": { "background": "#C45C26", "radius": 4 }
+            },
+            { "type": "spacer", "layout": { "width": 10, "height": 8 } },
+            {
+              "type": "text",
+              "text": "$text",
+              "layout": { "width": "fill", "height": 22, "grow": 1 },
+              "style": { "color": "#1F1A17", "fontSize": 15 }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "openMemo": {
+      "action": "open",
+      "page": "memo",
+      "params": {
+        "title": "$title",
+        "wash": "$wash",
+        "ink": "$ink"
+      }
+    },
+    "openStop": {
+      "action": "open",
+      "page": "stop",
+      "params": {
+        "name": "$name",
+        "when": "$when",
+        "detail": "$detail",
+        "tip": "$tip",
+        "place": "$title",
+        "cover": "$cover",
+        "wash": "$wash",
+        "ink": "$ink",
+        "been": "$been",
+        "again": "$again"
+      }
+    }
+  }
+}

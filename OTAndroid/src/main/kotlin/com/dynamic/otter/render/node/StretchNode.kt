@@ -55,6 +55,31 @@ data class StretchNode(
                 style.padding = it
             }
 
+            val box = flexBox
+            if (box != null && box.margin != null) {
+                style.margin = box.marginForDimension
+            }
+
+            flexBox?.minSizeForDimension?.let {
+                style.minSize = it
+            }
+
+            flexBox?.maxSizeForDimension?.let {
+                style.maxSize = it
+            }
+
+            flexBox?.aspectRatio?.let {
+                style.aspectRatio = it
+            }
+
+            flexBox?.flexWrap?.let {
+                style.flexWrap = it
+            }
+
+            flexBox?.alignSelf?.let {
+                style.alignSelf = it
+            }
+
             flexBox?.let {
                 style.flexGrow = it.flexGrow
             }

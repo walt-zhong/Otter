@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.data.TemplateKey
+import com.dynamic.otter.nav.Ime
 import com.dynamic.otter.expression.ExpressionWrapper
 import com.dynamic.otter.render.view.applyUniformCornerOutline
 import com.dynamic.otter.render.view.attr.InputAttr
@@ -49,6 +50,13 @@ class Input : AppCompatEditText, IDataBindingCapability, IReleaseCapability,
         maxLines = 1
         gravity = Gravity.CENTER_VERTICAL or Gravity.START
         imeOptions = EditorInfo.IME_ACTION_DONE
+        setOnEditorActionListener { _, actionId, _ ->
+            if (actionId != EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener false
+            }
+            Ime.dismiss(this)
+            true
+        }
     }
 
     override fun onBindData(data: Any?) {
@@ -74,9 +82,23 @@ class Input : AppCompatEditText, IDataBindingCapability, IReleaseCapability,
         setTextColor(colorOrDefault(attr.textColor, "#1F1A17"))
         hint = attr.hint
         setHintTextColor(colorOrDefault(attr.hintColor, "#8A8178"))
-        applyKeyboard(attr.inputType)
-        attr.textAlign?.let { setTextAlign(it) }
-            ?: run { gravity = Gravity.CENTER_VERTICAL or Gravity.START }
+        applyKeyboard(attr.inputType, attr.lines)
+        val align = attr.textAlign
+        if (align != null) {
+            setTextAlign(align)
+        } else {
+            gravity = if (attr.lines > 1) {
+                Gravity.TOP or Gravity.START
+            } else {
+                Gravity.CENTER_VERTICAL or Gravity.START
+            }
+        }
+        if (attr.lines > 1) {
+            val horizontal = gravity and (
+                Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK
+            )
+            gravity = Gravity.TOP or (if (horizontal == 0) Gravity.START else horizontal)
+        }
         val length = attr.maxLength?.toIntOrNull()
         filters = if (length != null && length >= 0) {
             arrayOf(InputFilter.LengthFilter(length))
@@ -131,11 +153,22 @@ class Input : AppCompatEditText, IDataBindingCapability, IReleaseCapability,
         }
     }
 
-    private fun applyKeyboard(type: String) {
+    private var appliedKeyboard: String? = null
+
+    private fun applyKeyboard(type: String, lines: Int) {
+        val key = "$type:$lines"
+        // setSingleLine / setInputType 会 restartInput。搜索每次按键都重绑，
+        // 重复写键盘类型会把下一次退格丢掉，字母就没法连续删除。
+        if (appliedKeyboard == key) {
+            return
+        }
+        val multiline = lines > 1
         // setSingleLine 会改掉 inputType，必须先收成单行，再写键盘类型。
-        isSingleLine = true
-        maxLines = 1
-        inputType = when (type) {
+        if (!multiline) {
+            isSingleLine = true
+            maxLines = 1
+        }
+        var bits = when (type) {
             "number" -> InputType.TYPE_CLASS_NUMBER
             "password" -> InputType.TYPE_CLASS_TEXT or
                 InputType.TYPE_TEXT_VARIATION_PASSWORD or
@@ -144,14 +177,26 @@ class Input : AppCompatEditText, IDataBindingCapability, IReleaseCapability,
             "phone" -> InputType.TYPE_CLASS_PHONE
             else -> InputType.TYPE_CLASS_TEXT
         }
-        // setInputType 会清掉 transformation，密码遮罩要在它后面补上。
+        if (multiline && (bits and InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT) {
+            bits = bits or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        }
+        inputType = bits
+        if (multiline) {
+            isSingleLine = false
+            maxLines = lines
+            minLines = lines
+            imeOptions = EditorInfo.IME_ACTION_NONE
+        } else {
+            imeOptions = EditorInfo.IME_ACTION_DONE
+        }
+        // setInputType / setSingleLine 会清掉 transformation，密码遮罩要在它们后面补上。
         transformationMethod = if (type == "password") {
             PasswordTransformationMethod.getInstance()
         } else {
             null
         }
-        imeOptions = EditorInfo.IME_ACTION_DONE
         applyAutofill(type)
+        appliedKeyboard = key
     }
 
     private fun applyAutofill(type: String) {

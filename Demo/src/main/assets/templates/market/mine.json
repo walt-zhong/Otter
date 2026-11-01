@@ -1,0 +1,202 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "mine",
+    "scroll": true,
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 16 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "text",
+        "text": "我的",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "align": "center" },
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_ava_c",
+            "layout": { "width": 64, "height": 64 },
+            "style": {
+              "radius": 32,
+              "fit": "contain",
+              "placeholder": "#E6DDD2",
+              "background": "#E6DDD2"
+            }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 14, "height": 12 }
+          },
+          {
+            "type": "column",
+            "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+            "children": [
+              {
+                "type": "text",
+                "text": "$name",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#1F1A17", "fontSize": 22, "fontWeight": "bold" }
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": "fill", "height": 4 }
+              },
+              {
+                "type": "text",
+                "text": "南市常客",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#8A8178", "fontSize": 13 }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "align": "center",
+          "padding": { "start": 12, "end": 12, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 16,
+          "border": { "color": "#E6DDD2", "width": 1 }
+        },
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_scene_bench",
+            "layout": { "width": 72, "height": 72 },
+            "style": { "radius": 12, "fit": "cover" }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 12, "height": 12 }
+          },
+          {
+            "type": "column",
+            "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+            "children": [
+              {
+                "type": "text",
+                "text": "巷口长椅",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+              },
+              {
+                "type": "spacer",
+                "layout": { "width": "fill", "height": 4 }
+              },
+              {
+                "type": "text",
+                "text": "傍晚还有空位，看完灯就坐一会儿。",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#8A8178", "fontSize": 13 }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "switch",
+        "id": "member",
+        "checked": true,
+        "label": "会员价提醒",
+        "layout": {
+          "width": "fill",
+          "height": 52,
+          "padding": { "start": 14, "end": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "tint": "#8B572A"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "签名",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "input",
+        "id": "signature",
+        "value": "$signature",
+        "hint": "写给店员的一句话",
+        "lines": 3,
+        "layout": {
+          "width": "fill",
+          "height": 96,
+          "padding": { "start": 14, "end": 14, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "hintColor": "#8A8178"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "保存偏好",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["savePrefs"]
+      }
+    ]
+  },
+  "events": {
+    "savePrefs": { "action": "toast", "message": "偏好已保存" }
+  }
+}

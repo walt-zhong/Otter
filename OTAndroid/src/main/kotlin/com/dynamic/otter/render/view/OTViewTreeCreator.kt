@@ -1,9 +1,12 @@
 package com.dynamic.otter.render.view
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.visly.stretch.Display
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -17,6 +20,7 @@ import com.dynamic.otter.render.utils.LayoutParamsUtils
 import com.dynamic.otter.render.view.attr.ContainerAttr
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.attr.CheckBoxAttr
+import com.dynamic.otter.render.view.attr.ColumnAttr
 import com.dynamic.otter.render.view.attr.ImageAttr
 import com.dynamic.otter.render.view.attr.InputAttr
 import com.dynamic.otter.render.view.attr.OTListAttr
@@ -27,6 +31,7 @@ import com.dynamic.otter.render.view.attr.TextAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.AnimationView
 import com.dynamic.otter.render.view.basic.CheckBox
+import com.dynamic.otter.render.view.basic.Column
 import com.dynamic.otter.render.view.basic.Image
 import com.dynamic.otter.render.view.basic.Input
 import com.dynamic.otter.render.view.basic.OTLayoutParams
@@ -43,6 +48,8 @@ import com.dynamic.otter.render.view.worker.ViewEventWorker
 import com.dynamic.otter.template.OTSize
 
 object OTViewTreeCreator {
+    private const val INPUT_CHANGE_WATCHER = 0x6F740C11
+
     fun buildAndroidView(templateContext: TemplateContext): View {
         val rootNode = templateContext.rootNode
             ?: throw IllegalStateException("TemplateContext.rootNode is null")
@@ -63,6 +70,78 @@ object OTViewTreeCreator {
             placeItemEnd(itemView, node, itemData)
         }
         return itemView
+    }
+
+    fun rebindViews(rootView: View, rootNode: OTNode, templateContext: TemplateContext) {
+        rebindView(rootView, rootNode, templateContext)
+    }
+
+    private fun rebindView(view: View, node: OTNode, templateContext: TemplateContext) {
+        val attr = node.attr
+        if (attr != null) {
+            attr.id = view.id
+            val name = attr.idName
+            if (!name.isNullOrEmpty()) {
+                templateContext.viewIds[name] = view.id
+                if (view.tag != name) {
+                    view.tag = name
+                }
+            }
+            view.setBackgroundWithRadius(attr)
+            if (hasCorner(attr)) {
+                view.setViewRoundCornerAndBorder(attr)
+            }
+            applyVisibility(view, node, attr, itemData = null)
+            pushContent(view, node, attr)
+        }
+        if (node.isListContainer()) {
+            return
+        }
+        val container = templateChildrenOf(view) ?: return
+        val count = minOf(container.childCount, node.children.size)
+        for (index in 0 until count) {
+            rebindView(container.getChildAt(index), node.children[index], templateContext)
+        }
+    }
+
+    private fun templateChildrenOf(view: View): ViewGroup? {
+        val scrolled = (view as? Column)?.scrollContent
+        if (scrolled != null) {
+            return scrolled
+        }
+        return view as? ViewGroup
+    }
+
+    private fun pushContent(view: View, node: OTNode, attr: ViewAttr) {
+        when {
+            view is Text && attr is TextAttr -> bindText(view, attr, itemData = null)
+            view is Input && attr is InputAttr -> suppressInputChange(view) {
+                bindInput(view, attr, itemData = null)
+            }
+            view is CheckBox && attr is CheckBoxAttr -> bindCheckBox(view, attr, itemData = null)
+            view is Radio && attr is RadioAttr -> bindRadio(view, attr, itemData = null)
+            view is Switch && attr is SwitchAttr -> bindSwitch(view, attr, itemData = null)
+            view is Image && attr is ImageAttr -> {
+                view.onBindStyle(attr)
+                view.onBindData(attr.src)
+            }
+            view is RecyclerView && node.isListContainer() -> rebindList(view, node)
+        }
+    }
+
+    private fun rebindList(view: RecyclerView, node: OTNode) {
+        val adapter = view.adapter as? OTListAdapter ?: return
+        val attr = node.attr as? OTListAttr ?: return
+        val direction = (view.layoutManager as? LinearLayoutManager)?.orientation
+            ?: RecyclerView.VERTICAL
+        val listLayout = node.stretchNode.layoutByPrepareView
+        val viewport = if (direction == RecyclerView.HORIZONTAL) {
+            OTEngine.OTViewPortSize(width = null, height = listLayout?.height)
+        } else {
+            OTEngine.OTViewPortSize(width = listLayout?.width, height = null)
+        }
+        val data = attr.liveData ?: JSON.parseArray(attr.data) ?: JSONArray()
+        adapter.updateBinding(node.itemTemplate, viewport, data)
     }
 
     private fun createConfiguredView(
@@ -120,7 +199,7 @@ object OTViewTreeCreator {
             listDirection = direction,
             itemPadding = itemPadding
         )
-        adapter.setData(JSON.parseArray(listAttr.data) ?: JSONArray())
+        adapter.setData(listAttr.liveData ?: JSON.parseArray(listAttr.data) ?: JSONArray())
         view.layoutManager = LinearLayoutManager(view.context, direction, false)
         view.adapter = adapter
     }
@@ -140,7 +219,7 @@ object OTViewTreeCreator {
             attr.background = resolvedBackground
         }
         try {
-            handleViewCommonAttr(view, attr, templateContext, itemData)
+            handleViewCommonAttr(view, node, attr, templateContext, itemData)
         } finally {
             attr.background = background
         }
@@ -150,12 +229,20 @@ object OTViewTreeCreator {
             view is CheckBox && attr is CheckBoxAttr -> bindCheckBox(view, attr, itemData)
             view is Radio && attr is RadioAttr -> bindRadio(view, attr, itemData)
             view is Switch && attr is SwitchAttr -> bindSwitch(view, attr, itemData)
-            view is Image && attr is ImageAttr -> view.onBindData(attr.src.resolve(itemData))
+            view is Image && attr is ImageAttr -> {
+                view.onBindStyle(attr, itemData)
+                view.onBindData(attr.src.resolve(itemData))
+            }
             view is ProgressView && attr is ProgressAttr -> {
                 view.onBindData(ProgressView.ProgressBind(attr, itemData))
                 view.onBindStyle(attr, itemData)
             }
             view is AnimationView && attr is AnimationViewAttr -> view.onBindData(attr)
+            view is Column && attr is ColumnAttr -> view.onBindStyle(attr, itemData)
+        }
+        val changeNames = attr.onChange?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }
+        if (view is Input && !changeNames.isNullOrEmpty()) {
+            attachInputChange(view, changeNames, templateContext, itemData)
         }
     }
 
@@ -332,22 +419,39 @@ object OTViewTreeCreator {
         return map
     }
 
+    private fun hasCorner(attr: ViewAttr): Boolean {
+        return attr.radius != null
+            || attr.leftBottomRadius != null
+            || attr.leftTopRadius != null
+            || attr.rightTopRadius != null
+            || attr.rightBottomRadius != null
+    }
+
+    private fun applyVisibility(
+        view: View,
+        node: OTNode?,
+        attr: ViewAttr,
+        itemData: JSONObject?
+    ) {
+        val visible = attr.visible?.resolve(itemData)
+        val displayNone = node?.stretchNode?.node?.getStyle()?.display == Display.None
+        view.visibility = if (visible == "false" || displayNone) View.GONE else View.VISIBLE
+    }
+
     private fun handleViewCommonAttr(
         view: View,
+        node: OTNode?,
         attr: ViewAttr,
         templateContext: TemplateContext,
         itemData: JSONObject?
     ) {
         view.setBackgroundWithRadius(viewAttr = attr)
 
-        if (attr.radius != null
-            || attr.leftBottomRadius != null
-            || attr.leftTopRadius != null
-            || attr.rightTopRadius != null
-            || attr.rightBottomRadius != null
-        ) {
+        if (hasCorner(attr)) {
             view.setViewRoundCornerAndBorder(attr)
         }
+
+        applyVisibility(view, node, attr, itemData)
 
         val clickNames = attr.onClick?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }
         if (!clickNames.isNullOrEmpty()) {
@@ -359,6 +463,66 @@ object OTViewTreeCreator {
                 if (data != null) {
                     ExpansionCenter.instance.itemClick?.onItemClick(data.toStringMap())
                 }
+            }
+        }
+
+    }
+
+    private fun attachInputChange(
+        view: Input,
+        names: List<String>,
+        templateContext: TemplateContext,
+        itemData: JSONObject?
+    ) {
+        if (view.getTag(INPUT_CHANGE_WATCHER) != null) {
+            return
+        }
+        val watcher = InputChangeWatcher(view, names, templateContext, itemData) { clicked, name, data ->
+            dispatchEvent(clicked, templateContext.events[name], data, templateContext)
+        }
+        view.setTag(INPUT_CHANGE_WATCHER, watcher)
+        view.addTextChangedListener(watcher)
+    }
+
+    internal fun suppressInputChange(view: View, block: () -> Unit) {
+        val watcher = view.getTag(INPUT_CHANGE_WATCHER) as? InputChangeWatcher
+        if (watcher == null) {
+            block()
+            return
+        }
+        watcher.suppress = true
+        try {
+            block()
+        } finally {
+            watcher.suppress = false
+        }
+    }
+
+    private class InputChangeWatcher(
+        private val view: Input,
+        private val names: List<String>,
+        private val templateContext: TemplateContext,
+        private val itemData: JSONObject?,
+        private val dispatch: (View, String, JSONObject?) -> Unit
+    ) : TextWatcher {
+        var suppress: Boolean = false
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        override fun afterTextChanged(s: Editable?) {
+            if (suppress) {
+                return
+            }
+            val text = s?.toString().orEmpty()
+            val idName = view.tag as? String
+            val data = templateContext.data
+            if (!idName.isNullOrEmpty() && data != null) {
+                data[idName] = text
+            }
+            names.forEach { name ->
+                dispatch(view, name, itemData)
             }
         }
     }

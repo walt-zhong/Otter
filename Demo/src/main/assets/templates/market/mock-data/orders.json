@@ -1,0 +1,20 @@
+{
+  "orders": [
+    {
+      "shop": "南市咖啡",
+      "title": "手冲两杯",
+      "image": "res:ic_scene_coffee",
+      "status": "制作中",
+      "statusNote": "店员正在萃取，大约还要八分钟。",
+      "meta": "今天 08:40 · 48 元"
+    },
+    {
+      "shop": "巷口书店",
+      "title": "旧书一册",
+      "image": "res:ic_scene_book",
+      "status": "已完成",
+      "statusNote": "昨天傍晚已经取走。",
+      "meta": "昨天 18:12 · 36 元"
+    }
+  ]
+}

@@ -6,6 +6,14 @@ import android.widget.Toast
 
 object DemoRoutes {
     fun open(context: Context, page: String) {
+        if (page == "stack") {
+            context.startActivity(Intent(context, StackActivity::class.java))
+            return
+        }
+        if (page == "market") {
+            context.startActivity(Intent(context, MarketActivity::class.java))
+            return
+        }
         if (page == "weather") {
             context.startActivity(Intent(context, WeatherCardTemplateActivity::class.java))
             return

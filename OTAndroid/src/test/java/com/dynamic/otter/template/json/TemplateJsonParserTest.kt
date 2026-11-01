@@ -223,6 +223,7 @@ class TemplateJsonParserTest {
                 "hint": "请输入",
                 "keyboard": "email",
                 "maxLength": 20,
+                "lines": 3,
                 "layout": { "width": "fill", "height": 44 },
                 "style": {
                   "color": "#1F1A17",
@@ -243,6 +244,7 @@ class TemplateJsonParserTest {
         assertEquals("请输入", input.attrs[TemplateKey.ATTR_HINT])
         assertEquals("email", input.attrs[TemplateKey.ATTR_INPUT_TYPE])
         assertEquals("20", input.attrs[TemplateKey.ATTR_MAX_LENGTH])
+        assertEquals("3", input.attrs[TemplateKey.ATTR_LINES])
         assertEquals("#1F1A17", input.attrs[TemplateKey.ATTR_TEXT_COLOR])
         assertEquals("16", input.attrs[TemplateKey.ATTR_TEXT_SIZE])
         assertEquals("start", input.attrs[TemplateKey.ATTR_TEXT_ALIGN])
@@ -271,6 +273,7 @@ class TemplateJsonParserTest {
         assertNull(input.attrs[TemplateKey.ATTR_HINT])
         assertNull(input.attrs[TemplateKey.ATTR_MAX_LENGTH])
         assertEquals("text", input.attrs[TemplateKey.ATTR_INPUT_TYPE])
+        assertNull(input.attrs[TemplateKey.ATTR_LINES])
     }
 
     @Test
@@ -485,7 +488,7 @@ class TemplateJsonParserTest {
     @Test
     fun rejectsUnrecognizedEventAction() {
         assertFails(
-            "$.events.bad.action「nope」无法识别，事件 bad 只能是 toast、setText、setTextStyle、setChecked、append、open、back"
+            "$.events.bad.action「nope」无法识别，事件 bad 只能是 toast、setText、setTextStyle、setChecked、append、update、remove、open、back、replace、popTo、host"
         ) {
             TemplateJsonParser.parse(
                 """
@@ -628,6 +631,224 @@ class TemplateJsonParserTest {
     }
 
     @Test
+    fun openWithoutParamsKeepsPageAndOmitsInnerParams() {
+        val literal = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": { "openPage": { "action": "open", "page": "detail" } }
+            }
+            """.trimIndent()
+        )
+        val literalEvent = literal.events.getValue("openPage")
+        assertEquals("nav", literalEvent.getString("class"))
+        assertEquals(2, literalEvent.size)
+        val literalParams = literalEvent.getJSONObject("params")
+        assertEquals("open", literalParams.getString("fun"))
+        assertEquals("detail", literalParams.getString("page"))
+        assertEquals(2, literalParams.size)
+        assertTrue(!literalParams.containsKey("params"))
+
+        val expression = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": { "openPage": { "action": "open", "page": "${'$'}page" } }
+            }
+            """.trimIndent()
+        )
+        val expressionEvent = expression.events.getValue("openPage")
+        assertEquals("nav", expressionEvent.getString("class"))
+        val expressionParams = expressionEvent.getJSONObject("params")
+        assertEquals("open", expressionParams.getString("fun"))
+        assertEquals("\$page", expressionParams.getString("page"))
+        assertEquals(2, expressionParams.size)
+        assertTrue(!expressionParams.containsKey("params"))
+    }
+
+    @Test
+    fun openParamsKeepStringNumberAndBoolean() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": {
+                "openPage": {
+                  "action": "open",
+                  "page": "detail",
+                  "params": {
+                    "city": "${'$'}city",
+                    "title": "北京",
+                    "count": 2,
+                    "ratio": 2.5,
+                    "delta": -1,
+                    "ok": true
+                  }
+                }
+              }
+            }
+            """.trimIndent()
+        )
+
+        val event = parsed.events.getValue("openPage")
+        assertEquals("nav", event.getString("class"))
+        val params = event.getJSONObject("params")
+        assertEquals("open", params.getString("fun"))
+        assertEquals("detail", params.getString("page"))
+        val inner = params.getJSONObject("params")
+        assertEquals("\$city", inner.get("city"))
+        assertEquals("北京", inner.get("title"))
+        val count = inner.get("count")
+        assertTrue(count is Number)
+        assertEquals(2, (count as Number).toInt())
+        val ratio = inner.get("ratio")
+        assertTrue(ratio is Number)
+        assertEquals(2.5, (ratio as Number).toDouble(), 0.0)
+        val delta = inner.get("delta")
+        assertTrue(delta is Number)
+        assertEquals(-1, (delta as Number).toInt())
+        assertEquals(true, inner.get("ok"))
+    }
+
+    @Test
+    fun openEmptyParamsBecomesEmptyObject() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": { "openPage": { "action": "open", "page": "detail", "params": {} } }
+            }
+            """.trimIndent()
+        )
+
+        val params = parsed.events.getValue("openPage").getJSONObject("params")
+        assertEquals("open", params.getString("fun"))
+        assertEquals("detail", params.getString("page"))
+        val inner = params.getJSONObject("params")
+        assertEquals(0, inner.size)
+    }
+
+    @Test
+    fun openParamsKeepNestedObjectAndArray() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": {
+                "openPage": {
+                  "action": "open",
+                  "page": "detail",
+                  "params": {
+                    "city": { "name": "上海" },
+                    "tags": ["${'$'}tag", 1]
+                  }
+                }
+              }
+            }
+            """.trimIndent()
+        )
+        val inner = parsed.events.getValue("openPage").getJSONObject("params").getJSONObject("params")
+        assertEquals("上海", inner.getJSONObject("city").getString("name"))
+        assertEquals("\$tag", inner.getJSONArray("tags").getString(0))
+        assertEquals(1, (inner.getJSONArray("tags").get(1) as Number).toInt())
+    }
+
+    @Test
+    fun rejectsInvalidOpenParamsAndPage() {
+        assertFails("$.events.openPage.params 必须是对象") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": { "openPage": { "action": "open", "page": "detail", "params": [] } }
+                }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.events.openPage.params.city 必须是字符串、数字、布尔、对象或数组") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": {
+                    "openPage": { "action": "open", "page": "detail", "params": { "city": null } }
+                  }
+                }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.events.openPage.params.1city 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": {
+                    "openPage": { "action": "open", "page": "detail", "params": { "1city": "上海" } }
+                  }
+                }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.events.openPage.page 必须是页面名或以 $ 开头") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": { "openPage": { "action": "open", "page": "1ab" } }
+                }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.events.openPage.target 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": { "openPage": { "action": "open", "page": "detail", "target": "title" } }
+                }
+                """.trimIndent()
+            )
+        }
+    }
+
+    @Test
+    fun backRejectsExtraFields() {
+        assertFails("$.events.goBack.note 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": { "goBack": { "action": "back", "note": "bye" } }
+                }
+                """.trimIndent()
+            )
+        }
+    }
+
+    @Test
+    fun backParamsKeepTheSameValuesAsOpen() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+              "events": {
+                "goBack": {
+                  "action": "back",
+                  "params": { "memos": "${'$'}lines", "count": 1, "ok": false }
+                }
+              }
+            }
+            """.trimIndent()
+        )
+        val params = parsed.events.getValue("goBack").getJSONObject("params")
+        assertEquals("back", params.getString("fun"))
+        val inner = params.getJSONObject("params")
+        assertEquals("\$lines", inner.getString("memos"))
+        assertEquals(1, (inner.get("count") as Number).toInt())
+        assertEquals(false, inner.get("ok"))
+    }
+
+    @Test
     fun demoTemplatesParse() {
         val root = listOf(
             File("../Demo/src/main/assets/templates"),
@@ -652,11 +873,231 @@ class TemplateJsonParserTest {
             "inbox/inbox.json",
             "journey/journey.json",
             "player/player.json",
-            "chat/chat.json"
+            "chat/chat.json",
+            "stack/shelf.json",
+            "stack/place.json",
+            "stack/stop.json",
+            "stack/memo.json",
+            "market/home.json",
+            "market/shop.json",
+            "market/cart.json",
+            "market/checkout.json",
+            "market/result.json",
+            "market/orders.json",
+            "market/mine.json"
         ).forEach { relative ->
             val file = File(root, relative)
             assertTrue("缺少 ${file.path}", file.isFile)
             TemplateJsonParser.parse(file.readText())
+        }
+    }
+
+    @Test
+    fun parsesLayoutStyleAndChangeFields() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": {
+                "type": "column",
+                "id": "page",
+                "scroll": true,
+                "visible": "${'$'}shown",
+                "onChange": ["renamed"],
+                "layout": {
+                  "width": "fill",
+                  "height": "fill",
+                  "margin": { "start": 8, "end": 4, "top": 2, "bottom": 1 },
+                  "wrap": true,
+                  "aspectRatio": 1.5,
+                  "alignSelf": "stretch",
+                  "minWidth": "fill",
+                  "maxHeight": "wrap"
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "title",
+                    "text": "Hi",
+                    "layout": { "width": "fill", "height": "wrap" },
+                    "style": { "maxLines": 2, "ellipsis": true, "fontWeight": "medium" }
+                  },
+                  {
+                    "type": "image",
+                    "src": "res:cover",
+                    "layout": { "width": 40, "height": 40 },
+                    "style": { "fit": "contain", "placeholder": "#112233" }
+                  },
+                  {
+                    "type": "input",
+                    "layout": { "width": "fill", "height": 44 },
+                    "style": { "lines": 3 }
+                  },
+                  {
+                    "type": "list",
+                    "id": "feed",
+                    "data": "${'$'}items",
+                    "layout": { "width": "fill", "height": 80 },
+                    "item": {
+                      "type": "text",
+                      "text": "${'$'}title",
+                      "layout": { "width": "fill", "height": 20 }
+                    }
+                  }
+                ]
+              },
+              "events": {
+                "renamed": { "action": "toast", "message": "ok" }
+              }
+            }
+            """.trimIndent()
+        )
+
+        val page = parsed.root
+        assertEquals("true", page.attrs[TemplateKey.ATTR_SCROLL])
+        assertEquals("\$shown", page.attrs[TemplateKey.ATTR_VISIBLE])
+        assertEquals("renamed", page.attrs[TemplateKey.ATTR_ONCHANGE])
+        assertEquals("8", page.attrs[TemplateKey.ATTR_MARGIN_START])
+        assertEquals("4", page.attrs[TemplateKey.ATTR_MARGIN_END])
+        assertEquals("2", page.attrs[TemplateKey.ATTR_MARGIN_TOP])
+        assertEquals("1", page.attrs[TemplateKey.ATTR_MARGIN_BOTTOM])
+        assertNull(page.attrs[TemplateKey.ATTR_MARGIN])
+        assertEquals("wrap", page.attrs[TemplateKey.ATTR_FLEX_WRAP])
+        assertEquals("1.5", page.attrs[TemplateKey.ATTR_ASPECT_RATIO])
+        assertEquals("stretch", page.attrs[TemplateKey.ATTR_ALIGN_SELF])
+        assertEquals("match_parent", page.attrs[TemplateKey.ATTR_MIN_WIDTH])
+        assertEquals("wrap_content", page.attrs[TemplateKey.ATTR_MAX_HEIGHT])
+
+        val title = page.children[0]
+        assertEquals("2", title.attrs[TemplateKey.ATTR_MAX_LINES])
+        assertEquals("true", title.attrs[TemplateKey.ATTR_ELLIPSIS])
+        assertEquals("medium", title.attrs[TemplateKey.ATTR_FONT_WEIGHT])
+
+        val image = page.children[1]
+        assertEquals("contain", image.attrs[TemplateKey.ATTR_IMAGE_FIT])
+        assertEquals("#112233", image.attrs[TemplateKey.ATTR_PLACEHOLDER])
+
+        assertEquals("3", page.children[2].attrs[TemplateKey.ATTR_LINES])
+    }
+
+    @Test
+    fun parsesUpdateRemoveReplacePopToAndHost() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": {
+                "type": "list",
+                "id": "feed",
+                "data": "${'$'}items",
+                "layout": { "width": "fill", "height": 80 },
+                "item": {
+                  "type": "text",
+                  "text": "${'$'}title",
+                  "layout": { "width": "fill", "height": 20 }
+                }
+              },
+              "events": {
+                "edit": {
+                  "action": "update",
+                  "list": "feed",
+                  "index": "${'$'}row",
+                  "item": { "title": "新" }
+                },
+                "drop": { "action": "remove", "list": "feed", "index": 0 },
+                "swap": {
+                  "action": "replace",
+                  "page": "detail",
+                  "params": { "city": "上海" }
+                },
+                "backTo": { "action": "popTo", "page": "${'$'}page" },
+                "share": {
+                  "action": "host",
+                  "name": "${'$'}sheet",
+                  "params": { "ok": true }
+                }
+              }
+            }
+            """.trimIndent()
+        )
+
+        val update = parsed.events.getValue("edit")
+        assertEquals("list", update.getString("class"))
+        val updateParams = update.getJSONObject("params")
+        assertEquals("update", updateParams.getString("fun"))
+        assertEquals("feed", updateParams.getString("id"))
+        assertEquals("\$row", updateParams.getString("index"))
+        assertEquals("新", updateParams.getJSONObject("item").getString("title"))
+
+        val remove = parsed.events.getValue("drop").getJSONObject("params")
+        assertEquals("remove", remove.getString("fun"))
+        assertEquals("feed", remove.getString("id"))
+        assertEquals("0", remove.getString("index"))
+
+        val replace = parsed.events.getValue("swap")
+        assertEquals("nav", replace.getString("class"))
+        val replaceParams = replace.getJSONObject("params")
+        assertEquals("replace", replaceParams.getString("fun"))
+        assertEquals("detail", replaceParams.getString("page"))
+        assertEquals("上海", replaceParams.getJSONObject("params").getString("city"))
+
+        val popTo = parsed.events.getValue("backTo").getJSONObject("params")
+        assertEquals("popTo", popTo.getString("fun"))
+        assertEquals("\$page", popTo.getString("page"))
+        assertTrue(!popTo.containsKey("params"))
+
+        val host = parsed.events.getValue("share")
+        assertEquals("nav", host.getString("class"))
+        val hostParams = host.getJSONObject("params")
+        assertEquals("host", hostParams.getString("fun"))
+        assertEquals("\$sheet", hostParams.getString("name"))
+        assertEquals(true, hostParams.getJSONObject("params").get("ok"))
+    }
+
+    @Test
+    fun rejectsScrollWrapStyleAndIndexMistakes() {
+        assertFails("$.layout.scroll 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "text", "text": "Hi", "scroll": true, "layout": { "width": 1, "height": 1 } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.layout.wrap 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1, "wrap": true } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.fontWeight 只能是 regular、medium、bold") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 }, "style": { "fontWeight": "heavy" } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.fit 只能是 cover、contain、fill") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "image", "src": "res:cover", "layout": { "width": 1, "height": 1 }, "style": { "fit": "tile" } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.onChange 不能是空数组") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 }, "onChange": [] } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.events.edit.index 不能是负数") {
+            TemplateJsonParser.parse(
+                """
+                {
+                  "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 } },
+                  "events": { "edit": { "action": "update", "list": "feed", "index": -1, "item": { "title": "x" } } }
+                }
+                """.trimIndent()
+            )
         }
     }
 

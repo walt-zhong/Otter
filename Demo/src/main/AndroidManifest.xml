@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Otter"
         tools:targetApi="31">
         <activity
+            android:name=".StackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MarketActivity"
+            android:exported="false" />
+        <activity
             android:name=".ComponentDemoActivity"
             android:exported="false" />
         <activity

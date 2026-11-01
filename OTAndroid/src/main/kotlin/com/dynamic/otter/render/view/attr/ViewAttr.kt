@@ -25,6 +25,19 @@ open class ViewAttr {
     var paddingEnd: String? = null
     var paddingTop: String? = null
     var paddingBottom: String? = null
+    var margin: String? = null
+    var marginStart: String? = null
+    var marginEnd: String? = null
+    var marginTop: String? = null
+    var marginBottom: String? = null
+    var visible: String? = null
+    var onChange: String? = null
+    var minWidth: String? = null
+    var minHeight: String? = null
+    var maxWidth: String? = null
+    var maxHeight: String? = null
+    var aspectRatio: String? = null
+    var alignSelf: String? = null
     var flexGrow: Float = 0f
     lateinit var flexbox: OTFlexBox
 
@@ -66,6 +79,19 @@ open class ViewAttr {
             TemplateKey.ATTR_PADDING_END -> paddingEnd = value
             TemplateKey.ATTR_PADDING_TOP -> paddingTop = value
             TemplateKey.ATTR_PADDING_BOTTOM -> paddingBottom = value
+            TemplateKey.ATTR_MARGIN -> margin = value
+            TemplateKey.ATTR_MARGIN_START -> marginStart = value
+            TemplateKey.ATTR_MARGIN_END -> marginEnd = value
+            TemplateKey.ATTR_MARGIN_TOP -> marginTop = value
+            TemplateKey.ATTR_MARGIN_BOTTOM -> marginBottom = value
+            TemplateKey.ATTR_VISIBLE -> visible = value
+            TemplateKey.ATTR_ONCHANGE -> onChange = raw
+            TemplateKey.ATTR_MIN_WIDTH -> minWidth = value
+            TemplateKey.ATTR_MIN_HEIGHT -> minHeight = value
+            TemplateKey.ATTR_MAX_WIDTH -> maxWidth = value
+            TemplateKey.ATTR_MAX_HEIGHT -> maxHeight = value
+            TemplateKey.ATTR_ASPECT_RATIO -> aspectRatio = value
+            TemplateKey.ATTR_ALIGN_SELF -> alignSelf = raw
             TemplateKey.ATTR_FLEX_GROW -> flexGrow = value.toFloatOrNull() ?: 0f
             else -> return false
         }

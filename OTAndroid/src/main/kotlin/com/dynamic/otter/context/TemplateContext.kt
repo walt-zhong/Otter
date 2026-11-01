@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.OTEngine
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.node.VDomNode
+import com.dynamic.otter.template.json.ParsedTemplate
 import com.dynamic.otter.utils.toJson
 
 class TemplateContext private constructor(
@@ -17,6 +18,10 @@ class TemplateContext private constructor(
     var rootNode: OTNode? = null
 
     var vDomNode: VDomNode? = null
+
+    var parsed: ParsedTemplate? = null
+
+    var viewport: OTEngine.OTViewPortSize? = null
 
     var data: JSONObject? = null
 
@@ -33,6 +38,8 @@ class TemplateContext private constructor(
         rootNode = null
         rootView = null
         vDomNode = null
+        parsed = null
+        viewport = null
         data = null
         events = emptyMap()
         viewIds.clear()

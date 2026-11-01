@@ -1,0 +1,141 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "shelf",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 16 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
+          { "type": "spacer", "layout": { "width": 6, "height": 18 } },
+          {
+            "type": "text",
+            "text": "返回",
+            "layout": { "width": 48, "height": 20 },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 10 } },
+      {
+        "type": "text",
+        "text": "城南 · 周六",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+      {
+        "type": "text",
+        "id": "title",
+        "text": "下午四站",
+        "layout": { "width": "fill", "height": 36 },
+        "style": { "color": "#1F1A17", "fontSize": 28 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+      {
+        "type": "text",
+        "text": "点进一站看具体去处，也可以为这一站记一句。",
+        "layout": { "width": "fill", "height": 40 },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "list",
+        "id": "places",
+        "data": "$places",
+        "direction": "vertical",
+        "gap": 12,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": {
+            "width": "fill",
+            "height": "wrap",
+            "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+          },
+          "style": { "background": "#FFFCF8", "radius": 22 },
+          "onClick": ["openPlace"],
+          "children": [
+            {
+              "type": "row",
+              "layout": { "width": "fill", "height": 72, "align": "center" },
+              "children": [
+                {
+                  "type": "image",
+                  "src": "$cover",
+                  "layout": { "width": 72, "height": 72 },
+                  "style": { "radius": 18 }
+                },
+                { "type": "spacer", "layout": { "width": 14, "height": 72 } },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "$area",
+                      "layout": { "width": "fill", "height": 16 },
+                      "style": { "color": "#1F6F6A", "fontSize": 12 }
+                    },
+                    { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                    {
+                      "type": "text",
+                      "text": "$title",
+                      "layout": { "width": "fill", "height": 26 },
+                      "style": { "color": "#1F1A17", "fontSize": 20 }
+                    },
+                    { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                    {
+                      "type": "text",
+                      "text": "$hours",
+                      "layout": { "width": "fill", "height": 18 },
+                      "style": { "color": "#8A8178", "fontSize": 13 }
+                    }
+                  ]
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "text",
+              "text": "$lead",
+              "layout": { "width": "fill", "height": 22 },
+              "style": { "color": "#1F1A17", "fontSize": 14 }
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "row",
+              "layout": { "width": "fill", "height": 18, "align": "center", "justify": "spaceBetween" },
+              "children": [
+                {
+                  "type": "spacer",
+                  "layout": { "width": 36, "height": 4 },
+                  "style": { "background": "$wash", "radius": 2 }
+                },
+                {
+                  "type": "text",
+                  "text": "进入",
+                  "layout": { "width": 36, "height": 18 },
+                  "style": { "color": "#C45C26", "fontSize": 13, "align": "end" }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "openPlace": { "action": "open", "page": "$page" }
+  }
+}

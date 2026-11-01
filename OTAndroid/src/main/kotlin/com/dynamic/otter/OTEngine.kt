@@ -3,13 +3,14 @@ package com.dynamic.otter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import app.visly.stretch.Size
+import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.render.node.NodeTreePrepare
-import com.dynamic.otter.render.node.NodeUtils
 import com.dynamic.otter.render.node.OTNode
 import com.dynamic.otter.render.node.VDomNode
+import com.dynamic.otter.render.view.basic.adapter.WrapTextHeight
 import com.dynamic.otter.render.view.OTViewTreeCreator
+import com.dynamic.otter.render.view.basic.Column
 import com.dynamic.otter.render.view.basic.OTLayoutParams
 import com.dynamic.otter.template.json.TemplateJsonParser
 import com.dynamic.otter.utils.AssetsUtils
@@ -22,6 +23,13 @@ class OTEngine {
     fun init(context: Context): OTEngine {
         this.context = context
         return this
+    }
+
+    internal fun readyContext(): Context? {
+        if (!::context.isInitialized) {
+            return null
+        }
+        return context
     }
 
     fun buildTemplate(bizId: String, templateId: String, templatePath: String): TemplateContext {
@@ -38,6 +46,8 @@ class OTEngine {
             templateContext.template.templatePath
         )
         val parsed = TemplateJsonParser.parse(templateJson)
+        templateContext.parsed = parsed
+        templateContext.viewport = viewport
         templateContext.viewIds.clear()
         templateContext.events = parsed.events
         val vDomNode = VDomNode.bind(parsed.root, templateContext)
@@ -63,15 +73,43 @@ class OTEngine {
     fun createNodeTree(
         vDomNode: VDomNode,
         viewPortSize: OTViewPortSize
-    ): OTNode = NodeTreePrepare.create(vDomNode, viewPortSize)
+    ): OTNode {
+        val root = NodeTreePrepare.create(vDomNode, viewPortSize)
+        WrapTextHeight.settle(root, JSONObject(), viewPortSize)
+        return root
+    }
+
+    fun rebind(templateContext: TemplateContext) {
+        val rootView = templateContext.rootView ?: return
+        val parsed = templateContext.parsed ?: return
+        val viewport = templateContext.viewport ?: return
+        val savedIds = templateContext.viewIds.toMap()
+        val savedVDom = templateContext.vDomNode
+        val previousRoot = templateContext.rootNode
+        val vDomNode = VDomNode.bind(parsed.root, templateContext)
+        val rootNode = try {
+            createNodeTree(vDomNode, viewport)
+        } catch (error: RuntimeException) {
+            templateContext.viewIds.clear()
+            templateContext.viewIds.putAll(savedIds)
+            templateContext.vDomNode = savedVDom
+            throw error
+        }
+        OTViewTreeCreator.rebindViews(rootView, rootNode, templateContext)
+        applyLayout(rootView, rootNode)
+        templateContext.vDomNode = vDomNode
+        templateContext.rootNode = rootNode
+        templateContext.rootView = rootView
+        if (previousRoot != null && previousRoot !== rootNode) {
+            retireNode(previousRoot)
+        }
+    }
 
     fun relayout(templateContext: TemplateContext, viewport: OTViewPortSize) {
+        templateContext.viewport = viewport
         val rootNode = templateContext.rootNode ?: return
         val rootView = templateContext.rootView ?: return
-        NodeUtils.computeNodeTreeByPrepareView(
-            rootNode,
-            Size(viewport.width, viewport.height)
-        )
+        WrapTextHeight.settle(rootNode, JSONObject(), viewport)
         applyLayout(rootView, rootNode)
     }
 
@@ -91,13 +129,32 @@ class OTEngine {
                 view.requestLayout()
             }
         }
-        if (view is ViewGroup && !node.isListContainer()) {
-            node.children.forEachIndexed { index, child ->
-                if (index < view.childCount) {
-                    applyLayout(view.getChildAt(index), child)
-                }
-            }
+        if (node.isListContainer()) {
+            return
         }
+        val container = templateChildrenOf(view) ?: return
+        val count = minOf(container.childCount, node.children.size)
+        for (index in 0 until count) {
+            applyLayout(container.getChildAt(index), node.children[index])
+        }
+    }
+
+    private fun templateChildrenOf(view: View): ViewGroup? {
+        val scrolled = (view as? Column)?.scrollContent
+        if (scrolled != null) {
+            return scrolled
+        }
+        return view as? ViewGroup
+    }
+
+    private fun retireNode(node: OTNode) {
+        clearViewRoots(node)
+        node.release()
+    }
+
+    private fun clearViewRoots(node: OTNode) {
+        node.viewRoot = null
+        node.children.forEach { clearViewRoots(it) }
     }
 
     data class OTViewPortSize(var width: Float?, var height: Float?)

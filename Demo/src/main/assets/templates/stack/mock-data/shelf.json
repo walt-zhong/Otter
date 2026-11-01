@@ -1,0 +1,40 @@
+{
+  "places": [
+    {
+      "page": "place_coffee",
+      "title": "旧巷咖啡",
+      "area": "巷口",
+      "hours": "08:00–18:00",
+      "lead": "靠窗两席，店里不放音乐。",
+      "cover": "res:ic_scene_coffee",
+      "wash": "#F3E2D4"
+    },
+    {
+      "page": "place_market",
+      "title": "周末市集",
+      "area": "广场",
+      "hours": "周六 10:00–16:00",
+      "lead": "面包十一点出炉，旧书在东侧。",
+      "cover": "res:ic_scene_market",
+      "wash": "#F8E7C8"
+    },
+    {
+      "page": "place_book",
+      "title": "街角书店",
+      "area": "梧桐街",
+      "hours": "11:00–21:00",
+      "lead": "楼梯下有一张不必买书也能坐的长桌。",
+      "cover": "res:ic_scene_book",
+      "wash": "#EFE6DA"
+    },
+    {
+      "page": "place_lamp",
+      "title": "河边路灯",
+      "area": "河堤",
+      "hours": "傍晚以后",
+      "lead": "桥头先亮，栗子摊天黑才出。",
+      "cover": "res:ic_scene_lamp",
+      "wash": "#E4EEF1"
+    }
+  ]
+}

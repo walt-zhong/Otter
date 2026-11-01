@@ -13,11 +13,11 @@
 }
 ```
 
-`layout` 必填，且只有一个节点。多个区块外面套 `column` 或 `row`。没有点击动作时不要写 `events`。
+`layout` 必填，且只有一个节点。多个区块外面套 `column` 或 `row`。没有 `onClick` 或 `onChange` 时不要写 `events`。
 
 ## 节点
 
-字段顺序固定为：`type`、`id`、该类型自己的内容字段、`layout`、`style`、`onClick`，最后才是 `children` 或 `item`。没有的字段不要写，不要写 `null`。
+字段顺序固定为：`type`、`id`、该类型自己的内容字段（`column` 的 `scroll` 也写在这里）、`layout`、`style`、`visible`、`onClick`、`onChange`，最后才是 `children` 或 `item`。没有的字段不要写，不要写 `null`。
 
 ```json
 {
@@ -32,6 +32,14 @@
 
 `id` 用字母或下划线开头，后面只含字母、数字、下划线。同一份模版里不要重复。事件的 `target` 和 `list` 必须有 `id`。
 
+任何节点都可以写 `visible` 和 `onChange`。
+
+`visible` 是布尔值，或以 `$` 开头的表达式。`false` 时这个节点不参与布局。缺省显示。
+
+`onChange` 和 `onClick` 一样，是事件名数组，不能是空数组，名字必须在 `events` 里。多个名字按数组顺序执行。
+
+只有 `column` 可以写 `scroll`，而且只能是布尔值，不能写表达式。`true` 时这一列是视口，子节点高出视口就可以在列里滚动。缺省 `false`。
+
 ## layout
 
 每个节点都必须有 `layout.width` 和 `layout.height`。
@@ -42,14 +50,21 @@
 | `"fill"` | 铺满父节点 |
 | `"wrap"` | 包住内容 |
 
-`padding` 可以是一个数字，表示四边相同；也可以是对象，只写需要的边：`start`、`end`、`top`、`bottom`。没写的边是 0。
+`padding` 可以是一个数字，表示四边相同；也可以是对象，只写需要的边：`start`、`end`、`top`、`bottom`。没写的边是 0。`margin` 同样写法。
 
-只有 `column` 和 `row` 可以写 `justify`、`align`：
+`minWidth`、`minHeight`、`maxWidth`、`maxHeight` 的写法和 `width`、`height` 一样：数字、`"fill"` 或 `"wrap"`。
+
+`aspectRatio` 是正数。
+
+`alignSelf` 任何节点都能写：`start`、`center`、`end`、`stretch`。
+
+只有 `column` 和 `row` 可以写 `justify`、`align`、`wrap`：
 
 | 字段 | 取值 |
 | --- | --- |
 | `justify` | `start` `center` `end` `spaceBetween` `spaceAround` `spaceEvenly` |
 | `align` | `start` `center` `end` `baseline` `stretch` |
+| `wrap` | 布尔。`true` 换行，`false` 不换行。缺省不换行 |
 
 ## style
 
@@ -66,15 +81,19 @@
 - `radius`：数字表示四角相同。四角分开时用 `topStart`、`topEnd`、`bottomEnd`、`bottomStart`，单位 dp。
 - `border`：必须同时有 `color` 和 `width`。`width` 是 dp。
 
-`text` 还可以写 `color`、`fontSize`、`align`（`start` `center` `end`）。
+`text` 还可以写 `color`、`fontSize`、`align`（`start` `center` `end`）、`maxLines`（正整数）、`ellipsis`（布尔）、`fontWeight`（`regular` `medium` `bold`）。不写 `ellipsis` 就不加省略号。不写 `fontWeight` 就是 `regular`。
+
+`image` 还可以写 `fit`（`cover` `contain` `fill`）和 `placeholder`。`placeholder` 用和背景一样的纯色：`#RGB`、`#RRGGBB`、`#AARRGGBB`、`transparent`，或以 `$` 开头。不要写渐变。
+
+`input` 还可以写 `lines`（正整数），放在节点上或 `style` 里都可以。不写就是一行。`style` 里还可以写 `color`、`fontSize`、`align`、`hintColor`。
 
 `progress` 还可以写 `track`（底色）和 `bar`（进度颜色）。
 
-## 八种 type
+## 节点类型
 
 ### column / row
 
-竖排或横排。子节点放在 `children` 数组里。不要写 `item`。
+竖排或横排。子节点放在 `children` 数组里。不要写 `item`。`column` 可以写 `scroll`。`column` 和 `row` 可以写 `layout.wrap`。
 
 ### text
 
@@ -88,7 +107,7 @@
 - `"res:ic_nav"`，对应 drawable 资源名
 - `"$img"`，从数据里取地址
 
-图片按居中裁剪显示。不要写 `local:`。
+不写 `fit` 时按 `cover` 居中裁剪。需要别的适应方式时写 `style.fit`：`cover`、`contain`、`fill`。不要写 `local:`。
 
 ### spacer
 
@@ -138,6 +157,18 @@
 
 `repeat` 是 `"infinite"` 或非负整数，缺省 `"infinite"`。`mode` 是 `restart` 或 `reverse`，缺省 `restart`。`autoPlay` 缺省 `true`。
 
+### input
+
+可选 `value`、`hint`、`keyboard`、`maxLength`、`lines`。`keyboard` 是 `text`、`number`、`password`、`email`、`phone`，缺省 `text`。`maxLength` 是非负整数。`lines` 是正整数，也可以写在 `style.lines`，缺省一行。
+
+### checkbox / switch
+
+可选 `checked`、`label`。`checked` 是布尔值或以 `$` 开头，缺省 `false`。
+
+### radio
+
+和 checkbox 一样，另外必填 `group`。`group` 是标识符或以 `$` 开头。
+
 ## 数据
 
 页面数据是模版外面的一份 JSON。模版里用 `$字段名` 取值，字段名和数据 key 一致。
@@ -151,13 +182,13 @@
 
 列表的 `data` 指向数组。数组里的对象字段，只能在对应 `item` 里用 `$` 读取。
 
-事件里的 `message`、`value`、`text` 也可以写 `$` 表达式。比较表达式沿用现有写法，例如 `"$week != null ? $week : '暂无'"`。不要发明新的函数或脚本。
+事件里的 `message`、`value`、`text`、`page`、`index`、`name` 也可以写 `$` 表达式。比较表达式沿用现有写法，例如 `"$week != null ? $week : '暂无'"`。不要发明新的函数或脚本。
 
 ## events
 
-`events` 的 key 是事件名，规则和 `id` 相同。节点用 `"onClick": ["事件名"]` 引用，可以写多个，按数组顺序执行。引用的事件必须存在。`onClick` 不要写成空数组。
+`events` 的 key 是事件名，规则和 `id` 相同。节点用 `"onClick": ["事件名"]` 或 `"onChange": ["事件名"]` 引用，可以写多个，按数组顺序执行。引用的事件必须存在。`onClick` 和 `onChange` 不要写成空数组。
 
-只有三种动作。
+动作只有下面这些。
 
 ```json
 "events": {
@@ -176,6 +207,13 @@
 - `toast` 必填 `message`。
 - `setText` 必填 `target` 和 `value`。`target` 是节点 `id`，必须出现在这份模版里。
 - `setTextStyle` 必填 `target`，并且 `fontSize`、`color`、`text` 至少写一个。没写的项保持原样。
+- `setChecked` 必填 `target` 和 `value`。`target` 是一个 id，或 id 数组。`value` 是布尔值或以 `$` 开头。
+- `append` 必填 `list`、`from`、`field`、`data`、`item`。`item` 是字符串字段组成的对象。可以再写 `empty`。
+- `update` 必填 `list`、`index`、`item`。`index` 是非负整数或以 `$` 开头。`item` 和 `append` 的 `item` 一样。
+- `remove` 必填 `list` 和 `index`。`index` 的写法和 `update` 一样。
+- `open`、`replace`、`popTo` 必填 `page`。`page` 是页面名或以 `$` 开头。可以再写 `params`。`params` 里的值可以是字符串、数字、布尔、对象或数组。
+- `back` 可以只写 `action`，也可以再写和 `open` 一样的 `params`。
+- `host` 必填 `name`。`name` 是标识符或以 `$` 开头。可以再写和 `open` 一样的 `params`。
 
 ## 不要写的东西
 
@@ -188,7 +226,7 @@
 - `local:` 图片地址
 - 颜色名，例如 `red`、`white`。只用十六进制或 `transparent`
 - 渐变停靠百分比
-- 输入框、页面跳转、网络请求、开关、Tab、底部导航
+- 网络请求、Tab、底部导航、权限、地图、支付、网页
 - 未知 `type` 或未知字段
 
 ## 完整例子
@@ -235,10 +273,10 @@
 
 ## 输出前检查
 
-1. 根上只有 `layout`，有点击才加 `events`。
+1. 根上只有 `layout`，有 `onClick` 或 `onChange` 才加 `events`。
 2. 每个节点都有 `type`、`layout.width`、`layout.height`。
 3. 内容字段只放在对应类型上，视觉字段只放在 `style`，尺寸和对齐只放在 `layout`。
 4. 数字尺寸没有单位。颜色是十六进制或 `transparent`。
-5. 每个 `onClick` 名字都能在 `events` 里找到，每个 `target` 都能在节点 `id` 里找到。
+5. 每个 `onClick`、`onChange` 名字都能在 `events` 里找到，每个 `target` 和 `list` 都能在节点 `id` 里找到。
 6. `list` 使用 `item`，`data` 以 `$` 开头。
 7. 没有空对象、空数组和 `null`。

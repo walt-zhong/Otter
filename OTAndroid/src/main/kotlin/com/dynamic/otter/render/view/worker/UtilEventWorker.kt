@@ -3,6 +3,7 @@ package com.dynamic.otter.render.view.worker
 import android.view.View
 import android.widget.Toast
 import com.alibaba.fastjson.JSONObject
+import com.dynamic.otter.nav.PageParams
 import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 
 class UtilEventWorker private constructor() : IEventWorker {
@@ -17,7 +18,7 @@ class UtilEventWorker private constructor() : IEventWorker {
         if (paramJsonObj["fun"] != "showToast") {
             return
         }
-        val value = paramJsonObj["info"].toString().extractExpValue(itemData ?: pageData)
+        val value = paramJsonObj["info"].toString().extractExpValue(PageParams.merge(pageData, itemData))
         Toast.makeText(clickedView.context, value, Toast.LENGTH_SHORT).show()
     }
 

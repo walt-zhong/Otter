@@ -1,0 +1,9 @@
+{
+  "start": "orders",
+  "pages": {
+    "orders": {
+      "template": "templates/market/orders.json",
+      "data": "templates/market/mock-data/orders.json"
+    }
+  }
+}

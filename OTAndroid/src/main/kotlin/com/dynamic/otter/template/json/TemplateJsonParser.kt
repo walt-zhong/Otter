@@ -42,6 +42,9 @@ object TemplateJsonParser {
         "stretch" to "stretch"
     )
     private val textAlignValues = setOf("start", "center", "end")
+    private val alignSelfValues = setOf("start", "center", "end", "stretch")
+    private val fontWeights = setOf("regular", "medium", "bold")
+    private val imageFits = setOf("cover", "contain", "fill")
     private val keyboardValues = setOf("text", "number", "password", "email", "phone")
     private val gradientDirections = mapOf(
         "bottom" to "to bottom",
@@ -79,15 +82,22 @@ object TemplateJsonParser {
         val events = parseEvents(root.get("events"), "$.events")
         val ids = linkedSetOf<String>()
         val clicks = mutableListOf<String>()
+        val changes = mutableListOf<String>()
         val layout = parseNode(
             requireObject(root.get("layout"), "$.layout"),
             "$.layout",
             ids,
-            clicks
+            clicks,
+            changes
         )
         clicks.forEach { name ->
             if (!events.containsKey(name)) {
                 throw TemplateParseException("onClick 引用了不存在的事件 $name")
+            }
+        }
+        changes.forEach { name ->
+            if (!events.containsKey(name)) {
+                throw TemplateParseException("onChange 引用了不存在的事件 $name")
             }
         }
         events.forEach { (name, event) ->
@@ -193,28 +203,97 @@ object TemplateJsonParser {
 
             "append" -> parseAppendEvent(event, path)
 
-            "open" -> {
-                requireKeys(event, path, allowed = setOf("action", "page"), required = setOf("action", "page"))
-                val page = requireString(event.get("page"), "$path.page")
-                if (!page.startsWith("$") && !namePattern.matches(page)) {
-                    throw TemplateParseException("$path.page 必须是页面名或以 \$ 开头")
-                }
-                jsonObject(
-                    "class" to "nav",
-                    "params" to jsonObject("fun" to "open", "page" to page)
-                )
-            }
+            "update" -> parseUpdateEvent(event, path)
+
+            "remove" -> parseRemoveEvent(event, path)
+
+            "open" -> parsePageEvent(event, path, "open")
+
+            "replace" -> parsePageEvent(event, path, "replace")
+
+            "popTo" -> parsePageEvent(event, path, "popTo")
+
+            "host" -> parseHostEvent(event, path)
 
             "back" -> {
-                requireKeys(event, path, allowed = setOf("action"), required = setOf("action"))
-                jsonObject(
-                    "class" to "nav",
-                    "params" to jsonObject("fun" to "back")
+                requireKeys(
+                    event,
+                    path,
+                    allowed = setOf("action", "params"),
+                    required = setOf("action")
                 )
+                val params = jsonObject("fun" to "back")
+                if (event.containsKey("params")) {
+                    params["params"] = parseOpenParams(event.get("params"), "$path.params")
+                }
+                jsonObject("class" to "nav", "params" to params)
             }
 
-            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle、setChecked、append、open、back")
+            else -> throw TemplateParseException("$path.action「$action」无法识别，事件 $name 只能是 toast、setText、setTextStyle、setChecked、append、update、remove、open、back、replace、popTo、host")
         }
+    }
+
+    private fun parseOpenParams(value: Any?, path: String): JSONObject {
+        val params = value as? JSONObject ?: throw TemplateParseException("$path 必须是对象")
+        val result = JSONObject()
+        for (key in params.keys) {
+            if (!namePattern.matches(key)) {
+                throw TemplateParseException("$path.$key 不是这里能写的字段")
+            }
+            result[key] = parseParamValue(params.get(key), "$path.$key")
+        }
+        return result
+    }
+
+    private fun parseParamValue(value: Any?, path: String): Any {
+        return when (value) {
+            is String, is Number, is Boolean -> value
+            is JSONObject -> parseOpenParams(value, path)
+            is JSONArray -> {
+                val copy = JSONArray()
+                for (index in 0 until value.size) {
+                    copy.add(parseParamValue(value.get(index), "$path[$index]"))
+                }
+                copy
+            }
+            else -> throw TemplateParseException("$path 必须是字符串、数字、布尔、对象或数组")
+        }
+    }
+
+    private fun parsePageEvent(event: JSONObject, path: String, funName: String): JSONObject {
+        requireKeys(
+            event,
+            path,
+            allowed = setOf("action", "page", "params"),
+            required = setOf("action", "page")
+        )
+        val page = requireString(event.get("page"), "$path.page")
+        if (!page.startsWith("$") && !namePattern.matches(page)) {
+            throw TemplateParseException("$path.page 必须是页面名或以 \$ 开头")
+        }
+        val params = jsonObject("fun" to funName, "page" to page)
+        if (event.containsKey("params")) {
+            params["params"] = parseOpenParams(event.get("params"), "$path.params")
+        }
+        return jsonObject("class" to "nav", "params" to params)
+    }
+
+    private fun parseHostEvent(event: JSONObject, path: String): JSONObject {
+        requireKeys(
+            event,
+            path,
+            allowed = setOf("action", "name", "params"),
+            required = setOf("action", "name")
+        )
+        val hostName = requireString(event.get("name"), "$path.name")
+        if (!hostName.startsWith("$") && !namePattern.matches(hostName)) {
+            throw TemplateParseException("$path.name 必须是标识符或以 \$ 开头")
+        }
+        val params = jsonObject("fun" to "host", "name" to hostName)
+        if (event.containsKey("params")) {
+            params["params"] = parseOpenParams(event.get("params"), "$path.params")
+        }
+        return jsonObject("class" to "nav", "params" to params)
     }
 
     private fun parseAppendEvent(event: JSONObject, path: String): JSONObject {
@@ -224,26 +303,79 @@ object TemplateJsonParser {
             allowed = setOf("action", "list", "from", "field", "data", "item", "empty"),
             required = setOf("action", "list", "from", "field", "data", "item")
         )
-        val item = requireObject(event.get("item"), "$path.item")
-        val fields = JSONObject()
-        item.keys.forEach { key ->
-            if (!namePattern.matches(key)) {
-                throw TemplateParseException("$path.item.$key 不是这里能写的字段")
-            }
-            fields[key] = requireString(item.get(key), "$path.item.$key")
-        }
         val params = jsonObject(
             "fun" to "append",
             "id" to requireName(event.get("list"), "$path.list"),
             "from" to requireName(event.get("from"), "$path.from"),
             "field" to requireName(event.get("field"), "$path.field"),
             "data" to requireName(event.get("data"), "$path.data"),
-            "item" to fields
+            "item" to parseStringMap(event.get("item"), "$path.item")
         )
         if (event.containsKey("empty")) {
             params["empty"] = requireString(event.get("empty"), "$path.empty")
         }
         return jsonObject("class" to "list", "params" to params)
+    }
+
+    private fun parseUpdateEvent(event: JSONObject, path: String): JSONObject {
+        requireKeys(
+            event,
+            path,
+            allowed = setOf("action", "list", "index", "item"),
+            required = setOf("action", "list", "index", "item")
+        )
+        return jsonObject(
+            "class" to "list",
+            "params" to jsonObject(
+                "fun" to "update",
+                "id" to requireName(event.get("list"), "$path.list"),
+                "index" to indexValue(event.get("index"), "$path.index"),
+                "item" to parseStringMap(event.get("item"), "$path.item")
+            )
+        )
+    }
+
+    private fun parseRemoveEvent(event: JSONObject, path: String): JSONObject {
+        requireKeys(
+            event,
+            path,
+            allowed = setOf("action", "list", "index"),
+            required = setOf("action", "list", "index")
+        )
+        return jsonObject(
+            "class" to "list",
+            "params" to jsonObject(
+                "fun" to "remove",
+                "id" to requireName(event.get("list"), "$path.list"),
+                "index" to indexValue(event.get("index"), "$path.index")
+            )
+        )
+    }
+
+    private fun parseStringMap(value: Any?, path: String): JSONObject {
+        val item = requireObject(value, path)
+        val fields = JSONObject()
+        item.keys.forEach { key ->
+            if (!namePattern.matches(key)) {
+                throw TemplateParseException("$path.$key 不是这里能写的字段")
+            }
+            fields[key] = requireString(item.get(key), "$path.$key")
+        }
+        return fields
+    }
+
+    private fun indexValue(value: Any?, path: String): String {
+        return when (value) {
+            is String -> {
+                if (value.startsWith("$")) {
+                    value
+                } else {
+                    throw TemplateParseException("$path 必须是非负整数或以 \$ 开头")
+                }
+            }
+            is Number -> nonNegativeInt(value, path)
+            else -> throw TemplateParseException("$path 必须是非负整数或以 \$ 开头")
+        }
     }
 
     private fun viewEvent(key: String, target: String, value: Any): JSONObject {
@@ -262,17 +394,22 @@ object TemplateJsonParser {
         node: JSONObject,
         path: String,
         ids: MutableSet<String>,
-        clicks: MutableList<String>
+        clicks: MutableList<String>,
+        changes: MutableList<String>
     ): ParsedNode {
         val type = node.get("type") as? String
             ?: throw TemplateParseException("$path 缺少 type")
         val viewName = viewNames[type]
             ?: throw TemplateParseException("$path.type「$type」无法识别")
         val isContainer = type == "column" || type == "row"
-        val allowed = linkedSetOf("type", "id", "layout", "style", "onClick")
+        val allowed = linkedSetOf("type", "id", "layout", "style", "onClick", "onChange", "visible")
         val required = linkedSetOf("type", "layout")
         when (type) {
-            "column", "row" -> allowed.add("children")
+            "column" -> {
+                allowed.add("children")
+                allowed.add("scroll")
+            }
+            "row" -> allowed.add("children")
             "text" -> {
                 allowed.add("text")
                 required.add("text")
@@ -290,7 +427,7 @@ object TemplateJsonParser {
                 allowed.addAll(listOf("src", "repeat", "mode", "autoPlay"))
                 required.add("src")
             }
-            "input" -> allowed.addAll(listOf("value", "hint", "keyboard", "maxLength"))
+            "input" -> allowed.addAll(listOf("value", "hint", "keyboard", "maxLength", "lines"))
             "checkbox", "switch" -> allowed.addAll(listOf("checked", "label"))
             "radio" -> {
                 allowed.addAll(listOf("checked", "label", "group"))
@@ -316,6 +453,9 @@ object TemplateJsonParser {
         if (node.containsKey("style")) {
             parseStyle(requireObject(node.get("style"), "$path.style"), "$path.style", type, attrs)
         }
+        if (node.containsKey("visible")) {
+            attrs[TemplateKey.ATTR_VISIBLE] = checkedValue(node.get("visible"), "$path.visible")
+        }
         if (node.containsKey("onClick")) {
             val names = parseNames(node.get("onClick"), "$path.onClick")
             if (names.isEmpty()) {
@@ -323,6 +463,17 @@ object TemplateJsonParser {
             }
             clicks.addAll(names)
             attrs[TemplateKey.ATTR_ONCLICK] = names.joinToString(",")
+        }
+        if (node.containsKey("onChange")) {
+            val names = parseNames(node.get("onChange"), "$path.onChange")
+            if (names.isEmpty()) {
+                throw TemplateParseException("$path.onChange 不能是空数组")
+            }
+            changes.addAll(names)
+            attrs[TemplateKey.ATTR_ONCHANGE] = names.joinToString(",")
+        }
+        if (node.containsKey("scroll")) {
+            attrs[TemplateKey.ATTR_SCROLL] = boolString(node.get("scroll"), "$path.scroll")
         }
 
         when (type) {
@@ -339,13 +490,19 @@ object TemplateJsonParser {
         val children = if (isContainer && node.containsKey("children")) {
             val array = requireArray(node.get("children"), "$path.children")
             array.mapIndexed { index, child ->
-                parseNode(requireObject(child, "$path.children[$index]"), "$path.children[$index]", ids, clicks)
+                parseNode(
+                    requireObject(child, "$path.children[$index]"),
+                    "$path.children[$index]",
+                    ids,
+                    clicks,
+                    changes
+                )
             }
         } else {
             emptyList()
         }
         val item = if (type == "list") {
-            parseNode(requireObject(node.get("item"), "$path.item"), "$path.item", ids, clicks)
+            parseNode(requireObject(node.get("item"), "$path.item"), "$path.item", ids, clicks, changes)
         } else {
             null
         }
@@ -358,19 +515,74 @@ object TemplateJsonParser {
         isContainer: Boolean,
         attrs: MutableMap<String, String>
     ) {
-        val allowed = linkedSetOf("width", "height", "padding", "grow")
+        val allowed = linkedSetOf(
+            "width",
+            "height",
+            "padding",
+            "grow",
+            "margin",
+            "minWidth",
+            "minHeight",
+            "maxWidth",
+            "maxHeight",
+            "aspectRatio",
+            "alignSelf"
+        )
         if (isContainer) {
             allowed.add("justify")
             allowed.add("align")
+            allowed.add("wrap")
         }
         requireKeys(layout, path, allowed, required = setOf("width", "height"))
         attrs[TemplateKey.ATTR_WIDTH] = sizeValue(layout.get("width"), "$path.width")
         attrs[TemplateKey.ATTR_HEIGHT] = sizeValue(layout.get("height"), "$path.height")
         if (layout.containsKey("padding")) {
-            parsePadding(layout.get("padding"), "$path.padding", attrs)
+            parseEdges(
+                layout.get("padding"),
+                "$path.padding",
+                TemplateKey.ATTR_PADDING,
+                TemplateKey.ATTR_PADDING_START,
+                TemplateKey.ATTR_PADDING_END,
+                TemplateKey.ATTR_PADDING_TOP,
+                TemplateKey.ATTR_PADDING_BOTTOM,
+                attrs
+            )
+        }
+        if (layout.containsKey("margin")) {
+            parseEdges(
+                layout.get("margin"),
+                "$path.margin",
+                TemplateKey.ATTR_MARGIN,
+                TemplateKey.ATTR_MARGIN_START,
+                TemplateKey.ATTR_MARGIN_END,
+                TemplateKey.ATTR_MARGIN_TOP,
+                TemplateKey.ATTR_MARGIN_BOTTOM,
+                attrs
+            )
+        }
+        putSize(layout, "minWidth", TemplateKey.ATTR_MIN_WIDTH, path, attrs)
+        putSize(layout, "minHeight", TemplateKey.ATTR_MIN_HEIGHT, path, attrs)
+        putSize(layout, "maxWidth", TemplateKey.ATTR_MAX_WIDTH, path, attrs)
+        putSize(layout, "maxHeight", TemplateKey.ATTR_MAX_HEIGHT, path, attrs)
+        if (layout.containsKey("aspectRatio")) {
+            attrs[TemplateKey.ATTR_ASPECT_RATIO] = positiveNumber(
+                layout.get("aspectRatio"),
+                "$path.aspectRatio"
+            )
+        }
+        if (layout.containsKey("alignSelf")) {
+            val alignSelf = requireString(layout.get("alignSelf"), "$path.alignSelf")
+            if (alignSelf !in alignSelfValues) {
+                throw TemplateParseException("$path.alignSelf 只能是 start、center、end、stretch")
+            }
+            attrs[TemplateKey.ATTR_ALIGN_SELF] = alignSelf
         }
         if (layout.containsKey("grow")) {
             attrs[TemplateKey.ATTR_FLEX_GROW] = plainNumber(layout.get("grow"), "$path.grow")
+        }
+        if (layout.containsKey("wrap")) {
+            val wrap = boolString(layout.get("wrap"), "$path.wrap")
+            attrs[TemplateKey.ATTR_FLEX_WRAP] = if (wrap == "true") "wrap" else "nowrap"
         }
         if (layout.containsKey("justify")) {
             attrs[TemplateKey.FLEXBOX_ATTR_JUSTIFY_CONTENT] = flexValue(
@@ -388,9 +600,30 @@ object TemplateJsonParser {
         }
     }
 
-    private fun parsePadding(value: Any?, path: String, attrs: MutableMap<String, String>) {
+    private fun putSize(
+        layout: JSONObject,
+        key: String,
+        attrName: String,
+        path: String,
+        attrs: MutableMap<String, String>
+    ) {
+        if (layout.containsKey(key)) {
+            attrs[attrName] = sizeValue(layout.get(key), "$path.$key")
+        }
+    }
+
+    private fun parseEdges(
+        value: Any?,
+        path: String,
+        uniform: String,
+        start: String,
+        end: String,
+        top: String,
+        bottom: String,
+        attrs: MutableMap<String, String>
+    ) {
         when (value) {
-            is Number -> attrs[TemplateKey.ATTR_PADDING] = plainNumber(value, path)
+            is Number -> attrs[uniform] = plainNumber(value, path)
             is JSONObject -> {
                 requireKeys(
                     value,
@@ -401,10 +634,10 @@ object TemplateJsonParser {
                 if (value.isEmpty()) {
                     throw TemplateParseException("$path 不能是空对象")
                 }
-                putSide(value, "start", TemplateKey.ATTR_PADDING_START, path, attrs)
-                putSide(value, "end", TemplateKey.ATTR_PADDING_END, path, attrs)
-                putSide(value, "top", TemplateKey.ATTR_PADDING_TOP, path, attrs)
-                putSide(value, "bottom", TemplateKey.ATTR_PADDING_BOTTOM, path, attrs)
+                putSide(value, "start", start, path, attrs)
+                putSide(value, "end", end, path, attrs)
+                putSide(value, "top", top, path, attrs)
+                putSide(value, "bottom", bottom, path, attrs)
             }
             else -> throw TemplateParseException("$path 必须是数字或四边对象")
         }
@@ -425,8 +658,9 @@ object TemplateJsonParser {
     private fun parseStyle(style: JSONObject, path: String, type: String, attrs: MutableMap<String, String>) {
         val allowed = linkedSetOf("background", "radius", "border")
         when (type) {
-            "text" -> allowed.addAll(listOf("color", "fontSize", "align"))
-            "input" -> allowed.addAll(listOf("color", "fontSize", "align", "hintColor"))
+            "text" -> allowed.addAll(listOf("color", "fontSize", "align", "maxLines", "ellipsis", "fontWeight"))
+            "image" -> allowed.addAll(listOf("fit", "placeholder"))
+            "input" -> allowed.addAll(listOf("color", "fontSize", "align", "hintColor", "lines"))
             "checkbox", "radio", "switch" -> allowed.addAll(listOf("color", "fontSize", "tint"))
             "progress" -> allowed.addAll(listOf("track", "bar"))
         }
@@ -467,6 +701,32 @@ object TemplateJsonParser {
         }
         if (style.containsKey("bar")) {
             attrs[TemplateKey.ATTR_TRAIL_COLOR] = paintValue(style.get("bar"), "$path.bar")
+        }
+        if (style.containsKey("maxLines")) {
+            attrs[TemplateKey.ATTR_MAX_LINES] = positiveInt(style.get("maxLines"), "$path.maxLines")
+        }
+        if (style.containsKey("ellipsis")) {
+            attrs[TemplateKey.ATTR_ELLIPSIS] = boolString(style.get("ellipsis"), "$path.ellipsis")
+        }
+        if (style.containsKey("fontWeight")) {
+            val weight = requireString(style.get("fontWeight"), "$path.fontWeight")
+            if (weight !in fontWeights) {
+                throw TemplateParseException("$path.fontWeight 只能是 regular、medium、bold")
+            }
+            attrs[TemplateKey.ATTR_FONT_WEIGHT] = weight
+        }
+        if (style.containsKey("fit")) {
+            val fit = requireString(style.get("fit"), "$path.fit")
+            if (fit !in imageFits) {
+                throw TemplateParseException("$path.fit 只能是 cover、contain、fill")
+            }
+            attrs[TemplateKey.ATTR_IMAGE_FIT] = fit
+        }
+        if (style.containsKey("placeholder")) {
+            attrs[TemplateKey.ATTR_PLACEHOLDER] = solidColor(style.get("placeholder"), "$path.placeholder")
+        }
+        if (style.containsKey("lines")) {
+            attrs[TemplateKey.ATTR_LINES] = positiveInt(style.get("lines"), "$path.lines")
         }
     }
 
@@ -548,6 +808,9 @@ object TemplateJsonParser {
         attrs[TemplateKey.ATTR_INPUT_TYPE] = keyboard
         if (node.containsKey("maxLength")) {
             attrs[TemplateKey.ATTR_MAX_LENGTH] = nonNegativeInt(node.get("maxLength"), "$path.maxLength")
+        }
+        if (node.containsKey("lines")) {
+            attrs[TemplateKey.ATTR_LINES] = positiveInt(node.get("lines"), "$path.lines")
         }
     }
 
@@ -743,6 +1006,29 @@ object TemplateJsonParser {
             }
             else -> throw TemplateParseException("$path 必须是布尔值或以 \$ 开头")
         }
+    }
+
+    private fun positiveNumber(value: Any?, path: String): String {
+        val number = plainNumber(value, path)
+        if (number == "0") {
+            throw TemplateParseException("$path 必须是正数")
+        }
+        return number
+    }
+
+    private fun positiveInt(value: Any?, path: String): String {
+        val number = nonNegativeInt(value, path)
+        if (number == "0") {
+            throw TemplateParseException("$path 必须是正整数")
+        }
+        return number
+    }
+
+    private fun solidColor(value: Any?, path: String): String {
+        if (value is JSONObject) {
+            throw TemplateParseException("$path 必须是颜色，不能是渐变")
+        }
+        return colorValue(value, path)
     }
 
     private fun nonNegativeInt(value: Any?, path: String): String {

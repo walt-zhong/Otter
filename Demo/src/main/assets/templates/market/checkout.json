@@ -1,0 +1,267 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "checkout",
+    "scroll": true,
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 16 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_back",
+            "layout": { "width": 18, "height": 18 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 6, "height": 18 }
+          },
+          {
+            "type": "text",
+            "text": "购物车",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "确认订单",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "text": "付款后到店取，不用等配送。",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "取餐人",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "input",
+        "id": "name",
+        "value": "$name",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 14, "end": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "手机",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "input",
+        "id": "phone",
+        "value": "$phone",
+        "keyboard": "phone",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 14, "end": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "备注",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "input",
+        "id": "note",
+        "value": "$note",
+        "hint": "口味、到店时间",
+        "lines": 3,
+        "layout": {
+          "width": "fill",
+          "height": 96,
+          "padding": { "start": 14, "end": 14, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "hintColor": "#8A8178",
+          "align": "start"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "取餐方式",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 14, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "radio",
+        "group": "pickup",
+        "checked": true,
+        "label": "到店自取",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 12, "end": 12 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "tint": "#8B572A"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "radio",
+        "group": "pickup",
+        "checked": false,
+        "label": "店内用",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 12, "end": 12 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "tint": "#8B572A"
+        }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "align": "center",
+          "justify": "spaceBetween"
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "合计",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 14 }
+          },
+          {
+            "type": "text",
+            "text": "$totalLabel",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 20, "fontWeight": "bold", "align": "end" }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "text",
+        "text": "支付",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["payOrder"]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "payOrder": {
+      "action": "host",
+      "name": "pay",
+      "params": { "amount": "$totalLabel" }
+    }
+  }
+}

@@ -62,4 +62,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(project(":OTAndroid"))
+    implementation(libs.fastjson)
 }

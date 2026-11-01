@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dynamic.otter.OTEngine
 import com.dynamic.otter.context.TemplateContext
+import com.dynamic.otter.nav.Ime
 import com.dynamic.otter.utils.AssetsUtils
 import kotlin.math.max
 
@@ -18,6 +19,7 @@ object TemplateScreen {
         dataPath: String? = null,
         onReady: ((View) -> Unit)? = null
     ) {
+        Ime.install(activity)
         val root = activity.findViewById<View>(R.id.main)
         var insetsApplied = false
         var rendered = false

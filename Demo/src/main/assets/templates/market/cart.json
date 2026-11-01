@@ -1,0 +1,299 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "cart",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 12 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "row",
+        "id": "back",
+        "layout": { "width": "fill", "height": 36, "align": "center" },
+        "onClick": ["goBack"],
+        "children": [
+          {
+            "type": "image",
+            "src": "res:ic_back",
+            "layout": { "width": 18, "height": 18 }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 6, "height": 18 }
+          },
+          {
+            "type": "text",
+            "text": "返回",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 14 }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "购物车",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "text": "改数量或拿掉一件，合计会跟着变。",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "list",
+        "id": "lines",
+        "data": "$lines",
+        "direction": "vertical",
+        "gap": 12,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": {
+            "width": "fill",
+            "height": "wrap",
+            "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+          },
+          "style": {
+            "background": "#FFFFFF",
+            "radius": 16,
+            "border": { "color": "#E6DDD2", "width": 1 }
+          },
+          "children": [
+            {
+              "type": "row",
+              "layout": { "width": "fill", "height": "wrap", "align": "center" },
+              "children": [
+                {
+                  "type": "image",
+                  "src": "$image",
+                  "layout": { "width": 56, "height": 56 },
+                  "style": { "radius": 12, "fit": "cover" }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": 12, "height": 12 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+                  "children": [
+                    {
+                      "type": "row",
+                      "layout": { "width": "fill", "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "text",
+                          "text": "$name",
+                          "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+                          "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+                        },
+                        {
+                          "type": "text",
+                          "text": "移除",
+                          "layout": {
+                            "width": "wrap",
+                            "height": "wrap",
+                            "padding": { "start": 8, "top": 4, "bottom": 4 }
+                          },
+                          "style": { "color": "#8B572A", "fontSize": 13 },
+                          "onClick": ["removeLine"]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "spacer",
+                      "layout": { "width": "fill", "height": 4 }
+                    },
+                    {
+                      "type": "text",
+                      "text": "$priceLabel",
+                      "layout": { "width": "fill", "height": "wrap" },
+                      "style": { "color": "#8A8178", "fontSize": 13 }
+                    },
+                    {
+                      "type": "spacer",
+                      "layout": { "width": "fill", "height": 10 }
+                    },
+                    {
+                      "type": "row",
+                      "layout": {
+                        "width": "fill",
+                        "height": 32,
+                        "align": "center",
+                        "justify": "spaceBetween"
+                      },
+                      "children": [
+                        {
+                          "type": "row",
+                          "layout": { "width": "wrap", "height": 32, "align": "center" },
+                          "children": [
+                            {
+                              "type": "text",
+                              "text": "−",
+                              "layout": { "width": 32, "height": 32 },
+                              "style": {
+                                "background": "#F6F1EA",
+                                "radius": 8,
+                                "color": "#1F1A17",
+                                "fontSize": 18,
+                                "align": "center"
+                              },
+                              "onClick": ["minusQty"]
+                            },
+                            {
+                              "type": "spacer",
+                              "layout": { "width": 8, "height": 8 }
+                            },
+                            {
+                              "type": "text",
+                              "text": "$qtyText",
+                              "layout": { "width": 28, "height": 32 },
+                              "style": { "color": "#1F1A17", "fontSize": 16, "align": "center", "fontWeight": "medium" }
+                            },
+                            {
+                              "type": "spacer",
+                              "layout": { "width": 8, "height": 8 }
+                            },
+                            {
+                              "type": "text",
+                              "text": "+",
+                              "layout": { "width": 32, "height": 32 },
+                              "style": {
+                                "background": "#F6F1EA",
+                                "radius": 8,
+                                "color": "#1F1A17",
+                                "fontSize": 18,
+                                "align": "center"
+                              },
+                              "onClick": ["plusQty"]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "row",
+                          "layout": { "width": "wrap", "height": 32, "align": "center" },
+                          "children": [
+                            {
+                              "type": "text",
+                              "text": "$amount",
+                              "layout": { "width": "wrap", "height": "wrap" },
+                              "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "medium" }
+                            },
+                            {
+                              "type": "spacer",
+                              "layout": { "width": 2, "height": 8 }
+                            },
+                            {
+                              "type": "text",
+                              "text": "元",
+                              "layout": { "width": "wrap", "height": "wrap" },
+                              "style": { "color": "#8A8178", "fontSize": 13 }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "text",
+        "text": "购物车是空的，先去南市看看。",
+        "visible": "$empty",
+        "layout": { "width": "fill", "height": "wrap", "margin": { "top": 8 } },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "align": "center",
+          "justify": "spaceBetween",
+          "margin": { "top": 12 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "合计",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#8A8178", "fontSize": 14 }
+          },
+          {
+            "type": "text",
+            "id": "total",
+            "text": "$totalLabel",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1F1A17", "fontSize": 20, "fontWeight": "bold", "align": "end" }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "text",
+        "text": "去结算",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["goCheckout"]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "minusQty": {
+      "action": "host",
+      "name": "setQty",
+      "params": { "lineId": "$lineId", "qty": "$qtyMinus" }
+    },
+    "plusQty": {
+      "action": "host",
+      "name": "setQty",
+      "params": { "lineId": "$lineId", "qty": "$qtyPlus" }
+    },
+    "removeLine": {
+      "action": "host",
+      "name": "removeLine",
+      "params": { "lineId": "$lineId" }
+    },
+    "goCheckout": {
+      "action": "open",
+      "page": "checkout",
+      "params": { "total": "$total", "totalLabel": "$totalLabel" }
+    }
+  }
+}

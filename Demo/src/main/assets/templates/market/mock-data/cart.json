@@ -1,0 +1,31 @@
+{
+  "empty": false,
+  "total": "48",
+  "totalLabel": "48 元",
+  "lines": [
+    {
+      "lineId": "coffee",
+      "name": "南市咖啡 · 手冲",
+      "image": "res:ic_scene_coffee",
+      "price": 18,
+      "priceLabel": "18 元",
+      "qty": 2,
+      "qtyText": "2",
+      "qtyMinus": "1",
+      "qtyPlus": "3",
+      "amount": "36"
+    },
+    {
+      "lineId": "card",
+      "name": "巷口书店 · 明信片",
+      "image": "res:ic_scene_book",
+      "price": 12,
+      "priceLabel": "12 元",
+      "qty": 1,
+      "qtyText": "1",
+      "qtyMinus": "1",
+      "qtyPlus": "2",
+      "amount": "12"
+    }
+  ]
+}

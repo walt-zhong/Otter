@@ -6,10 +6,15 @@ import com.dynamic.otter.render.utils.FunctionExt.extractExpValue
 
 class ImageAttr : ViewAttr() {
     var src = ""
+    var fit = "cover"
+    var placeholder: String? = null
 
     override fun applyOwn(name: String, raw: String, scope: TemplateContext) {
-        if (name == TemplateKey.ATTR_SRC) {
-            src = raw.extractExpValue(scope.data)
+        val value = raw.extractExpValue(scope.data)
+        when (name) {
+            TemplateKey.ATTR_SRC -> src = value
+            "fit" -> fit = value.ifBlank { "cover" }
+            "placeholder" -> placeholder = value.ifBlank { null }
         }
     }
 

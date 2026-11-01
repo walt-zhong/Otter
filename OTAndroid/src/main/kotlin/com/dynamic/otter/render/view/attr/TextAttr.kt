@@ -9,6 +9,9 @@ class TextAttr : ViewAttr() {
     var textSize = "12px"
     var text = ""
     var textAlign: String? = null
+    var maxLines: Int? = null
+    var ellipsis = false
+    var fontWeight: String? = null
 
     override fun applyOwn(name: String, raw: String, scope: TemplateContext) {
         val value = raw.extractExpValue(scope.data)
@@ -17,6 +20,9 @@ class TextAttr : ViewAttr() {
             TemplateKey.ATTR_TEXT_SIZE -> textSize = value
             TemplateKey.ATTR_TEXT -> text = value
             TemplateKey.ATTR_TEXT_ALIGN -> textAlign = value
+            "maxLines" -> maxLines = value.toIntOrNull()?.takeIf { it > 0 }
+            "ellipsis" -> ellipsis = value == "true"
+            "fontWeight" -> fontWeight = value.trim().ifBlank { null }
         }
     }
 

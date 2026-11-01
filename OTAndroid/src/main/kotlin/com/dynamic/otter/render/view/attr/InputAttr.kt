@@ -13,6 +13,7 @@ class InputAttr : ViewAttr() {
     var textAlign: String? = null
     var inputType = "text"
     var maxLength: String? = null
+    var lines = 1
 
     override fun applyOwn(name: String, raw: String, scope: TemplateContext) {
         val value = raw.extractExpValue(scope.data)
@@ -25,6 +26,7 @@ class InputAttr : ViewAttr() {
             TemplateKey.ATTR_TEXT_ALIGN -> textAlign = value
             TemplateKey.ATTR_INPUT_TYPE -> inputType = value
             TemplateKey.ATTR_MAX_LENGTH -> maxLength = value
+            "lines" -> lines = value.toIntOrNull()?.takeIf { it > 0 } ?: 1
         }
     }
 
