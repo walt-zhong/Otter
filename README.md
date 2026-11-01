@@ -6,6 +6,23 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 
 当前仓库先把渲染协议和原生渲染器做稳。Demo 里的模版放在 assets 中，用来验证组件、事件和解析器。后面接上大模型时，变的是模版从哪来，渲染链路不变。生成时要遵守的输出约定写在 [docs/template-json.md](docs/template-json.md)：只输出一份 JSON，结构归模版，数据归另一份 JSON。
 
+## 文档
+
+| 文档 | 内容 |
+| --- | --- |
+| [docs/architecture.md](docs/architecture.md) | 分层、一次上屏、事件分发、页面栈 |
+| [docs/getting-started.md](docs/getting-started.md) | 接入、刷新、多页和权限 |
+| [docs/template-json.md](docs/template-json.md) | 模版 JSON 约定 |
+| [docs/components.md](docs/components.md) | 十二种节点怎么写 |
+| [docs/demo.md](docs/demo.md) | Demo 页面和资源目录 |
+| [docs/README.md](docs/README.md) | 文档索引，以及公开到 GitHub 之前还缺的文件 |
+
+## 介绍
+
+[![Demo 走查：首页、天气卡、城南](docs/media/intro-poster.jpg)](docs/media/intro.mp4)
+
+这段是 Demo 在真机上的走查，约 16 秒：首页列表、天气卡、城南的四站，再点进「旧巷咖啡」。文件在 [docs/media/intro.mp4](docs/media/intro.mp4)。播放、权限弹窗和南市底栏见 [docs/demo.md](docs/demo.md)。
+
 ## 动态化在说什么
 
 原生页面通常把界面写进安装包，比如 XML 或 Compose。改一个卡片的结构，就要发一版应用。
@@ -83,7 +100,8 @@ H5、React Native、Lynx、Kuikly 更适合已经有前端或跨端团队、需�
 ## 环境
 
 - JDK 17
-- Android SDK，`compileSdk` 34，`minSdk` 24
+- Android SDK，`compileSdk` 36，`minSdk` 26。Demo 的 `targetSdk` 也是 36。三个数写在 `gradle/libs.versions.toml`
+- Android Gradle Plugin 8.5.1 官方测到 `compileSdk` 34。现在用 36 编译可以通过，Gradle 会提示建议换更新的插件
 - Android Gradle Plugin 8.5.1，Kotlin 1.9.0
 - Gradle 8.7，仓库自带 Wrapper
 - NDK `30.0.16248370`，CMake 3.10.2。版本写在 `OTAndroid/build.gradle.kts` 里，用来编 `OTAnalyze`，并让 `libc++_shared.so` 按 16 KB 页对齐

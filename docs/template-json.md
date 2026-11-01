@@ -2,7 +2,7 @@
 
 生成 Otter 页面时，只输出一份 JSON 对象。模版描述结构，数据放在另一份 JSON 里。不要输出 XML，不要解释，不要加注释。
 
-示例页面见 `Demo/src/main/assets/templates/`。
+给人看的节点说明在 [components.md](components.md)。示例页面在 `Demo/src/main/assets/templates/`。
 
 ## 根对象
 

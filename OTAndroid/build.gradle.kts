@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.dynamic.outter"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
     // r28+ ships a 16 KB aligned libc++_shared.so. r26 does not.
     ndkVersion = "30.0.16248370"
 
     defaultConfig {
-        minSdk = 24
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
