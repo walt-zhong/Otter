@@ -8,7 +8,7 @@
     { "index": "06", "tag": "场景", "title": "收件", "desc": "一长串会话，点开看是谁", "page": "inbox" },
     { "index": "07", "tag": "场景", "title": "播放", "desc": "封面、进度和控制", "page": "player" },
     { "index": "08", "tag": "场景", "title": "聊天", "desc": "左右气泡和底部输入", "page": "chat" },
-    { "index": "09", "tag": "场景", "title": "液态玻璃", "desc": "Regular 和 Clear，拖动只换背后的图", "page": "glass" },
+    { "index": "09", "tag": "场景", "title": "液态玻璃", "desc": "拖动背景，看磨砂、染色和按住变亮", "page": "glass" },
     { "index": "10", "tag": "组件", "title": "Column", "desc": "纵向容器的全部属性", "page": "column" },
     { "index": "11", "tag": "组件", "title": "Row", "desc": "横向容器的全部属性", "page": "row" },
     { "index": "12", "tag": "组件", "title": "Text", "desc": "文案、颜色、字号和对齐", "page": "text" },

@@ -45,3 +45,32 @@ https://github.com/alibaba/GaiaX/blob/main/GaiaXStretch/LICENSE
 
 GaiaXStretch is GaiaX's maintained copy of Stretch. The Stretch copyright
 and MIT license remain with Visly Inc., as stated in the GaiaX NOTICE.
+
+========================================================================
+GaiaX iOS expression bridge
+Copyright (c) 2021, Alibaba Group Holding Limited
+Licensed under the Apache License, Version 2.0.
+https://github.com/alibaba/GaiaX
+Upstream commit: 32876389b6a447bb8d6b77ce12a70d0f1fc57dbf
+Recorded in OTIOS/ThirdParty/UPSTREAM_COMMIT.txt.
+
+The iOS engine compiles the existing OT* C++ sources listed above
+(OTAndroid/src/main/cpp/OTAnalyze, OTWordAnalyze, OTATSNode, OTValue.h).
+Those sources are not copied into the iOS tree.
+
+The ObjC++ call bridge follows the structure of these vendored GaiaX iOS
+files. They were not copied into OtterAnalyzeBridge:
+  OTIOS/ThirdParty/GXAnalyzeiOS/GXAnalyzeImpl.mm
+  OTIOS/ThirdParty/GXAnalyzeiOS/GXNativeAnalyze.mm
+  OTIOS/ThirdParty/GXAnalyzeiOS/GXContext.mm
+  OTIOS/ThirdParty/GXAnalyzeiOS/GXFunction.m
+  OTIOS/ThirdParty/GXAnalyzeiOS/GXObject.m
+
+Otter-owned bridge files:
+  OTIOS/ThirdParty/OtterAnalyzeBridge/include/OTExpressionBridge.h
+  OTIOS/ThirdParty/OtterAnalyzeBridge/OTExpressionBridge.mm
+  OTIOS/Sources/OtterExpression/ExpressionEngine.swift
+
+Value lookup, size(), and env() follow
+OTAndroid/src/main/kotlin/com/dynamic/otter/expression/ExpressionWrapper.kt.
+On iOS, env("isAndroid") is false and env("isiOS") is true.

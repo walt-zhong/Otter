@@ -13,219 +13,226 @@
         "layout": {
           "width": "fill",
           "height": "wrap",
-          "padding": { "start": 20, "end": 20, "top": 8, "bottom": 36 }
+          "padding": { "start": 20, "end": 20, "top": 12, "bottom": 28 }
         },
         "children": [
-      {
-        "type": "row",
-        "layout": { "width": "wrap", "height": "wrap", "padding": { "top": 8, "bottom": 8 } },
-        "onClick": ["goBack"],
-        "children": [
           {
-            "type": "text",
-            "text": "返回",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 16 }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
-      {
-        "type": "text",
-        "text": "Liquid Glass Demo",
-        "layout": { "width": "fill", "height": "wrap" },
-        "style": { "color": "#1C1C1E", "fontSize": 28, "fontWeight": "bold" }
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 22 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "wrap",
-          "height": "wrap",
-          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
-        },
-        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
-        "children": [
-          {
-            "type": "text",
-            "text": "基础效果",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "fill",
-          "height": 60,
-          "align": "center",
-          "justify": "center"
-        },
-        "style": { "glass": { "style": "regular" }, "radius": 30 },
-        "children": [
-          {
-            "type": "text",
-            "text": "液态玻璃 (Regular)",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "fill",
-          "height": 60,
-          "align": "center",
-          "justify": "center"
-        },
-        "style": { "glass": { "style": "clear" }, "radius": 30 },
-        "children": [
-          {
-            "type": "text",
-            "text": "液态玻璃 (Clear)",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 28 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "wrap",
-          "height": "wrap",
-          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
-        },
-        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
-        "children": [
-          {
-            "type": "text",
-            "text": "融合效果",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
-      {
-        "type": "row",
-        "layout": { "width": "fill", "height": 60, "align": "center" },
-        "children": [
-          {
-            "type": "row",
+            "type": "column",
             "layout": {
-              "width": 120,
-              "height": 60,
-              "grow": 1,
-              "align": "center",
-              "justify": "center"
+              "width": "fill",
+              "height": "wrap",
+              "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
             },
-            "style": { "glass": { "style": "regular" }, "radius": 30 },
+            "style": { "glass": { "style": "regular", "tint": "#B3FFFFFF" }, "radius": 16 },
             "children": [
               {
                 "type": "text",
-                "text": "默认",
+                "text": "上下拖动，只换背后的图",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+              },
+              { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+              {
+                "type": "text",
+                "text": "玻璃留在原地。看圆角边缘怎么折后面的画面。",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 13 }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 18 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+            },
+            "style": { "glass": { "style": "regular", "tint": "#B3FFFFFF" }, "radius": 12 },
+            "children": [
+              {
+                "type": "text",
+                "text": "两种质地",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 13, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "fill",
+              "height": 56,
+              "align": "center",
+              "justify": "center"
+            },
+            "style": { "glass": { "style": "regular" }, "radius": 28 },
+            "children": [
+              {
+                "type": "text",
+                "text": "磨砂，中间有一层薄霜",
                 "layout": { "width": "wrap", "height": "wrap" },
                 "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
               }
             ]
           },
-          { "type": "spacer", "layout": { "width": 12, "height": 60 } },
+          { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
           {
             "type": "row",
             "layout": {
-              "width": 120,
-              "height": 60,
-              "grow": 1,
+              "width": "fill",
+              "height": 56,
+              "align": "center",
+              "justify": "center"
+            },
+            "style": { "glass": { "style": "clear" }, "radius": 28 },
+            "children": [
+              {
+                "type": "text",
+                "text": "更透，边缘折得更明显",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+            },
+            "style": { "glass": { "style": "regular", "tint": "#B3FFFFFF" }, "radius": 12 },
+            "children": [
+              {
+                "type": "text",
+                "text": "染色",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 13, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+          {
+            "type": "row",
+            "layout": { "width": "fill", "height": 56, "align": "center" },
+            "children": [
+              {
+                "type": "row",
+                "layout": {
+                  "width": 120,
+                  "height": 56,
+                  "grow": 1,
+                  "align": "center",
+                  "justify": "center"
+                },
+                "style": { "glass": { "style": "regular" }, "radius": 28 },
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "不染色",
+                    "layout": { "width": "wrap", "height": "wrap" },
+                    "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+                  }
+                ]
+              },
+              { "type": "spacer", "layout": { "width": 12, "height": 56 } },
+              {
+                "type": "row",
+                "layout": {
+                  "width": 120,
+                  "height": 56,
+                  "grow": 1,
+                  "align": "center",
+                  "justify": "center"
+                },
+                "style": {
+                  "glass": { "style": "regular", "tint": "#8034C759" },
+                  "radius": 28
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "染成绿色",
+                    "layout": { "width": "wrap", "height": "wrap" },
+                    "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+                  }
+                ]
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+            },
+            "style": { "glass": { "style": "regular", "tint": "#B3FFFFFF" }, "radius": 12 },
+            "children": [
+              {
+                "type": "text",
+                "text": "按住会更亮",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 13, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "fill",
+              "height": 64,
               "align": "center",
               "justify": "center"
             },
             "style": {
-              "glass": { "style": "regular", "tint": "#8034C759" },
-              "radius": 30
+              "glass": { "style": "regular", "tint": "#3334C759", "interactive": true },
+              "radius": 16
             },
+            "onClick": ["pressFrost"],
             "children": [
               {
                 "type": "text",
-                "text": "绿色",
+                "text": "按住磨砂",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": "fill",
+              "height": 64,
+              "align": "center",
+              "justify": "center"
+            },
+            "style": {
+              "glass": { "style": "clear", "tint": "#4DFFD60A", "interactive": true },
+              "radius": 16
+            },
+            "onClick": ["pressClear"],
+            "children": [
+              {
+                "type": "text",
+                "text": "按住透玻璃",
                 "layout": { "width": "wrap", "height": "wrap" },
                 "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
               }
             ]
           }
         ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 28 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "wrap",
-          "height": "wrap",
-          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
-        },
-        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
-        "children": [
-          {
-            "type": "text",
-            "text": "交互示例",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "fill",
-          "height": 80,
-          "align": "center",
-          "justify": "center"
-        },
-        "style": {
-          "glass": { "style": "regular", "tint": "#3334C759", "interactive": true },
-          "radius": 10
-        },
-        "children": [
-          {
-            "type": "text",
-            "text": "可点击的 Regular",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
-          }
-        ]
-      },
-      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
-      {
-        "type": "row",
-        "layout": {
-          "width": "fill",
-          "height": 80,
-          "align": "center",
-          "justify": "center"
-        },
-        "style": {
-          "glass": { "style": "clear", "tint": "#4DFFD60A", "interactive": true },
-          "radius": 10
-        },
-        "children": [
-          {
-            "type": "text",
-            "text": "可点击的 Clear",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
-          }
-        ]
-      }
-        ]
       }
     ]
   },
   "events": {
-    "goBack": { "action": "back" }
+    "pressFrost": { "action": "toast", "message": "磨砂被按住了，手指按下时这一层更亮" },
+    "pressClear": { "action": "toast", "message": "透玻璃被按住了，手指按下时这一层更亮" }
   }
 }

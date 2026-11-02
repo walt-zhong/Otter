@@ -20,3 +20,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+.gaiax-ref/
+OTIOS/.build/

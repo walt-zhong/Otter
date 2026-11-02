@@ -16,6 +16,7 @@ class PermissionActivity : AppCompatActivity() {
         enableEdgeToEdge()
         permissions = AndroidPermissionCenter.install(this)
         setContentView(R.layout.activity_stack)
+        DemoTopBar.bind(this, "权限", showBack = true)
         stack = PageStack.attach(
             this,
             findViewById(R.id.main),

@@ -11,24 +11,9 @@
     "children": [
       {
         "type": "row",
-        "id": "back",
-        "layout": { "width": "fill", "height": 36, "align": "center", "justify": "spaceBetween" },
+        "id": "memoEntry",
+        "layout": { "width": "fill", "height": 36, "align": "center", "justify": "end" },
         "children": [
-          {
-            "type": "row",
-            "layout": { "width": 88, "height": 36, "align": "center" },
-            "onClick": ["goBack"],
-            "children": [
-              { "type": "image", "src": "res:ic_back", "layout": { "width": 18, "height": 18 } },
-              { "type": "spacer", "layout": { "width": 6, "height": 18 } },
-              {
-                "type": "text",
-                "text": "四站",
-                "layout": { "width": 40, "height": 20 },
-                "style": { "color": "#1F1A17", "fontSize": 14 }
-              }
-            ]
-          },
           {
             "type": "text",
             "text": "记一句",

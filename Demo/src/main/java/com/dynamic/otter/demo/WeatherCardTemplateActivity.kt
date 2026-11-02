@@ -10,6 +10,7 @@ class WeatherCardTemplateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_weather_card_template)
+        DemoTopBar.bind(this, "天气", showBack = true)
         TemplateScreen.show(
             this,
             findViewById<LinearLayoutCompat>(R.id.weather_card_template_container),

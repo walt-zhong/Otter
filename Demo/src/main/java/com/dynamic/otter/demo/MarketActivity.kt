@@ -36,6 +36,7 @@ class MarketActivity : AppCompatActivity() {
         permissions = AndroidPermissionCenter.install(this, NanshiPermissions.prompts)
         enableEdgeToEdge()
         setContentView(R.layout.activity_market)
+        DemoTopBar.bind(this, "南市", showBack = true)
         tabLabels = listOf(
             findViewById(R.id.tab_home_label),
             findViewById(R.id.tab_orders_label),

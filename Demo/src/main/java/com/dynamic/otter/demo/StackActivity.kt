@@ -13,6 +13,7 @@ class StackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_stack)
+        DemoTopBar.bind(this, "城南", showBack = true)
         stack = PageStack.attach(
             this,
             findViewById(R.id.main),

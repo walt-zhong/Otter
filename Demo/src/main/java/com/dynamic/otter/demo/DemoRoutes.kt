@@ -31,79 +31,97 @@ object DemoRoutes {
             Intent(context, ComponentDemoActivity::class.java)
                 .putExtra(ComponentDemoActivity.EXTRA_TEMPLATE, spec.template)
                 .putExtra(ComponentDemoActivity.EXTRA_DATA, spec.data)
+                .putExtra(ComponentDemoActivity.EXTRA_TITLE, spec.title)
         )
     }
 
-    private data class Spec(val template: String, val data: String)
+    private data class Spec(val template: String, val data: String, val title: String)
 
     private val components = mapOf(
         "column" to Spec(
             "templates/column/column.json",
-            "templates/column/mock-data/column.json"
+            "templates/column/mock-data/column.json",
+            "Column"
         ),
         "row" to Spec(
             "templates/row/row.json",
-            "templates/row/mock-data/row.json"
+            "templates/row/mock-data/row.json",
+            "Row"
         ),
         "text" to Spec(
             "templates/text/text.json",
-            "templates/text/mock-data/text.json"
+            "templates/text/mock-data/text.json",
+            "Text"
         ),
         "image" to Spec(
             "templates/image/image.json",
-            "templates/image/mock-data/image.json"
+            "templates/image/mock-data/image.json",
+            "Image"
         ),
         "spacer" to Spec(
             "templates/spacer/spacer.json",
-            "templates/spacer/mock-data/spacer.json"
+            "templates/spacer/mock-data/spacer.json",
+            "Spacer"
         ),
         "list" to Spec(
             "templates/list/list.json",
-            "templates/list/mock-data/list.json"
+            "templates/list/mock-data/list.json",
+            "List"
         ),
         "progress" to Spec(
             "templates/progress/progress.json",
-            "templates/progress/mock-data/progress.json"
+            "templates/progress/mock-data/progress.json",
+            "Progress"
         ),
         "lottie" to Spec(
             "templates/lottie/lottie.json",
-            "templates/lottie/mock-data/lottie.json"
+            "templates/lottie/mock-data/lottie.json",
+            "Lottie"
         ),
         "input" to Spec(
             "templates/input/input.json",
-            "templates/input/mock-data/input.json"
+            "templates/input/mock-data/input.json",
+            "Input"
         ),
         "checkbox" to Spec(
             "templates/checkbox/checkbox.json",
-            "templates/checkbox/mock-data/checkbox.json"
+            "templates/checkbox/mock-data/checkbox.json",
+            "CheckBox"
         ),
         "radio" to Spec(
             "templates/radio/radio.json",
-            "templates/radio/mock-data/radio.json"
+            "templates/radio/mock-data/radio.json",
+            "Radio"
         ),
         "switch" to Spec(
             "templates/switch/switch.json",
-            "templates/switch/mock-data/switch.json"
+            "templates/switch/mock-data/switch.json",
+            "Switch"
         ),
         "inbox" to Spec(
             "templates/inbox/inbox.json",
-            "templates/inbox/mock-data/inbox.json"
+            "templates/inbox/mock-data/inbox.json",
+            "收件"
         ),
         "journey" to Spec(
             "templates/journey/journey.json",
-            "templates/journey/mock-data/journey.json"
+            "templates/journey/mock-data/journey.json",
+            "行程"
         ),
         "player" to Spec(
             "templates/player/player.json",
-            "templates/player/mock-data/player.json"
+            "templates/player/mock-data/player.json",
+            "播放"
         ),
         "chat" to Spec(
             "templates/chat/chat.json",
-            "templates/chat/mock-data/chat.json"
+            "templates/chat/mock-data/chat.json",
+            "聊天"
         ),
         "glass" to Spec(
             "templates/glass/glass.json",
-            "templates/glass/mock-data/glass.json"
+            "templates/glass/mock-data/glass.json",
+            "液态玻璃"
         )
     )
 }

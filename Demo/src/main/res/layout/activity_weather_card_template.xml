@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:background="@color/page"
     tools:context=".WeatherCardTemplateActivity">
+
+    <include
+        android:id="@+id/demo_top_bar"
+        layout="@layout/view_demo_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/weather_card_template_container"
         android:layout_width="0dp"
@@ -15,6 +25,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/demo_top_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

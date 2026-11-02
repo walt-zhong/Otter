@@ -3,14 +3,17 @@ package com.dynamic.otter.demo
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.dynamic.otter.ExpansionCenter
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        DemoTopBar.bind(this, "Otter", showBack = false)
         ExpansionCenter.instance.registerPageOpener { context, page ->
             DemoRoutes.open(context, page)
         }

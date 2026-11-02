@@ -14,6 +14,7 @@ class ComponentDemoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_component)
         val templatePath = intent.getStringExtra(EXTRA_TEMPLATE)
         val dataPath = intent.getStringExtra(EXTRA_DATA)
+        DemoTopBar.bind(this, intent.getStringExtra(EXTRA_TITLE) ?: "", showBack = true)
         if (templatePath.isNullOrBlank() || dataPath.isNullOrBlank()) {
             finish()
             return
@@ -39,5 +40,6 @@ class ComponentDemoActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_TEMPLATE = "template"
         const val EXTRA_DATA = "data"
+        const val EXTRA_TITLE = "title"
     }
 }

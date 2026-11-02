@@ -11,34 +11,6 @@
     "style": { "background": "#F6F1EA" },
     "children": [
       {
-        "type": "row",
-        "id": "back",
-        "layout": {
-          "width": "fill",
-          "height": 40,
-          "align": "center",
-          "margin": { "start": 12, "end": 20, "top": 4 }
-        },
-        "onClick": ["goBack"],
-        "children": [
-          {
-            "type": "image",
-            "src": "res:ic_back",
-            "layout": { "width": 18, "height": 18 }
-          },
-          {
-            "type": "spacer",
-            "layout": { "width": 6, "height": 18 }
-          },
-          {
-            "type": "text",
-            "text": "南市",
-            "layout": { "width": "wrap", "height": "wrap" },
-            "style": { "color": "#1F1A17", "fontSize": 14 }
-          }
-        ]
-      },
-      {
         "type": "image",
         "src": "$image",
         "layout": {
