@@ -17,6 +17,7 @@ import kotlin.math.max
 open class OTAbsoluteLayout : ViewGroup, ICornerRoundConfigCapability {
     private var radius: FloatArray? = null
     private var roundCornerPath: Path? = null
+    private var clipRadiiToSize = false
 
     constructor(context: Context) : super(context)
 
@@ -112,6 +113,42 @@ open class OTAbsoluteLayout : ViewGroup, ICornerRoundConfigCapability {
 
     override fun shouldDelayChildPressedState(): Boolean {
         return false
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (clipRadiiToSize) {
+            rebuildSizedCornerPath()
+        }
+    }
+
+    internal fun clipContentToRadii(radii: FloatArray) {
+        radius = radii.copyOf()
+        clipRadiiToSize = true
+        clipToOutline = false
+        rebuildSizedCornerPath()
+    }
+
+    internal fun clearSizedCornerClip() {
+        if (!clipRadiiToSize) {
+            return
+        }
+        clipRadiiToSize = false
+        roundCornerPath = null
+    }
+
+    private fun rebuildSizedCornerPath() {
+        val radii = radius ?: return
+        if (width <= 0 || height <= 0 || radii.size != 8) {
+            return
+        }
+        val path = roundCornerPath ?: Path().also { roundCornerPath = it }
+        path.reset()
+        path.addRoundRect(
+            RectF(0f, 0f, width.toFloat(), height.toFloat()),
+            radii,
+            Path.Direction.CW
+        )
     }
 
     override fun dispatchDraw(canvas: Canvas) {

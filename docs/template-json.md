@@ -76,10 +76,19 @@
 { "direction": "bottom", "colors": ["#8b572a", "#f5a623"] }
 ```
 
-`direction` 只能是 `bottom`、`top`、`left`、`right`、`topLeft`、`topRight`、`bottomLeft`、`bottomRight`。`colors` 至少两个，按顺序均匀分布。不要写百分比。
+`direction` 只能是 `bottom`、`top`、`left`、`right`、`topLeft`、`topRight`、`bottomLeft`、`bottomRight`。`colors` 至少两个，按顺序均匀分布。不要写百分比。背景也可以是 `res:drawable名`，图片按 cover 铺满。写在 `column` 上且图片比这一层高时，上下拖动只移动背景，子节点留在原地。
 
 - `radius`：数字表示四角相同。四角分开时用 `topStart`、`topEnd`、`bottomEnd`、`bottomStart`，单位 dp。
 - `border`：必须同时有 `color` 和 `width`。`width` 是 dp。
+- `glass`：只给 `column`、`row`、`spacer`。不要和 `background` 一起写。`"glass": {}` 合法，这是唯一允许的空对象，表示标准玻璃。
+
+```json
+{ "style": "regular", "tint": "#33FFFFFF", "interactive": false }
+```
+
+`style` 只能是 `regular`、`clear`，不写就是 `regular`。`clear` 更透，圆角边缘折得更明显；`regular` 中间有一层薄霜。`tint` 是纯色，写法同颜色，用 `#AARRGGBB`，不写渐变，也可以不写。`interactive` 是布尔，不写就是关，按下时这一层更亮。圆角和边框仍用 `radius`、`border`。不要写模糊、高光、阴影。文字、图片、输入框、列表、进度、动画、勾选、单选、开关不要写 `glass`，外面套 `column` 或 `row`。玻璃垫的是背后已经画好的画面，子节点保持清晰。Android 13 及以上，圆角边缘会折射背后的颜色；更早的系统只做模糊。背后是一块平的纯色时，看起来会像实心填充。
+
+`column` 的 `res:` 位图比这一列高时，上下拖动只移动背景。这种列不要再写 `scroll`。
 
 `text` 还可以写 `color`、`fontSize`、`align`（`start` `center` `end`）、`maxLines`（正整数）、`ellipsis`（布尔）、`fontWeight`（`regular` `medium` `bold`）。不写 `ellipsis` 就不加省略号。不写 `fontWeight` 就是 `regular`。
 
@@ -229,6 +238,8 @@
 - 渐变停靠百分比
 - 网络请求、Tab、底部导航、地图、支付、网页。不要写系统权限名，权限走上面的 host
 - 未知 `type` 或未知字段
+- 同一个 `style` 里同时写 `background` 和 `glass`
+- `glass` 写在 `column`、`row`、`spacer` 以外
 
 ## 完整例子
 
@@ -280,4 +291,4 @@
 4. 数字尺寸没有单位。颜色是十六进制或 `transparent`。
 5. 每个 `onClick`、`onChange` 名字都能在 `events` 里找到，每个 `target` 和 `list` 都能在节点 `id` 里找到。
 6. `list` 使用 `item`，`data` 以 `$` 开头。
-7. 没有空对象、空数组和 `null`。
+7. 没有空数组和 `null`。空对象仍然不行，只有 `style.glass` 可以是 `{}`。

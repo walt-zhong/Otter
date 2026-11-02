@@ -214,14 +214,20 @@ object OTViewTreeCreator {
         view.id = attr.id
         attr.idName?.let { view.tag = it }
         val background = attr.background
+        val glassTint = attr.glassTint
         val resolvedBackground = background?.resolve(itemData)
+        val resolvedTint = glassTint?.resolve(itemData)
         if (resolvedBackground != background) {
             attr.background = resolvedBackground
+        }
+        if (resolvedTint != glassTint) {
+            attr.glassTint = resolvedTint
         }
         try {
             handleViewCommonAttr(view, node, attr, templateContext, itemData)
         } finally {
             attr.background = background
+            attr.glassTint = glassTint
         }
         when {
             view is Text && attr is TextAttr -> bindText(view, attr, itemData)

@@ -16,7 +16,7 @@ Demo/src/main/assets/templates/
 ├── home-demo/
 ├── column/ row/ text/ image/ spacer/
 ├── list/ progress/ lottie/ input/ checkbox/ radio/ switch/
-├── weather-card-demo/ journey/ inbox/ player/ chat/
+├── weather-card-demo/ journey/ inbox/ player/ chat/ glass/
 ├── stack/
 ├── market/
 └── permission/
@@ -38,6 +38,7 @@ Demo/src/main/assets/templates/
 | 收件 | `inbox` | `templates/inbox/inbox.json` | `ComponentDemoActivity` |
 | 播放 | `player` | `templates/player/player.json` | `ComponentDemoActivity` |
 | 聊天 | `chat` | `templates/chat/chat.json` | `ComponentDemoActivity` |
+| 液态玻璃 | `glass` | `templates/glass/glass.json` | `ComponentDemoActivity` |
 | Column 到 Switch | 与 type 同名 | `templates/<type>/<type>.json` | `ComponentDemoActivity` |
 
 组件页是同一套版式：返回、名称、一句说明，下面一组例子。例子的标题在数据的 `sheet` 里，版式在模版的 `item` 里。
@@ -47,6 +48,8 @@ Demo/src/main/assets/templates/
 天气卡是渐变、小时预报和一周趋势。行程是头图、进度和可滚动日程。收件是一长串会话。聊天是左右气泡和底部输入，用来看键盘 inset。
 
 播放页在模版画完之后多挂了 `PlayerSession`。它按节点 tag 找到进度和 Lottie，在 SDK 外面驱动播放和拖动。协议里没有播放器节点。
+
+液态玻璃按 Kuikly Android 那页来排：基础效果、融合效果、交互示例。背景是 `res:glass_wallpaper`，一张比屏幕高的彩图，从上到下是崖边小镇、花田和夜景街道。页面本身不滚动。上下拖动时只动这张图，玻璃按钮留在原地，用来看边缘怎么折后面的画面。
 
 城南的 `start` 是 `shelf`。四站共用 `place.json`，数据文件不同。地点页里的看点带上页面的颜色、标题和这一项的名称、时间，打开共用的 `stop`。看点页的勾选写回对应的那一项。右上角「记一句」打开 `memo`，返回时把 `$lines` 放进地点页的 `memos`。
 

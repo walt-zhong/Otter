@@ -37,6 +37,9 @@ object TemplateKey {
 
     const val ATTR_BORDER_COLOR = "borderColor"
     const val ATTR_BORDER_WIDTH = "borderWidth"
+    const val ATTR_GLASS_STYLE = "glassStyle"
+    const val ATTR_GLASS_TINT = "glassTint"
+    const val ATTR_GLASS_INTERACTIVE = "glassInteractive"
 
     const val ATTR_PADDING = "padding"
     const val ATTR_PADDING_START = "paddingStart"

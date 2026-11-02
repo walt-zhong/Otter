@@ -57,7 +57,7 @@ Otter 要做的是生成式 UI 的客户端这一端：协议、校验、布局�
 
 交互收在白名单里：toast、改文案、改选中态、往列表追加、打开已注册的页面、返回。网络请求、页面栈和业务脚本留在宿主里，模版只引用这些已经约定的动作。
 
-Demo 里的天气卡、行程、收件箱、播放器和对话页，就是这类界面的样子。它们现在读本地 JSON，是为了把协议跑通。接上模型之后，同一批组件用来承接模型刚生成的那一屏。
+Demo 里的天气卡、行程、收件箱、播放器、对话页和液态玻璃，就是这类界面的样子。它们现在读本地 JSON，是为了把协议跑通。接上模型之后，同一批组件用来承接模型刚生成的那一屏。
 
 适合放进 Otter 的界面：
 
@@ -166,7 +166,7 @@ ExpansionCenter.instance.registerPageOpener { context, page ->
 
 | type | 作用 |
 | --- | --- |
-| `column` / `row` | 纵向或横向容器，子节点放在 `children`。只有 `column` 可以写 `scroll` |
+| `column` / `row` | 纵向或横向容器，子节点放在 `children`。只有 `column` 可以写 `scroll`。`column`、`row`、`spacer` 可以写 `style.glass` |
 | `text` | 文本，`text` 必填。还可以写 `maxLines`、`ellipsis`、`fontWeight` |
 | `image` | 图片。`src` 可以是 `http(s)` 地址、`res:drawable名`，或以 `$` 开头的表达式。还可以写 `fit`、`placeholder` |
 | `spacer` | 占位或分割线 |
@@ -177,7 +177,7 @@ ExpansionCenter.instance.registerPageOpener { context, page ->
 | `checkbox` / `switch` | 勾选和开关，可选 `checked`、`label` |
 | `radio` | 单选，必填 `group` |
 
-`column` 和 `row` 可以写 `layout.justify`、`layout.align`、`layout.wrap`。任意节点都可以写 `layout.grow`、`layout.padding`、`layout.margin`、`minWidth`、`minHeight`、`maxWidth`、`maxHeight`、`aspectRatio`、`alignSelf`，以及 `style` 里的背景、圆角、边框。任何节点都可以写 `visible`（布尔或 `$` 表达式）和 `onChange`。`visible` 为 `false` 时不参与布局。`scroll: true` 的列是视口，子节点在列里滚动。
+`column` 和 `row` 可以写 `layout.justify`、`layout.align`、`layout.wrap`。任意节点都可以写 `layout.grow`、`layout.padding`、`layout.margin`、`minWidth`、`minHeight`、`maxWidth`、`maxHeight`、`aspectRatio`、`alignSelf`，以及 `style` 里的背景、圆角、边框。`column`、`row`、`spacer` 还可以写 `style.glass`，不要和 `background` 一起写。`column` 的 `res:` 位图比这一列高时，上下拖动只移动背景，这种列不要再写 `scroll`。任何节点都可以写 `visible`（布尔或 `$` 表达式）和 `onChange`。`visible` 为 `false` 时不参与布局。`scroll: true` 的列是视口，子节点在列里滚动。
 
 ## 事件
 

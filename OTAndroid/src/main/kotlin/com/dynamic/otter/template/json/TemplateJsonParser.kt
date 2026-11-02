@@ -657,6 +657,9 @@ object TemplateJsonParser {
 
     private fun parseStyle(style: JSONObject, path: String, type: String, attrs: MutableMap<String, String>) {
         val allowed = linkedSetOf("background", "radius", "border")
+        if (type == "column" || type == "row" || type == "spacer") {
+            allowed.add("glass")
+        }
         when (type) {
             "text" -> allowed.addAll(listOf("color", "fontSize", "align", "maxLines", "ellipsis", "fontWeight"))
             "image" -> allowed.addAll(listOf("fit", "placeholder"))
@@ -668,6 +671,9 @@ object TemplateJsonParser {
         if (style.isEmpty()) {
             throw TemplateParseException("$path 不能是空对象")
         }
+        if (style.containsKey("background") && style.containsKey("glass")) {
+            throw TemplateParseException("$path 不能同时写 background 和 glass")
+        }
         if (style.containsKey("background")) {
             attrs[TemplateKey.ATTR_BACKGROUND] = backgroundValue(style.get("background"), "$path.background")
         }
@@ -676,6 +682,9 @@ object TemplateJsonParser {
         }
         if (style.containsKey("border")) {
             parseBorder(requireObject(style.get("border"), "$path.border"), "$path.border", attrs)
+        }
+        if (style.containsKey("glass")) {
+            parseGlass(requireObject(style.get("glass"), "$path.glass"), "$path.glass", attrs)
         }
         if (style.containsKey("color")) {
             attrs[TemplateKey.ATTR_TEXT_COLOR] = colorValue(style.get("color"), "$path.color")
@@ -749,6 +758,30 @@ object TemplateJsonParser {
                 putSide(value, "bottomStart", TemplateKey.ATTR_LEFT_BOTTOM_RADIUS, path, attrs)
             }
             else -> throw TemplateParseException("$path 必须是数字或四角对象")
+        }
+    }
+
+    private fun parseGlass(glass: JSONObject, path: String, attrs: MutableMap<String, String>) {
+        requireKeys(
+            glass,
+            path,
+            allowed = setOf("style", "tint", "interactive"),
+            required = emptySet()
+        )
+        val style = if (glass.containsKey("style")) {
+            requireString(glass.get("style"), "$path.style")
+        } else {
+            "regular"
+        }
+        if (style != "regular" && style != "clear") {
+            throw TemplateParseException("$path.style 只能是 regular、clear")
+        }
+        attrs[TemplateKey.ATTR_GLASS_STYLE] = style
+        if (glass.containsKey("tint")) {
+            attrs[TemplateKey.ATTR_GLASS_TINT] = solidColor(glass.get("tint"), "$path.tint")
+        }
+        if (glass.containsKey("interactive")) {
+            attrs[TemplateKey.ATTR_GLASS_INTERACTIVE] = boolString(glass.get("interactive"), "$path.interactive")
         }
     }
 
@@ -874,7 +907,17 @@ object TemplateJsonParser {
 
     private fun backgroundValue(value: Any?, path: String): String {
         return when (value) {
-            is String -> colorValue(value, path)
+            is String -> {
+                if (value.startsWith("res:")) {
+                    val name = value.removePrefix("res:")
+                    if (!namePattern.matches(name)) {
+                        throw TemplateParseException("$path 的资源名必须是字母或下划线开头")
+                    }
+                    value
+                } else {
+                    colorValue(value, path)
+                }
+            }
             is JSONObject -> {
                 requireKeys(
                     value,

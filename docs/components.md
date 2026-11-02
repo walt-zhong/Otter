@@ -32,9 +32,10 @@
 
 ### style
 
-- `background`：`#RGB`、`#RRGGBB`、`#AARRGGBB`、`transparent`，或以 `$` 开头。渐变写成对象，`direction` 取 `bottom`、`top`、`left`、`right`、`topLeft`、`topRight`、`bottomLeft`、`bottomRight`，`colors` 至少两个，按顺序均匀分布。
+- `background`：`#RGB`、`#RRGGBB`、`#AARRGGBB`、`transparent`，或以 `$` 开头。也可以写 `res:drawable名`，图片按 cover 铺满这一层。写在 `column` 上且图片比这一层高时，上下拖动只移动背景，子节点留在原地。渐变写成对象，`direction` 取 `bottom`、`top`、`left`、`right`、`topLeft`、`topRight`、`bottomLeft`、`bottomRight`，`colors` 至少两个，按顺序均匀分布。
 - `radius`：一个数字表示四角相同，单位 dp。分开写时用 `topStart`、`topEnd`、`bottomEnd`、`bottomStart`。
 - `border`：同时有 `color` 和 `width`，`width` 是 dp。
+- `glass`：只给 `column`、`row`、`spacer`。不要和 `background` 一起写。`"glass": {}` 是标准玻璃。可以写 `style`（`regular` 或 `clear`，缺省 `regular`）、`tint`、`interactive`。`clear` 更透，圆角边缘折得更明显；`regular` 中间有一层薄霜。`tint` 写法和颜色一样，用 `#AARRGGBB`，不写渐变，不写就用这种样式自己的一层薄白。`interactive` 是布尔，按下时这一层更亮。圆角和边框仍用 `radius`、`border`。不要写模糊、高光、阴影。文字、图片、输入框、列表不要写，外面套一层容器。玻璃取的是这一层背后已经画好的画面，子节点保持清晰。Android 13 及以上，圆角边缘会折射背后的颜色；更早的系统只做模糊。背后要有内容，平的纯色上看起来会像一块实心。示例：`templates/glass/glass.json`。
 
 颜色写十六进制或 `transparent`。`red`、`white` 这种名字在解析时会被拒绝。
 
@@ -43,6 +44,10 @@
 纵向容器，子节点写在 `children`。控件是 `Column`，继承 `OTAbsoluteLayout`。
 
 `scroll` 只能是布尔值。`true` 时这一列是视口，高出视口的子节点在内部的 `NestedScrollView` 里滚。页面栈会记 `list` 的滚动位置，不记这一列的滚动。
+
+`background` 写成 `res:` 位图、并且图比这一列高时，上下拖动只改背景偏移，子节点留在原地。这种列不要再写 `scroll`，上下拖动会先被背景吃掉。图没有高出这一列时，拖动没有位移。
+
+`style.glass` 写在这一层，垫在子节点下面，文字和图保持清晰。Android 13 及以上，圆角边缘会把背后的画面折进来。
 
 ```json
 {
@@ -83,7 +88,7 @@
 }
 ```
 
-点击写在行上时，点到没有自己 `onClick` 的子节点也会落到这行。示例：`templates/row/row.json`。
+点击写在行上时，点到没有自己 `onClick` 的子节点也会落到这行。`style.glass` 同样写在这一层，子节点画在玻璃上面。示例：`templates/row/row.json`。
 
 ## text
 
@@ -153,7 +158,7 @@
 }
 ```
 
-横排里的空隙把宽度写成数字。示例：`templates/spacer/spacer.json`。
+横排里的空隙把宽度写成数字。没有子节点的玻璃用 `spacer` 加 `style.glass`。示例：`templates/spacer/spacer.json`。
 
 ## list
 

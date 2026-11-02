@@ -2,16 +2,22 @@ package com.dynamic.otter.render.view.basic
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.VelocityTracker
 import android.view.View
 import android.view.View.MeasureSpec
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
+import android.widget.OverScroller
 import androidx.annotation.Keep
 import androidx.core.widget.NestedScrollView
 import com.dynamic.otter.render.view.attr.ColumnAttr
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.capability.IStyleBindingCapability
+import com.dynamic.otter.render.view.drawable.PanningBitmapDrawable
+import kotlin.math.abs
 
 @Keep
 class Column : OTAbsoluteLayout, IStyleBindingCapability {
@@ -19,6 +25,7 @@ class Column : OTAbsoluteLayout, IStyleBindingCapability {
         private set
 
     private var installingScroll = false
+    private val backdropPan = BackdropPanner(this)
 
     constructor(context: Context) : super(context)
 
@@ -39,6 +46,20 @@ class Column : OTAbsoluteLayout, IStyleBindingCapability {
         if (attr is ColumnAttr && attr.scroll) {
             ensureScrollContent()
         }
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        if (backdropPan.onIntercept(ev)) {
+            return true
+        }
+        return super.onInterceptTouchEvent(ev)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (backdropPan.onTouch(event)) {
+            return true
+        }
+        return super.onTouchEvent(event)
     }
 
     override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams) {
@@ -127,5 +148,119 @@ class Column : OTAbsoluteLayout, IStyleBindingCapability {
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
             )
         }
+    }
+}
+
+/**
+ * 上下拖动只移动列的背景图。点按仍然交给子节点。
+ */
+private class BackdropPanner(private val host: Column) {
+    private val slop = ViewConfiguration.get(host.context).scaledTouchSlop
+    private val scroller = OverScroller(host.context)
+    private var tracker: VelocityTracker? = null
+    private var lastY = 0f
+    private var downY = 0f
+    private var dragging = false
+
+    private val fling = object : Runnable {
+        override fun run() {
+            val picture = host.background as? PanningBitmapDrawable ?: return
+            if (!scroller.computeScrollOffset()) {
+                return
+            }
+            if (picture.panTo(scroller.currY.toFloat(), host.height)) {
+                host.invalidate()
+            }
+            if (!scroller.isFinished) {
+                host.postOnAnimation(this)
+            }
+        }
+    }
+
+    fun onIntercept(ev: MotionEvent): Boolean {
+        val picture = host.background as? PanningBitmapDrawable ?: return false
+        when (ev.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                scroller.abortAnimation()
+                host.removeCallbacks(fling)
+                lastY = ev.y
+                downY = ev.y
+                dragging = false
+                tracker?.recycle()
+                tracker = VelocityTracker.obtain()
+                tracker?.addMovement(ev)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                tracker?.addMovement(ev)
+                if (!dragging && abs(ev.y - downY) > slop) {
+                    dragging = true
+                    lastY = downY
+                    host.parent?.requestDisallowInterceptTouchEvent(true)
+                }
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> finish(ev, picture)
+        }
+        return dragging
+    }
+
+    fun onTouch(ev: MotionEvent): Boolean {
+        val picture = host.background as? PanningBitmapDrawable ?: return false
+        when (ev.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                scroller.abortAnimation()
+                host.removeCallbacks(fling)
+                lastY = ev.y
+                downY = ev.y
+                dragging = false
+                tracker?.recycle()
+                tracker = VelocityTracker.obtain()
+                tracker?.addMovement(ev)
+                return true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                tracker?.addMovement(ev)
+                if (!dragging && abs(ev.y - downY) > slop) {
+                    dragging = true
+                    lastY = downY
+                }
+                if (dragging) {
+                    val dy = lastY - ev.y
+                    lastY = ev.y
+                    if (picture.panBy(dy, host.height)) {
+                        host.invalidate()
+                    }
+                }
+                return dragging
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                finish(ev, picture)
+                return dragging
+            }
+        }
+        return dragging
+    }
+
+    private fun finish(ev: MotionEvent, picture: PanningBitmapDrawable) {
+        val wasDragging = dragging
+        tracker?.addMovement(ev)
+        tracker?.computeCurrentVelocity(1000)
+        val velocity = tracker?.yVelocity ?: 0f
+        tracker?.recycle()
+        tracker = null
+        dragging = false
+        if (!wasDragging || ev.actionMasked != MotionEvent.ACTION_UP) {
+            return
+        }
+        scroller.fling(
+            0,
+            picture.offsetPx(),
+            0,
+            (-velocity).toInt(),
+            0,
+            0,
+            0,
+            picture.maxOffset(host.height).toInt()
+        )
+        host.postOnAnimation(fling)
     }
 }

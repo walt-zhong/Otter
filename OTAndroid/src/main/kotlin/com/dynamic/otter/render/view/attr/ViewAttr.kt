@@ -20,6 +20,9 @@ open class ViewAttr {
     var radius: String? = null
     var borderColor: String? = null
     var borderWidth: String? = null
+    var glassStyle: String? = null
+    var glassTint: String? = null
+    var glassInteractive: String? = null
     var padding: String? = null
     var paddingStart: String? = null
     var paddingEnd: String? = null
@@ -74,6 +77,9 @@ open class ViewAttr {
             TemplateKey.ATTR_RIGHT_BOTTOM_RADIUS -> rightBottomRadius = value
             TemplateKey.ATTR_BORDER_COLOR -> borderColor = value
             TemplateKey.ATTR_BORDER_WIDTH -> borderWidth = value
+            TemplateKey.ATTR_GLASS_STYLE -> glassStyle = value
+            TemplateKey.ATTR_GLASS_TINT -> glassTint = value
+            TemplateKey.ATTR_GLASS_INTERACTIVE -> glassInteractive = value
             TemplateKey.ATTR_PADDING -> padding = value
             TemplateKey.ATTR_PADDING_START -> paddingStart = value
             TemplateKey.ATTR_PADDING_END -> paddingEnd = value

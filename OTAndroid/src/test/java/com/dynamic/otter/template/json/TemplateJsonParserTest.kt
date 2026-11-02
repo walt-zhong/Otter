@@ -849,6 +849,145 @@ class TemplateJsonParserTest {
     }
 
     @Test
+    fun parsesGlassOnContainersAndFillsDefaults() {
+        val parsed = TemplateJsonParser.parse(
+            """
+            {
+              "layout": {
+                "type": "column",
+                "layout": { "width": "fill", "height": "wrap" },
+                "style": { "glass": {}, "radius": 16 },
+                "children": [
+                  {
+                    "type": "row",
+                    "layout": { "width": "fill", "height": 36 },
+                    "style": { "glass": { "style": "clear", "tint": "${'$'}accent", "interactive": true } }
+                  },
+                  {
+                    "type": "spacer",
+                    "layout": { "width": "fill", "height": 8 },
+                    "style": {
+                      "glass": { "tint": "#80FFFFFF" },
+                      "border": { "color": "#66FFFFFF", "width": 0.5 }
+                    }
+                  },
+                  {
+                    "type": "list",
+                    "id": "feed",
+                    "data": "${'$'}items",
+                    "layout": { "width": "fill", "height": 80 },
+                    "item": {
+                      "type": "column",
+                      "layout": { "width": "fill", "height": "wrap" },
+                      "style": { "glass": { "style": "clear" } }
+                    }
+                  }
+                ]
+              }
+            }
+            """.trimIndent()
+        )
+
+        val root = parsed.root
+        assertEquals("regular", root.attrs[TemplateKey.ATTR_GLASS_STYLE])
+        assertNull(root.attrs[TemplateKey.ATTR_GLASS_TINT])
+        assertNull(root.attrs[TemplateKey.ATTR_GLASS_INTERACTIVE])
+        assertNull(root.attrs[TemplateKey.ATTR_BACKGROUND])
+        assertEquals("16", root.attrs[TemplateKey.ATTR_RADIUS])
+
+        val row = root.children[0]
+        assertEquals("clear", row.attrs[TemplateKey.ATTR_GLASS_STYLE])
+        assertEquals("\$accent", row.attrs[TemplateKey.ATTR_GLASS_TINT])
+        assertEquals("true", row.attrs[TemplateKey.ATTR_GLASS_INTERACTIVE])
+
+        val spacer = root.children[1]
+        assertEquals("regular", spacer.attrs[TemplateKey.ATTR_GLASS_STYLE])
+        assertEquals("#80FFFFFF", spacer.attrs[TemplateKey.ATTR_GLASS_TINT])
+        assertNull(spacer.attrs[TemplateKey.ATTR_GLASS_INTERACTIVE])
+        assertEquals("#66FFFFFF", spacer.attrs[TemplateKey.ATTR_BORDER_COLOR])
+        assertEquals("0.5", spacer.attrs[TemplateKey.ATTR_BORDER_WIDTH])
+
+        assertNull(root.children[2].attrs[TemplateKey.ATTR_GLASS_STYLE])
+        val item = root.children[2].item!!
+        assertEquals("clear", item.attrs[TemplateKey.ATTR_GLASS_STYLE])
+        assertNull(item.attrs[TemplateKey.ATTR_GLASS_TINT])
+    }
+
+    @Test
+    fun rejectsGlassOnTheWrongNodeOrWithBackground() {
+        assertFails("$.layout.style.glass 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "text", "text": "Hi", "layout": { "width": 1, "height": 1 }, "style": { "glass": {} } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style 不能同时写 background 和 glass") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "background": "red", "glass": {} } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass 必须是对象") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": 1 } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.style 只能是 regular、clear") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "row", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "style": "heavy" } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.style 必须是字符串") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "spacer", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "style": 1 } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.blur 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "blur": 12 } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.tint 必须是 #RGB、#RRGGBB、#AARRGGBB、transparent，或以 \$ 开头") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "tint": "white" } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.tint 必须是颜色，不能是渐变") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "tint": { "direction": "bottom", "colors": ["#ffffff", "#000000"] } } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.interactive 必须是布尔值") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "interactive": "yes" } } } }
+                """.trimIndent()
+            )
+        }
+        assertFails("$.layout.style.glass.opacity 不是这里能写的字段") {
+            TemplateJsonParser.parse(
+                """
+                { "layout": { "type": "column", "layout": { "width": 1, "height": 1 }, "style": { "glass": { "opacity": 1 } } } }
+                """.trimIndent()
+            )
+        }
+    }
+
+    @Test
     fun demoTemplatesParse() {
         val root = listOf(
             File("../Demo/src/main/assets/templates"),
@@ -874,6 +1013,7 @@ class TemplateJsonParserTest {
             "journey/journey.json",
             "player/player.json",
             "chat/chat.json",
+            "glass/glass.json",
             "stack/shelf.json",
             "stack/place.json",
             "stack/stop.json",

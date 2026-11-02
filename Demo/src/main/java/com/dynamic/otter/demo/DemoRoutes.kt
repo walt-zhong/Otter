@@ -100,6 +100,10 @@ object DemoRoutes {
         "chat" to Spec(
             "templates/chat/chat.json",
             "templates/chat/mock-data/chat.json"
+        ),
+        "glass" to Spec(
+            "templates/glass/glass.json",
+            "templates/glass/mock-data/glass.json"
         )
     )
 }

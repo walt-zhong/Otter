@@ -1,0 +1,231 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill"
+    },
+    "style": { "background": "res:glass_wallpaper" },
+    "children": [
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 20, "end": 20, "top": 8, "bottom": 36 }
+        },
+        "children": [
+      {
+        "type": "row",
+        "layout": { "width": "wrap", "height": "wrap", "padding": { "top": 8, "bottom": 8 } },
+        "onClick": ["goBack"],
+        "children": [
+          {
+            "type": "text",
+            "text": "返回",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 16 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "text",
+        "text": "Liquid Glass Demo",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1C1C1E", "fontSize": 28, "fontWeight": "bold" }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 22 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "wrap",
+          "height": "wrap",
+          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+        },
+        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
+        "children": [
+          {
+            "type": "text",
+            "text": "基础效果",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": 60,
+          "align": "center",
+          "justify": "center"
+        },
+        "style": { "glass": { "style": "regular" }, "radius": 30 },
+        "children": [
+          {
+            "type": "text",
+            "text": "液态玻璃 (Regular)",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": 60,
+          "align": "center",
+          "justify": "center"
+        },
+        "style": { "glass": { "style": "clear" }, "radius": 30 },
+        "children": [
+          {
+            "type": "text",
+            "text": "液态玻璃 (Clear)",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 28 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "wrap",
+          "height": "wrap",
+          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+        },
+        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
+        "children": [
+          {
+            "type": "text",
+            "text": "融合效果",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 60, "align": "center" },
+        "children": [
+          {
+            "type": "row",
+            "layout": {
+              "width": 120,
+              "height": 60,
+              "grow": 1,
+              "align": "center",
+              "justify": "center"
+            },
+            "style": { "glass": { "style": "regular" }, "radius": 30 },
+            "children": [
+              {
+                "type": "text",
+                "text": "默认",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+              }
+            ]
+          },
+          { "type": "spacer", "layout": { "width": 12, "height": 60 } },
+          {
+            "type": "row",
+            "layout": {
+              "width": 120,
+              "height": 60,
+              "grow": 1,
+              "align": "center",
+              "justify": "center"
+            },
+            "style": {
+              "glass": { "style": "regular", "tint": "#8034C759" },
+              "radius": 30
+            },
+            "children": [
+              {
+                "type": "text",
+                "text": "绿色",
+                "layout": { "width": "wrap", "height": "wrap" },
+                "style": { "color": "#1C1C1E", "fontSize": 16, "fontWeight": "medium" }
+              }
+            ]
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 28 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "wrap",
+          "height": "wrap",
+          "padding": { "start": 12, "end": 12, "top": 6, "bottom": 6 }
+        },
+        "style": { "glass": { "style": "regular", "tint": "#73FFFFFF" }, "radius": 14 },
+        "children": [
+          {
+            "type": "text",
+            "text": "交互示例",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 20, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": 80,
+          "align": "center",
+          "justify": "center"
+        },
+        "style": {
+          "glass": { "style": "regular", "tint": "#3334C759", "interactive": true },
+          "radius": 10
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "可点击的 Regular",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 20 } },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": 80,
+          "align": "center",
+          "justify": "center"
+        },
+        "style": {
+          "glass": { "style": "clear", "tint": "#4DFFD60A", "interactive": true },
+          "radius": 10
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "可点击的 Clear",
+            "layout": { "width": "wrap", "height": "wrap" },
+            "style": { "color": "#1C1C1E", "fontSize": 17, "fontWeight": "medium" }
+          }
+        ]
+      }
+        ]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" }
+  }
+}

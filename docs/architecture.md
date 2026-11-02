@@ -66,6 +66,7 @@ flowchart TB
 | `render.node` | `VDomNode`、`OTNode`、Stretch 绑定 |
 | `render.view` | 创建控件、绑定内容、分发点击 |
 | `render.view.basic` | 十二种控件，见 [components.md](components.md) |
+| `render.view.drawable` | 液态玻璃，以及 cover、可拖动的位图背景 |
 | `render.view.worker` | 四类事件 |
 | `expression` | `$` 表达式，JNI 调 `OTAnalyze` |
 | `nav` | 一个 Activity 里的多页 |
@@ -152,6 +153,14 @@ flowchart LR
 `column` 和 `row` 都是 `OTAbsoluteLayout`。子 View 按 Stretch 算好的坐标摆，不靠 `LinearLayout` 排。`column` 写了 `scroll: true` 时，外层仍是这一列的视口，子节点放进内部的 `NestedScrollView`。`relayout` 从 `Column.scrollContent` 找到这些子节点。
 
 `list` 是 `RecyclerView`。布局递归到列表就停，单项留在 `item` 模版里。`OTListAdapter` 按列表自己的视口和这一项的数据单独创建。纵向列表的单项宽度取列表宽度，横向列表的单项高度取列表高度。
+
+## 液态玻璃和可拖动背景
+
+`style.glass` 只出现在 `column`、`row`、`spacer`，并且不能和 `background` 一起写。它是这一层的背景，子节点画在上面。
+
+绘制前把盖住这一层的兄弟藏起来，把根视图画进一块位图，再铺回玻璃的范围。采样比玻璃大一圈，边缘才能拉到外面的像素。Android 13 及以上用着色器做圆角折射：`clear` 更透、折得更明显，`regular` 中间有一层薄霜。Android 12 用系统模糊，更早的版本把位图缩小后做堆叠模糊。作者只写 `style`、`tint`、`interactive`，不写模糊、高光和阴影。玻璃没移动、背后的图也没动时，采样会停下来。背景偏移变了会重新取。
+
+`background` 写成 `res:` 时，位图按 cover 铺满。写在 `column` 上、并且图比这一列高时，上下拖动和松手后的滑动只改图片偏移，子节点留在原地。点按仍然交给子节点。这种列不要再写 `scroll: true`，否则上下拖动会被背景吃掉。`scroll: true` 滚的是子节点，背景留在外层视口上。
 
 ## 表达式
 
