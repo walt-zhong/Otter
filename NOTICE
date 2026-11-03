@@ -69,7 +69,8 @@ files. They were not copied into OtterAnalyzeBridge:
 Otter-owned bridge files:
   OTIOS/ThirdParty/OtterAnalyzeBridge/include/OTExpressionBridge.h
   OTIOS/ThirdParty/OtterAnalyzeBridge/OTExpressionBridge.mm
-  OTIOS/Sources/OtterExpression/ExpressionEngine.swift
+  OTIOS/objc/OtterExpression/ExpressionEngine.h
+  OTIOS/objc/OtterExpression/ExpressionEngine.m
 
 Value lookup, size(), and env() follow
 OTAndroid/src/main/kotlin/com/dynamic/otter/expression/ExpressionWrapper.kt.

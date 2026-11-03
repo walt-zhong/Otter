@@ -31,8 +31,8 @@ typedef NS_ENUM(NSInteger, OTEvalKind) {
 @property (nonatomic, readonly, nullable) id objectValue;
 @end
 
-/// Owns one OTAnalyze subclass. String expressions only; the Swift
-/// ExpressionEngine applies ExpressionWrapper / OTAnalyze.getResult.
+/// Owns one OTAnalyze subclass. String expressions only; ExpressionEngine
+/// applies ExpressionWrapper / OTAnalyze.getResult.
 @interface OTExpressionBridge : NSObject
 
 - (nullable OTEvalBox *)evaluateString:(NSString *)expression data:(nullable id)data;
