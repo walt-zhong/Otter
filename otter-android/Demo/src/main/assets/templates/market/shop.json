@@ -1,0 +1,370 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "shop",
+    "scroll": true,
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "bottom": 8 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "image",
+        "src": "$image",
+        "layout": {
+          "width": "fill",
+          "height": 200,
+          "margin": { "start": 20, "end": 20, "top": 8 }
+        },
+        "style": { "radius": 16, "fit": "cover" }
+      },
+      {
+        "type": "text",
+        "id": "name",
+        "text": "$name",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 16 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 22, "fontWeight": "bold" }
+      },
+      {
+        "type": "text",
+        "text": "$hours",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 6 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "$phone",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 4 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "$blurb",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 15 }
+      },
+      {
+        "type": "row",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "wrap": true,
+          "align": "center",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "$tagA",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 8, "end": 8, "top": 4, "bottom": 4 }
+            },
+            "style": {
+              "background": "#FFFFFF",
+              "radius": 8,
+              "color": "#8B572A",
+              "fontSize": 12
+            }
+          },
+          {
+            "type": "spacer",
+            "visible": "$showTagB",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "$tagB",
+            "visible": "$showTagB",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 8, "end": 8, "top": 4, "bottom": 4 }
+            },
+            "style": {
+              "background": "#FFFFFF",
+              "radius": 8,
+              "color": "#8B572A",
+              "fontSize": 12
+            }
+          },
+          {
+            "type": "spacer",
+            "layout": { "width": 8, "height": 8 }
+          },
+          {
+            "type": "text",
+            "text": "到店",
+            "layout": {
+              "width": "wrap",
+              "height": "wrap",
+              "padding": { "start": 8, "end": 8, "top": 4, "bottom": 4 }
+            },
+            "style": {
+              "background": "#FFFFFF",
+              "radius": 8,
+              "color": "#8B572A",
+              "fontSize": 12
+            }
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "text": "$price",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 16 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 20, "fontWeight": "bold" }
+      },
+      {
+        "type": "text",
+        "text": "$memberPrice",
+        "visible": "$member",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 4 }
+        },
+        "style": { "color": "#8B572A", "fontSize": 15, "fontWeight": "bold" }
+      },
+      {
+        "type": "text",
+        "text": "$closedNote",
+        "visible": "$closed",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 }
+        },
+        "style": { "color": "#8B572A", "fontSize": 14 }
+      },
+      {
+        "type": "text",
+        "text": "店员说明",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 20 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+      },
+      {
+        "type": "text",
+        "text": "$note1",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 14 }
+      },
+      {
+        "type": "text",
+        "text": "$note2",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 14 }
+      },
+      {
+        "type": "text",
+        "text": "$note3",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 }
+        },
+        "style": { "color": "#1F1A17", "fontSize": 14 }
+      },
+      {
+        "type": "text",
+        "text": "联系店铺",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 20 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["callShop"]
+      },
+      {
+        "type": "text",
+        "text": "$cameraStatusText",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "拍一张菜单",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askCamera"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开相机",
+        "visible": "$cameraShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["cameraSettings"]
+      },
+      {
+        "type": "text",
+        "text": "$microphoneStatusText",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 12 }
+        },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "text",
+        "text": "留一句语音",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askMicrophone"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开麦克风",
+        "visible": "$microphoneShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["microphoneSettings"]
+      },
+      {
+        "type": "text",
+        "text": "加入购物车",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "start": 20, "end": 20, "top": 10, "bottom": 16 },
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["inCart", "openCart"]
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "callShop": {
+      "action": "host",
+      "name": "call",
+      "params": { "phone": "$phone" }
+    },
+    "askCamera": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "camera" }
+    },
+    "cameraSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "camera" }
+    },
+    "askMicrophone": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "microphone" }
+    },
+    "microphoneSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "microphone" }
+    },
+    "inCart": { "action": "toast", "message": "已在购物车中" },
+    "openCart": { "action": "open", "page": "cart" }
+  }
+}

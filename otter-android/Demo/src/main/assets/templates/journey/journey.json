@@ -1,0 +1,149 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 12 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "column",
+        "id": "hero",
+        "layout": { "width": "fill", "height": "wrap", "padding": 18 },
+        "style": {
+          "background": { "direction": "bottomRight", "colors": ["#1B3A4B", "#3E6B73"] },
+          "radius": 24
+        },
+        "children": [
+          {
+            "type": "text",
+            "text": "行程",
+            "layout": { "width": "fill", "height": 16 },
+            "style": { "color": "#F6E7C1", "fontSize": 12 }
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+          {
+            "type": "text",
+            "text": "京都 · 四日",
+            "layout": { "width": "fill", "height": 32 },
+            "style": { "color": "#FFFFFF", "fontSize": 26 }
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+          {
+            "type": "text",
+            "text": "4月12日 — 4月15日",
+            "layout": { "width": "fill", "height": 20 },
+            "style": { "color": "#D5E4E8", "fontSize": 13 }
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 14 } },
+          {
+            "type": "progress",
+            "layout": { "width": "fill", "height": 8 },
+            "from": 0,
+            "to": 0.42,
+            "animate": false,
+            "style": { "track": "#4E6A72", "bar": "#F2C14E", "radius": 4 }
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+          {
+            "type": "text",
+            "text": "已走完 42%",
+            "layout": { "width": "fill", "height": 18 },
+            "style": { "color": "#F6E7C1", "fontSize": 12 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "day_chips",
+        "data": "$days",
+        "direction": "horizontal",
+        "gap": 8,
+        "layout": { "width": "fill", "height": 36 },
+        "item": {
+          "type": "text",
+          "text": "$label",
+          "layout": { "width": 72, "height": 36 },
+          "style": {
+            "background": "#FFFCF8",
+            "radius": 18,
+            "color": "#1F1A17",
+            "fontSize": 13,
+            "align": "center"
+          }
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "stops",
+        "data": "$stops",
+        "direction": "vertical",
+        "gap": 10,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 78,
+            "padding": 14,
+            "align": "center"
+          },
+          "style": { "background": "#FFFCF8", "radius": 18 },
+          "onClick": ["showStop"],
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": 52, "height": "wrap" },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$time",
+                  "layout": { "width": 52, "height": 18 },
+                  "style": { "color": "#C45C26", "fontSize": 12 }
+                },
+                { "type": "spacer", "layout": { "width": 52, "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$day",
+                  "layout": { "width": 52, "height": 16 },
+                  "style": { "color": "#8A8178", "fontSize": 11 }
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": 8, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+            { "type": "spacer", "layout": { "width": 10, "height": 40 } },
+            {
+              "type": "column",
+              "layout": { "width": 180, "height": "wrap" },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$place",
+                  "layout": { "width": 180, "height": 22 },
+                  "style": { "color": "#1F1A17", "fontSize": 15 }
+                },
+                { "type": "spacer", "layout": { "width": 180, "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$note",
+                  "layout": { "width": 180, "height": 18 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showStop": { "action": "toast", "message": "$place" }
+  }
+}

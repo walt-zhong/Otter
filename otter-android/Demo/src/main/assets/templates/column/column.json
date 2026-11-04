@@ -1,0 +1,611 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "id": "kicker",
+        "text": "COLUMN",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "text": "纵向容器",
+        "layout": { "width": "fill", "height": 30 },
+        "style": { "color": "#1F1A17", "fontSize": 22 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "id": "intro",
+        "text": "type 为 column。children 从上到下排列。",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "direction": "vertical",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "width / height",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "fill 撑满父级，数字是设计稿 dp，wrap 由内容撑开。grow 吃掉父级剩下的高度，用来把列表铺满屏幕。",
+                  "layout": { "width": "fill", "height": 52 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": 28 },
+                  "style": { "background": "#1F6F6A", "radius": 8 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "fill",
+                      "layout": { "width": "fill", "height": 28 },
+                      "style": { "color": "#F4FBF8", "fontSize": 12, "align": "center" }
+                    }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": 120, "height": 28 },
+                  "style": { "background": "#C45C26", "radius": 8 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "120",
+                      "layout": { "width": 120, "height": 28 },
+                      "style": { "color": "#FFFCF8", "fontSize": 12, "align": "center" }
+                    }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "wrap", "height": "wrap" },
+                  "style": { "background": "#1F1A17", "radius": 8 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "wrap",
+                      "layout": { "width": 64, "height": 28 },
+                      "style": { "color": "#F3EFE7", "fontSize": 12, "align": "center" }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "padding",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "一个数字表示四边相同，也可以分别写 start、end、top、bottom。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": "wrap", "padding": 16 },
+                  "style": { "background": "#F3E2D4", "radius": 12 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "padding: 16",
+                      "layout": { "width": "fill", "height": 28 },
+                      "style": { "background": "#FFFCF8", "radius": 8, "color": "#1F1A17", "fontSize": 12, "align": "center" }
+                    }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "column",
+                  "layout": {
+                    "width": "fill",
+                    "height": "wrap",
+                    "padding": { "start": 24, "end": 8, "top": 12, "bottom": 4 }
+                  },
+                  "style": { "background": "#E7EEF2", "radius": 12 },
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "start 24  end 8  top 12  bottom 4",
+                      "layout": { "width": "fill", "height": 28 },
+                      "style": { "background": "#FFFCF8", "radius": 8, "color": "#1F1A17", "fontSize": 12, "align": "center" }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "justify",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "主轴对齐。column 的主轴是竖直方向：start、center、end、spaceBetween、spaceAround、spaceEvenly。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" },
+                  "children": [
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "start", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "start", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "center", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "center", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "end", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "end", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" },
+                  "children": [
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "spaceBetween", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "between", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "spaceAround", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "around", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap", "align": "center" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 72, "justify": "spaceEvenly", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#C45C26", "radius": 4 } },
+                            { "type": "spacer", "layout": { "width": 28, "height": 8 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "evenly", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "align",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "交叉轴对齐。column 里是水平方向：start、center、end、stretch、baseline。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" },
+                  "children": [
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 40, "justify": "center", "align": "start" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 36, "height": 10 }, "style": { "background": "#1F6F6A", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "start", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 40, "justify": "center", "align": "center" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 36, "height": 10 }, "style": { "background": "#C45C26", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "center", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 96, "height": "wrap" },
+                      "children": [
+                        {
+                          "type": "column",
+                          "layout": { "width": 96, "height": 40, "justify": "center", "align": "end" },
+                          "style": { "background": "#F6F1EA", "radius": 10 },
+                          "children": [
+                            { "type": "spacer", "layout": { "width": 36, "height": 10 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                          ]
+                        },
+                        { "type": "spacer", "layout": { "width": 96, "height": 4 } },
+                        { "type": "text", "text": "end", "layout": { "width": 96, "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11, "align": "center" } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "text",
+                  "text": "stretch 把没写死宽度的子节点拉满。",
+                  "layout": { "width": "fill", "height": 18 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 6 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": 36, "justify": "center", "align": "stretch" },
+                  "style": { "background": "#F6F1EA", "radius": 10 },
+                  "children": [
+                    { "type": "spacer", "layout": { "width": "wrap", "height": 10 }, "style": { "background": "#1F6F6A", "radius": 4 } }
+                  ]
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "text",
+                  "text": "baseline 让文字按基线对齐。",
+                  "layout": { "width": "fill", "height": 18 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 6 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": "wrap", "align": "baseline" },
+                  "children": [
+                    { "type": "text", "text": "大", "layout": { "width": 28, "height": 28 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+                    { "type": "text", "text": "小", "layout": { "width": 28, "height": 18 }, "style": { "color": "#C45C26", "fontSize": 12 } }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "background",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "纯色，或渐变。direction 可以是 bottom、top、left、right、topLeft、topRight、bottomLeft、bottomRight。colors 至少两个颜色。",
+                  "layout": { "width": "fill", "height": 52 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "background": "#1F6F6A", "radius": 10 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 8 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": {
+                    "background": { "direction": "right", "colors": ["#1F6F6A", "#C45C26"] },
+                    "radius": 10
+                  }
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "radius / border",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "radius 可以是一个数字，或 topStart、topEnd、bottomEnd、bottomStart。border 要同时写 color 和 width。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" },
+                  "children": [
+                    {
+                      "type": "column",
+                      "layout": { "width": 120, "height": 56 },
+                      "style": { "background": "#F3E2D4", "radius": 18 }
+                    },
+                    {
+                      "type": "column",
+                      "layout": { "width": 120, "height": 56 },
+                      "style": {
+                        "background": "#E7EEF2",
+                        "radius": { "topStart": 22, "topEnd": 4, "bottomEnd": 22, "bottomStart": 4 },
+                        "border": { "color": "#1F6F6A", "width": 2 }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 12 }
+            },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "id / onClick",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "id 是节点名字，事件用 target 找到它。onClick 写事件名数组。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "text",
+                  "id": "click_target",
+                  "text": "点这里",
+                  "layout": { "width": "fill", "height": 44 },
+                  "style": {
+                    "background": "#1F1A17",
+                    "radius": 12,
+                    "color": "#F3EFE7",
+                    "fontSize": 14,
+                    "align": "center"
+                  },
+                  "onClick": ["showClick"]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 16 }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showClick": {
+      "action": "toast",
+      "message": "onClick 已触发，目标 id 是 click_target"
+    }
+  }
+}

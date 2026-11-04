@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  color: #1c1c1c;
+  background: #f4f4f4;
+  font-family: "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+label {
+  font-weight: 600;
+}
+
+input {
+  font: inherit;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #bbb;
+}
+
+button {
+  font: inherit;
+  align-self: flex-start;
+  padding: 0.4rem 0.9rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.notice {
+  color: #8a1f1f;
+}
+
+.result p {
+  margin: 0.75rem 0;
+}
+
+.sample {
+  display: inline-block;
+  margin: 0;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid #333;
+  border-radius: 999px;
+  font-size: 0.875rem;
+}
+
+ul {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+}
+
+a {
+  color: #0b57d0;
+}

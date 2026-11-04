@@ -1,0 +1,12 @@
+{
+  "sheet": [
+    {
+      "agreed": true,
+      "agreeLabel": "已同意，来自数据",
+      "declined": false,
+      "declineLabel": "未同意，来自数据",
+      "boxTint": "#C45C26",
+      "labelColor": "#1F6F6A"
+    }
+  ]
+}

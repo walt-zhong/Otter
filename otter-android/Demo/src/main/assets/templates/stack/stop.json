@@ -1,0 +1,143 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "stop",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 20 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 14 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 56, "align": "center" },
+        "children": [
+          {
+            "type": "image",
+            "src": "$cover",
+            "layout": { "width": 56, "height": 56 },
+            "style": { "radius": 16 }
+          },
+          { "type": "spacer", "layout": { "width": 12, "height": 56 } },
+          {
+            "type": "column",
+            "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+            "children": [
+              {
+                "type": "text",
+                "text": "$place",
+                "layout": { "width": "fill", "height": 16 },
+                "style": { "color": "$ink", "fontSize": 12 }
+              },
+              { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+              {
+                "type": "text",
+                "id": "name",
+                "text": "$name",
+                "layout": { "width": "fill", "height": 30 },
+                "style": { "color": "#1F1A17", "fontSize": 24 }
+              }
+            ]
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "text",
+        "id": "when",
+        "text": "$when",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "column",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 16, "bottom": 16 }
+        },
+        "style": { "background": "#FFFCF8", "radius": 20 },
+        "children": [
+          {
+            "type": "spacer",
+            "layout": { "width": 28, "height": 3 },
+            "style": { "background": "$wash", "radius": 2 }
+          },
+          { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+          {
+            "type": "text",
+            "id": "detail",
+            "text": "$detail",
+            "layout": { "width": "fill", "height": 72 },
+            "style": { "color": "#1F1A17", "fontSize": 16 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "text",
+        "id": "tip",
+        "text": "$tip",
+        "layout": { "width": "fill", "height": 22 },
+        "style": { "color": "#5C564F", "fontSize": 14 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8, "grow": 1 } },
+      {
+        "type": "text",
+        "text": "这次",
+        "layout": { "width": "fill", "height": 18 },
+        "style": { "color": "#8A8178", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "checkbox",
+        "id": "been",
+        "checked": "$been",
+        "label": "到过这里",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 14, "end": 14 }
+        },
+        "style": {
+          "background": "#FFFCF8",
+          "radius": 16,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "tint": "#1F6F6A"
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "checkbox",
+        "id": "again",
+        "checked": "$again",
+        "label": "还想再来",
+        "layout": {
+          "width": "fill",
+          "height": 48,
+          "padding": { "start": 14, "end": 14 }
+        },
+        "style": {
+          "background": "#FFFCF8",
+          "radius": 16,
+          "color": "#1F1A17",
+          "fontSize": 15,
+          "tint": "#C45C26"
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": {
+      "action": "back",
+      "params": {
+        "been": "$been",
+        "again": "$again"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "tracks": [
+    { "title": "海岸线", "artist": "周日乐队", "length": "3:20", "cover": "res:ic_scene_coast", "titleColor": "#F2C14E", "rowBg": "#3A2A22", "mark": "正在听" },
+    { "title": "晚风", "artist": "周日乐队", "length": "2:58", "cover": "res:ic_scene_lamp", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "街灯", "artist": "北窗", "length": "4:02", "cover": "res:ic_scene_market", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "回声", "artist": "北窗", "length": "3:41", "cover": "res:ic_scene_book", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "慢车", "artist": "木木", "length": "3:15", "cover": "res:ic_scene_tram", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "雨停之前", "artist": "木木", "length": "2:47", "cover": "res:ic_scene_rain", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "旧电台", "artist": "南边", "length": "4:18", "cover": "res:ic_scene_coffee", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "夏天的房间", "artist": "南边", "length": "3:06", "cover": "res:ic_scene_bench", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "轮渡", "artist": "阿梨", "length": "3:33", "cover": "res:ic_scene_coast", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "夜航", "artist": "阿梨", "length": "4:26", "cover": "res:ic_scene_lamp", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "空白页", "artist": "周日乐队", "length": "2:39", "cover": "res:ic_scene_book", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "再听一遍", "artist": "周日乐队", "length": "3:52", "cover": "res:ic_scene_coffee", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "车站", "artist": "北窗", "length": "3:11", "cover": "res:ic_scene_tram", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" },
+    { "title": "回家的路", "artist": "木木", "length": "4:05", "cover": "res:ic_scene_bench", "titleColor": "#F6F1EA", "rowBg": "#241F1C", "mark": "" }
+  ]
+}

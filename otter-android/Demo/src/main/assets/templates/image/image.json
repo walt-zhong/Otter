@@ -1,0 +1,91 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "IMAGE", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#C45C26", "fontSize": 12 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "图片", "layout": { "width": "fill", "height": 30 }, "style": { "color": "#1F1A17", "fontSize": 22 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      { "type": "text", "text": "必填 src。res: 读本地 drawable，http 或 https 走网络。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 13 } },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "src", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "可以写死，也可以用 $ 从数据里拿地址。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "row", "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" }, "children": [
+                  { "type": "image", "id": "local_image", "src": "res:ic_scene_coast", "layout": { "width": 96, "height": 96 }, "style": { "radius": 20 } },
+                  { "type": "image", "id": "bound_image", "src": "$photo", "layout": { "width": 96, "height": 96 }, "style": { "radius": 20 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "text", "text": "左：res:ic_scene_coast    右：$photo", "layout": { "width": "fill", "height": 18 }, "style": { "color": "#8A8178", "fontSize": 12 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "layout / radius / border / background", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "width、height 决定图片盒子。radius 裁成圆角，border 描边，background 垫在图下面。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                {
+                  "type": "image",
+                  "id": "framed",
+                  "src": "$remote",
+                  "layout": { "width": "fill", "height": 160, "padding": 8 },
+                  "style": {
+                    "background": "#F3E2D4",
+                    "radius": { "topStart": 24, "topEnd": 8, "bottomEnd": 24, "bottomStart": 8 },
+                    "border": { "color": "#C45C26", "width": 2 }
+                  }
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "图片也可以点击。id 用来被事件找到。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "image", "id": "click_image", "src": "res:ic_nav", "layout": { "width": 48, "height": 48 }, "onClick": ["showClick"] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showClick": { "action": "toast", "message": "点到了图片 click_image" }
+  }
+}
