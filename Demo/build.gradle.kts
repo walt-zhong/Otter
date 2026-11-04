@@ -45,6 +45,10 @@ android {
             res.srcDirs(arrayOf("src/androidTest/res"))
             // manifest.srcFile("src/androidTest/AndroidManifest.xml")
         }
+
+        getByName("debug") {
+            java.srcDirs(arrayOf("src/debug/kotlin"))
+        }
     }
 
     lint.abortOnError = false
@@ -63,4 +67,5 @@ dependencies {
 
     implementation(project(":OTAndroid"))
     implementation(libs.fastjson)
+    debugImplementation(libs.bouncycastle)
 }

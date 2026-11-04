@@ -23,6 +23,8 @@ data class ParsedTemplate(
 )
 
 object TemplateJsonParser {
+    private const val MAX_DEPTH = 32
+    private const val MAX_NODES = 2000
     private val namePattern = Regex("[A-Za-z_][A-Za-z0-9_]*")
     private val colorPattern = Regex("#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")
 
@@ -83,12 +85,15 @@ object TemplateJsonParser {
         val ids = linkedSetOf<String>()
         val clicks = mutableListOf<String>()
         val changes = mutableListOf<String>()
+        val budget = intArrayOf(MAX_NODES)
         val layout = parseNode(
             requireObject(root.get("layout"), "$.layout"),
             "$.layout",
             ids,
             clicks,
-            changes
+            changes,
+            budget,
+            0
         )
         clicks.forEach { name ->
             if (!events.containsKey(name)) {
@@ -395,8 +400,17 @@ object TemplateJsonParser {
         path: String,
         ids: MutableSet<String>,
         clicks: MutableList<String>,
-        changes: MutableList<String>
+        changes: MutableList<String>,
+        budget: IntArray,
+        depth: Int
     ): ParsedNode {
+        if (depth > MAX_DEPTH) {
+            throw TemplateParseException("$path 嵌套过深")
+        }
+        if (budget[0] <= 0) {
+            throw TemplateParseException("$path 节点过多")
+        }
+        budget[0] -= 1
         val type = node.get("type") as? String
             ?: throw TemplateParseException("$path 缺少 type")
         val viewName = viewNames[type]
@@ -495,14 +509,24 @@ object TemplateJsonParser {
                     "$path.children[$index]",
                     ids,
                     clicks,
-                    changes
+                    changes,
+                    budget,
+                    depth + 1
                 )
             }
         } else {
             emptyList()
         }
         val item = if (type == "list") {
-            parseNode(requireObject(node.get("item"), "$path.item"), "$path.item", ids, clicks, changes)
+            parseNode(
+                requireObject(node.get("item"), "$path.item"),
+                "$path.item",
+                ids,
+                clicks,
+                changes,
+                budget,
+                depth + 1
+            )
         } else {
             null
         }

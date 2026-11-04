@@ -8,6 +8,7 @@ import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieListener
 import com.dynamic.otter.data.OTHelper
+import com.dynamic.otter.utils.AssetsUtils
 import com.dynamic.otter.render.view.attr.AnimationViewAttr
 import com.dynamic.otter.render.view.basic.capability.IDataBindingCapability
 
@@ -49,9 +50,10 @@ class AnimationView : LottieAnimationView, IDataBindingCapability, Playable {
     private fun playAnimationFromBoundUrl() {
         val source = url ?: return
         when {
-            OTHelper.isNetSrc(source) -> playNetAnimation(source, aniRepeatCount, aniRepeatMode)
+            OTHelper.isNetSrc(source) && source.startsWith("https:") ->
+                playNetAnimation(source, aniRepeatCount, aniRepeatMode)
             OTHelper.isAssetsSrc(source) -> {
-                val assetPath = OTHelper.getAssetsSrc(source)
+                val assetPath = AssetsUtils.containedAssetPath(OTHelper.getAssetsSrc(source)) ?: return
                 assetImageFolder(assetPath)?.let { imageAssetsFolder = it }
                 playAssetsAnimation(assetPath, aniRepeatCount, aniRepeatMode)
             }

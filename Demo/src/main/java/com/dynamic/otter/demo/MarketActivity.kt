@@ -180,6 +180,8 @@ private class MarketSession {
     fun release() {
         if (current === this) {
             current = null
+            listOf("pay", "setQty", "removeLine", "refreshStatus", "call", "filter", "openTab")
+                .forEach { ExpansionCenter.instance.unregisterHostAction(it) }
         }
         openTab = null
         stacks.forEach { it.release() }
@@ -263,6 +265,10 @@ private class MarketSession {
 
     fun callShop(context: Context, params: JSONObject?) {
         val phone = params.string("phone").orEmpty()
+        if (!Regex("^[0-9+()\\- ]{6,20}$").matches(phone)) {
+            toast(context, "这个号码不能拨")
+            return
+        }
         toast(context, "正在联系店铺 $phone")
     }
 

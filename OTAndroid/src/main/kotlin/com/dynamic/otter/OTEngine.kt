@@ -2,6 +2,7 @@ package com.dynamic.otter
 
 import android.content.Context
 import android.view.View
+import java.io.File
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSONObject
 import com.dynamic.otter.context.TemplateContext
@@ -32,8 +33,13 @@ class OTEngine {
         return context
     }
 
-    fun buildTemplate(bizId: String, templateId: String, templatePath: String): TemplateContext {
-        val template = OTTemplate(context, bizId, templateId, templatePath)
+    fun buildTemplate(
+        bizId: String,
+        templateId: String,
+        templatePath: String,
+        fileRoot: File? = null
+    ): TemplateContext {
+        val template = OTTemplate(context, bizId, templateId, templatePath, fileRoot)
         return TemplateContext.create(template)
     }
 
@@ -41,10 +47,12 @@ class OTEngine {
         templateContext: TemplateContext,
         viewport: OTViewPortSize = defaultViewPortSize()
     ): View? {
-        val templateJson = AssetsUtils.parseAssetsToString(
-            templateContext.context,
-            templateContext.template.templatePath
-        )
+        val template = templateContext.template
+        val templateJson = if (template.fileRoot != null) {
+            AssetsUtils.readRelative(template.fileRoot, template.templatePath)
+        } else {
+            AssetsUtils.parseAssetsToString(templateContext.context, template.templatePath)
+        }
         val parsed = TemplateJsonParser.parse(templateJson)
         templateContext.parsed = parsed
         templateContext.viewport = viewport
@@ -163,7 +171,8 @@ class OTEngine {
         val context: Context,
         var bizId: String,
         val templateId: String,
-        val templatePath: String
+        val templatePath: String,
+        val fileRoot: File? = null
     )
 
     companion object {

@@ -3,11 +3,25 @@ package com.dynamic.otter.utils
 import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.fastjson.parser.ParserConfig
 
-fun String.toJson(): JSONObject = try {
-    JSONObject.parseObject(this)
-} catch (_: Exception) {
-    JSONObject()
+private object FastjsonGuard {
+    init {
+        ParserConfig.getGlobalInstance().isSafeMode = true
+    }
+}
+
+fun String.toJson(): JSONObject {
+    FastjsonGuard
+    if (isBlank()) {
+        return JSONObject()
+    }
+    return try {
+        JSON.parseObject(this) ?: throw IllegalArgumentException("JSON 必须是对象")
+    } catch (error: Exception) {
+        Log.e("Otter", "rejected invalid JSON", error)
+        throw error
+    }
 }
 
 fun JSON.getAnyExt(valuePath: String): Any? {

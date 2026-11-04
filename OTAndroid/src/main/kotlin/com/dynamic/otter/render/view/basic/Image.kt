@@ -62,9 +62,17 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
         val placeholder = placeholderDrawable()
         when {
             src.isBlank() -> showPlaceholder(placeholder)
-            OTHelper.isNetSrc(src) -> loadModel(src, placeholder)
-            OTHelper.isContentSrc(src) -> loadModel(Uri.parse(src), placeholder)
+            OTHelper.isNetSrc(src) -> {
+                if (!src.startsWith("https:")) {
+                    showPlaceholder(placeholder)
+                } else {
+                    loadModel(src, placeholder)
+                }
+            }
+            OTHelper.isContentSrc(src) && src.startsWith("content://") ->
+                loadModel(Uri.parse(src), placeholder)
             OTHelper.isResSrc(src) -> bindRes(getResSrc(src), placeholder)
+            else -> showPlaceholder(placeholder)
         }
     }
 
@@ -133,6 +141,10 @@ class Image : AppCompatImageView, IDataBindingCapability, IReleaseCapability,
     }
 
     private fun bindRes(resUri: String, placeholder: ColorDrawable?) {
+        if (resUri.contains('/') || resUri.contains('\\') || resUri.contains("..")) {
+            showPlaceholder(placeholder)
+            return
+        }
         cancelRequest()
         try {
             val res: Int = getResIdByUrl(this, resUri)

@@ -38,17 +38,28 @@ class ExpansionCenter {
     }
 
     fun registerHostAction(name: String, action: HostAction): ExpansionCenter {
+        if (!HOST_NAME.matches(name)) {
+            return this
+        }
         hostActions[name] = action
         return this
     }
 
+    fun unregisterHostAction(name: String) {
+        hostActions.remove(name)
+    }
+
     fun dispatchHost(context: Context, name: String, params: JSONObject?): Boolean {
+        if (!HOST_NAME.matches(name)) {
+            return false
+        }
         val action = hostActions[name] ?: return false
         action.handle(context, params)
         return true
     }
 
     companion object{
+        private val HOST_NAME = Regex("^[A-Za-z_][A-Za-z0-9_]*$")
         val instance by lazy {
             ExpansionCenter()
         }

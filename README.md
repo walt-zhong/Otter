@@ -4,24 +4,23 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 
 页面结构和数据分开。结构是 JSON 模版，数据是另一份 JSON。布局使用来自 [GaiaX](https://github.com/alibaba/GaiaX) 的 Flexbox 引擎，`$` 表达式使用来自 GaiaX 的表达式引擎。出处、许可证和本仓库中的对应文件见文末[来源声明](#来源声明)。
 
-当前仓库先把渲染协议和原生渲染器做稳。Demo 里的模版放在 assets 中，用来验证组件、事件和解析器。后面接上大模型时，变的是模版从哪来，渲染链路不变。生成时要遵守的输出约定写在 [docs/template-json.md](docs/template-json.md)：只输出一份 JSON，结构归模版，数据归另一份 JSON。
+当前仓库先把渲染协议和原生渲染器做稳。Demo 里的模版放在 assets 中，用来验证组件、事件和解析器。后面接上大模型时，变的是模版从哪来，渲染链路不变。生成时要遵守的输出约定写在 [docs/template-format.md](docs/template-format.md)：只输出一份 JSON，结构归模版，数据归另一份 JSON。
 
 ## 文档
 
 | 文档 | 内容 |
 | --- | --- |
-| [docs/architecture.md](docs/architecture.md) | 分层、一次上屏、事件分发、页面栈 |
-| [docs/getting-started.md](docs/getting-started.md) | 接入、刷新、多页和权限 |
-| [docs/template-json.md](docs/template-json.md) | 模版 JSON 约定 |
-| [docs/components.md](docs/components.md) | 十二种节点怎么写 |
-| [docs/demo.md](docs/demo.md) | Demo 页面和资源目录 |
-| [docs/README.md](docs/README.md) | 文档索引，以及公开到 GitHub 之前还缺的文件 |
+| [docs/render-pipeline.md](docs/render-pipeline.md) | 模版怎么被解析、布局、画出来，事件和页面栈怎么走 |
+| [docs/sdk-integration.md](docs/sdk-integration.md) | 业务工程怎么接入：画一页、刷新、多页、权限 |
+| [docs/template-format.md](docs/template-format.md) | 写或生成模版时要遵守的 JSON 格式 |
+| [docs/node-types.md](docs/node-types.md) | 十二种节点各自能写哪些字段 |
+| [docs/demo-guide.md](docs/demo-guide.md) | Demo 有哪些页面，以及真机怎么调试生成页 |
 
 ## 介绍
 
 [![Demo 走查：首页、天气卡、城南](docs/media/intro-poster.jpg)](docs/media/intro.mp4)
 
-这段是 Demo 在真机上的走查，约 16 秒：首页列表、天气卡、城南的四站，再点进「旧巷咖啡」。文件在 [docs/media/intro.mp4](docs/media/intro.mp4)。播放、权限弹窗和南市底栏见 [docs/demo.md](docs/demo.md)。
+这段是 Demo 在真机上的走查，约 16 秒：首页列表、天气卡、城南的四站，再点进「旧巷咖啡」。文件在 [docs/media/intro.mp4](docs/media/intro.mp4)。播放、权限弹窗和南市底栏见 [docs/demo-guide.md](docs/demo-guide.md)。
 
 ## 动态化在说什么
 
@@ -95,7 +94,7 @@ H5、React Native、Lynx、Kuikly 更适合已经有前端或跨端团队、需�
 | `:OTAndroid` | Android Library | 模版解析、布局、视图创建、事件分发。包名 `com.dynamic.otter`，namespace `com.dynamic.outter` |
 | `:Demo` | Application | 示例应用。首页和各组件页都是 assets 里的模版 |
 
-模版示例在 `Demo/src/main/assets/templates/`。字段写法见 [docs/template-json.md](docs/template-json.md)。节点和事件以 `OTAndroid` 里的 `TemplateJsonParser` 为准。
+模版示例在 `Demo/src/main/assets/templates/`。字段写法见 [docs/template-format.md](docs/template-format.md)。节点和事件以 `OTAndroid` 里的 `TemplateJsonParser` 为准。
 
 ## 环境
 
@@ -116,7 +115,7 @@ H5、React Native、Lynx、Kuikly 更适合已经有前端或跨端团队、需�
 ./gradlew :OTAndroid:testDebugUnitTest
 ```
 
-Demo 的 `applicationId` 是 `com.senseauto.sensedyne.demo`。启动后进入首页模版 `templates/home-demo/home.json`，点列表项会打开对应示例。
+Demo 的 `applicationId` 是 `com.senseauto.sensedyne.demo`。启动后是导航页，点列表项会打开对应示例。
 
 ## 接入
 

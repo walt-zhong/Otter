@@ -22,6 +22,7 @@ import com.dynamic.otter.context.TemplateContext
 import com.dynamic.otter.expression.ExpressionWrapper
 import com.dynamic.otter.utils.AssetsUtils
 import com.dynamic.otter.utils.toJson
+import java.io.File
 import kotlin.math.max
 
 class PageStack private constructor(
@@ -31,7 +32,8 @@ class PageStack private constructor(
     private val routes: PageRouteTable,
     private val routePath: String,
     private val bizId: String,
-    private val templateId: String
+    private val templateId: String,
+    private val fileRoot: File?
 ) {
     private val frames = PageFrames()
     private val stack = mutableListOf<Frame>()
@@ -324,6 +326,10 @@ class PageStack private constructor(
         pageData: JSONObject?
     ) {
         Ime.dismiss(insetRoot)
+        if (frames.depth >= MAX_DEPTH) {
+            toastCannotOpen()
+            return
+        }
         val entry = resolveEntry(page, rawParams, itemData, pageData, replace = false) ?: return
         val shown = createShown(page, entry, itemData) ?: return
         try {
@@ -394,15 +400,28 @@ class PageStack private constructor(
         return Entry(route, current, overlay)
     }
 
+    private fun readText(path: String): String {
+        val root = fileRoot
+        if (root != null) {
+            return AssetsUtils.readRelative(root, path)
+        }
+        return AssetsUtils.parseAssetsToString(activity, path)
+    }
+
     private fun createShown(page: String, entry: Entry, itemData: JSONObject?): Shown? {
         var created: TemplateContext? = null
         try {
             val base = if (entry.route.data != null) {
-                AssetsUtils.parseAssetsToString(activity, entry.route.data).toJson()
+                readText(entry.route.data).toJson()
             } else {
                 null
             }
-            val templateContext = OTEngine.instance.buildTemplate(bizId, templateId, entry.route.template)
+            val templateContext = OTEngine.instance.buildTemplate(
+                bizId,
+                templateId,
+                entry.route.template,
+                fileRoot
+            )
             created = templateContext
             if (base != null || entry.overlay != null) {
                 templateContext.setData(PageParams.merge(base, entry.overlay)!!.toJSONString())
@@ -609,7 +628,12 @@ class PageStack private constructor(
         }
         var created: TemplateContext? = null
         try {
-            val templateContext = OTEngine.instance.buildTemplate(bizId, templateId, frame.templatePath)
+            val templateContext = OTEngine.instance.buildTemplate(
+                bizId,
+                templateId,
+                frame.templatePath,
+                fileRoot
+            )
             created = templateContext
             frame.data?.let { templateContext.setData(it.toJSONString()) }
             val view = OTEngine.instance.createAndroidView(
@@ -970,6 +994,7 @@ class PageStack private constructor(
         private const val STATE_KEY = "com.dynamic.otter.nav.PageStack"
         private const val STATE_JSON = "json"
         private const val MAX_STATE_CHARS = 200_000
+        private const val MAX_DEPTH = 32
         private val groups = mutableMapOf<Activity, MutableList<PageStack>>()
         private val active = mutableMapOf<Activity, PageStack>()
 
@@ -979,14 +1004,28 @@ class PageStack private constructor(
             container: ViewGroup,
             routePath: String,
             bizId: String,
-            templateId: String
+            templateId: String,
+            fileRoot: File? = null
         ): PageStack {
-            val json = AssetsUtils.parseAssetsToString(activity, routePath)
+            val json = if (fileRoot != null) {
+                AssetsUtils.readRelative(fileRoot, routePath)
+            } else {
+                AssetsUtils.parseAssetsToString(activity, routePath)
+            }
             val routes = PageRouteParser.parse(json)
             OTEngine.instance.init(activity)
             Ime.install(activity)
             val list = groups.getOrPut(activity) { mutableListOf() }
-            val stack = PageStack(activity, insetRoot, container, routes, routePath, bizId, templateId)
+            val stack = PageStack(
+                activity,
+                insetRoot,
+                container,
+                routes,
+                routePath,
+                bizId,
+                templateId,
+                fileRoot
+            )
             val manageInsets = list.none { it.ownsInsets }
             list.add(stack)
             if (active[activity] == null) {

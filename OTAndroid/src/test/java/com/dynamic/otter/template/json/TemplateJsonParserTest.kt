@@ -1229,6 +1229,13 @@ class TemplateJsonParserTest {
                 """.trimIndent()
             )
         }
+        assertFails("$.layout" + ".children[0]".repeat(33) + " 嵌套过深") {
+            val column = """{"type":"column","layout":{"width":1,"height":1},"children":["""
+            val nested = column.repeat(33) +
+                """{"type":"text","text":"Hi","layout":{"width":1,"height":1}}""" +
+                "]}".repeat(33)
+            TemplateJsonParser.parse("""{"layout":$nested}""")
+        }
         assertFails("$.events.edit.index 不能是负数") {
             TemplateJsonParser.parse(
                 """
