@@ -21,10 +21,33 @@ type Generator interface {
 	Generate(ctx context.Context, query string) (generate.Result, error)
 }
 
+type stored struct {
+	Query     string
+	Intent    string
+	Sample    bool
+	Label     string
+	Hash      string
+	Files     []string
+	CreatedAt string
+	Zip       []byte
+}
+
+// CatalogItem 是管理后台看到的一条模版记录。不含模版正文和签名。
+type CatalogItem struct {
+	ID          string   `json:"id"`
+	Query       string   `json:"query"`
+	Intent      string   `json:"intent"`
+	Sample      bool     `json:"sample"`
+	SampleLabel string   `json:"sampleLabel"`
+	Hash        string   `json:"hash"`
+	Files       []string `json:"files"`
+	CreatedAt   string   `json:"createdAt"`
+}
+
 type Store struct {
 	mu    sync.Mutex
 	order []string
-	items map[string][]byte
+	items map[string]stored
 	max   int
 }
 
@@ -32,16 +55,25 @@ func NewStore(max int) *Store {
 	if max <= 0 {
 		max = 32
 	}
-	return &Store{items: map[string][]byte{}, max: max}
+	return &Store{items: map[string]stored{}, max: max}
 }
 
-func (s *Store) Put(id string, zip []byte) {
+func (s *Store) Put(query string, result generate.Result) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if _, ok := s.items[id]; !ok {
-		s.order = append(s.order, id)
+	if _, ok := s.items[result.ID]; !ok {
+		s.order = append(s.order, result.ID)
 	}
-	s.items[id] = zip
+	s.items[result.ID] = stored{
+		Query:     query,
+		Intent:    result.Intent,
+		Sample:    result.Sample,
+		Label:     result.Label,
+		Hash:      result.Hash,
+		Files:     append([]string(nil), result.Files...),
+		CreatedAt: result.Manifest.CreatedAt,
+		Zip:       result.Zip,
+	}
 	for len(s.order) > s.max {
 		old := s.order[0]
 		s.order = s.order[1:]
@@ -52,8 +84,31 @@ func (s *Store) Put(id string, zip []byte) {
 func (s *Store) Get(id string) ([]byte, bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	body, ok := s.items[id]
-	return body, ok
+	item, ok := s.items[id]
+	if !ok {
+		return nil, false
+	}
+	return item.Zip, true
+}
+
+func (s *Store) List() []CatalogItem {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	out := make([]CatalogItem, 0, len(s.order))
+	for i := len(s.order) - 1; i >= 0; i-- {
+		item := s.items[s.order[i]]
+		out = append(out, CatalogItem{
+			ID:          s.order[i],
+			Query:       item.Query,
+			Intent:      item.Intent,
+			Sample:      item.Sample,
+			SampleLabel: item.Label,
+			Hash:        item.Hash,
+			Files:       append([]string(nil), item.Files...),
+			CreatedAt:   item.CreatedAt,
+		})
+	}
+	return out
 }
 
 type Server struct {
@@ -75,6 +130,7 @@ func New(gen Generator, public ed25519.PublicKey, log *slog.Logger) *Server {
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /api/v1/generate", s.generate)
+	mux.HandleFunc("GET /api/v1/bundles", s.list)
 	mux.HandleFunc("GET /api/v1/bundles/{id}", s.download)
 	mux.HandleFunc("GET /api/v1/pubkey", s.pubkey)
 	mux.HandleFunc("GET /api/v1/health", func(w http.ResponseWriter, _ *http.Request) {
@@ -107,7 +163,7 @@ func (s *Server) generate(w http.ResponseWriter, r *http.Request) {
 		writeGenerateErr(w, err)
 		return
 	}
-	s.Store.Put(result.ID, result.Zip)
+	s.Store.Put(query, result)
 	if s.Log != nil {
 		s.Log.Info("bundle.generated",
 			"query", query,
@@ -126,6 +182,10 @@ func (s *Server) generate(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (s *Server) list(w http.ResponseWriter, _ *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]any{"items": s.Store.List()})
+}
+
 func (s *Server) download(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	if strings.Contains(id, "/") || strings.Contains(id, "..") || id == "" {
@@ -138,6 +198,7 @@ func (s *Server) download(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/zip")
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+id+".zip\"")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(body)
 }

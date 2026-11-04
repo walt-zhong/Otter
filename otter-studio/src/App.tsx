@@ -1,136 +1,124 @@
-import { FormEvent, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
-import {
-  presentFailure,
-  presentSuccess,
-  sampleMark,
-  type FailurePresentation,
-  type GenerateSuccessBody,
-  type SuccessPresentation,
-} from './present'
+import { DeliveryDetail, MonitorOverview, MonitorQuality } from './MonitorPages'
+import { PatternDetail, RecallHits, RecallLibrary } from './RecallPages'
+import TemplatesPage from './TemplatesPage'
+import { hrefFor, parseHash, type Route } from './route'
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null
-}
+const NAV: Array<{ label: string; items: Array<{ id: string; label: string; route: Route }> }> = [
+  {
+    label: '监控',
+    items: [
+      { id: 'monitor', label: '总览', route: { page: 'monitor' } },
+      { id: 'quality', label: '端上质量', route: { page: 'quality' } },
+    ],
+  },
+  {
+    label: '模版',
+    items: [{ id: 'templates', label: '签名包', route: { page: 'templates' } }],
+  },
+  {
+    label: '召回',
+    items: [
+      { id: 'recall', label: '模版库', route: { page: 'recall' } },
+      { id: 'hits', label: '命中记录', route: { page: 'hits' } },
+    ],
+  },
+]
 
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string')
-}
-
-function isSuccessBody(value: unknown): value is GenerateSuccessBody {
-  if (!isRecord(value)) {
-    return false
+function isActive(route: Route, id: string): boolean {
+  if (id === 'monitor') {
+    return route.page === 'monitor' || route.page === 'delivery'
   }
-  if (typeof value.id !== 'string' || value.id === '') {
-    return false
+  if (id === 'quality') {
+    return route.page === 'quality'
   }
-  if (typeof value.intent !== 'string') {
-    return false
+  if (id === 'templates') {
+    return route.page === 'templates'
   }
-  if (typeof value.sample !== 'boolean') {
-    return false
+  if (id === 'recall') {
+    return route.page === 'recall' || route.page === 'pattern'
   }
-  if (value.files !== undefined && !isStringArray(value.files)) {
-    return false
-  }
-  return true
-}
-
-function messageFrom(value: unknown): string {
-  if (isRecord(value) && typeof value.message === 'string') {
-    return value.message
-  }
-  return '请求失败'
+  return route.page === 'hits'
 }
 
 export default function App() {
-  const [query, setQuery] = useState('')
-  const [pending, setPending] = useState(false)
-  const [localMessage, setLocalMessage] = useState<string | null>(null)
-  const [success, setSuccess] = useState<SuccessPresentation | null>(null)
-  const [failure, setFailure] = useState<FailurePresentation | null>(null)
+  const [route, setRoute] = useState<Route>(() => parseHash(window.location.hash))
+  const [serviceUp, setServiceUp] = useState<boolean | null>(null)
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (pending) {
+  useEffect(() => {
+    if (!window.location.hash) {
+      window.location.replace('#/templates')
+    }
+    const sync = () => setRoute(parseHash(window.location.hash))
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/v1/health')
+      .then((response) => setServiceUp(response.ok))
+      .catch(() => setServiceUp(false))
+  }, [])
+
+  function navigate(next: Route) {
+    const href = hrefFor(next)
+    if (window.location.hash === href) {
+      setRoute(next)
       return
     }
-    if (query.trim() === '') {
-      setLocalMessage('请输入查询')
-      setSuccess(null)
-      setFailure(null)
-      return
-    }
-
-    setPending(true)
-    setLocalMessage(null)
-    setSuccess(null)
-    setFailure(null)
-
-    try {
-      const response = await fetch('/api/v1/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      })
-      let body: unknown
-      try {
-        body = await response.json()
-      } catch {
-        setFailure(presentFailure({ message: '请求失败' }))
-        return
-      }
-      if (!response.ok) {
-        setFailure(presentFailure({ message: messageFrom(body) }))
-        return
-      }
-      if (!isSuccessBody(body)) {
-        setFailure(presentFailure({ message: '响应格式不正确' }))
-        return
-      }
-      setSuccess(presentSuccess(body))
-    } catch {
-      setFailure(presentFailure({ message: '网络请求失败' }))
-    } finally {
-      setPending(false)
-    }
+    window.location.hash = href
   }
 
-  const mark = success ? sampleMark(success.showSample) : null
-
   return (
-    <main className="page">
-      <h1>调试控制台</h1>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="query">查询</label>
-        <input
-          id="query"
-          name="query"
-          type="text"
-          value={query}
-          autoComplete="off"
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <button type="submit" disabled={pending}>
-          提交
-        </button>
-      </form>
-      {localMessage ? <p className="notice">{localMessage}</p> : null}
-      {failure ? <p className="notice">{failure.message}</p> : null}
-      {success ? (
-        <section className="result">
-          <p>
-            意图：<span>{success.intent}</span>
+    <div className="shell">
+      <aside className="rail">
+        <div className="brand">
+          <span className="brand-mark" aria-hidden="true">
+            Ot
+          </span>
+          <div>
+            <p className="brand-name">Otter</p>
+            <p className="brand-sub">管理后台</p>
+          </div>
+        </div>
+        <nav className="nav-scroll" aria-label="后台目录">
+          {NAV.map((group) => (
+            <div key={group.label}>
+              <p className="rail-label">{group.label}</p>
+              <div className="nav-links">
+                {group.items.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={isActive(route, item.id) ? 'nav-link nav-link-active' : 'nav-link'}
+                    aria-current={isActive(route, item.id) ? 'page' : undefined}
+                    onClick={() => navigate(item.route)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+        <div className="rail-foot">
+          <p className={serviceUp ? 'status status-up' : 'status'}>
+            <span className="status-dot" aria-hidden="true" />
+            {serviceUp === null ? '正在检查服务' : serviceUp ? '生成服务可用' : '生成服务未连接'}
           </p>
-          {mark ? <p className="sample">{mark}</p> : null}
-          <ul>
-            {success.files.map((name) => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
-          <a href={success.downloadHref}>下载</a>
-        </section>
-      ) : null}
-    </main>
+          <p className="rail-note">签名包来自生成服务。监控和召回仍是示例页。</p>
+        </div>
+      </aside>
+      <main className="workspace">
+        {route.page === 'monitor' ? <MonitorOverview onNavigate={navigate} /> : null}
+        {route.page === 'quality' ? <MonitorQuality /> : null}
+        {route.page === 'delivery' ? <DeliveryDetail id={route.id} onNavigate={navigate} /> : null}
+        {route.page === 'templates' ? <TemplatesPage onOpenRecall={() => navigate({ page: 'recall' })} /> : null}
+        {route.page === 'recall' ? <RecallLibrary onNavigate={navigate} /> : null}
+        {route.page === 'pattern' ? <PatternDetail id={route.id} onNavigate={navigate} /> : null}
+        {route.page === 'hits' ? <RecallHits onNavigate={navigate} /> : null}
+      </main>
+    </div>
   )
 }

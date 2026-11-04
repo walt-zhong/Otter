@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { presentFailure, presentSuccess, sampleMark } from './present'
+import { formatCreatedAt, intentLabel, presentCatalog, presentFailure, presentSuccess, sampleMark } from './present'
 
 describe('presentSuccess', () => {
   it('shopping sample true shows 示例 and a download href', () => {
@@ -46,6 +46,37 @@ describe('presentSuccess', () => {
     expect(view.showSample).toBe(false)
     expect(sampleMark(view.showSample)).toBeNull()
     expect(view.downloadHref).toBe('/api/v1/bundles/clarify-1')
+  })
+})
+
+describe('presentCatalog', () => {
+  it('maps a shopping record into the admin row', () => {
+    const items = presentCatalog({
+      items: [
+        {
+          id: 'shop-1',
+          query: '买个手机壳',
+          intent: 'shopping.browse',
+          sample: true,
+          sampleLabel: '示例',
+          hash: 'abc',
+          createdAt: '2026-11-04T12:00:00Z',
+          files: ['routes.json', 'templates/list.json'],
+        },
+      ],
+    })
+
+    expect(items).not.toBeNull()
+    expect(items?.[0]?.intentLabel).toBe('购物')
+    expect(items?.[0]?.kind).toBe('示例')
+    expect(items?.[0]?.files[1]).toEqual({ name: 'templates/list.json', label: '列表模版' })
+    expect(items?.[0]?.downloadHref).toBe('/api/v1/bundles/shop-1')
+    expect(intentLabel('clarify')).toBe('澄清')
+  })
+
+  it('rejects a catalog that is missing items', () => {
+    expect(presentCatalog({})).toBeNull()
+    expect(formatCreatedAt('not-a-date')).toBe('not-a-date')
   })
 })
 

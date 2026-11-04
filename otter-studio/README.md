@@ -1,6 +1,6 @@
 # otter-studio
 
-Otter 的调试台。把一句 query 交给旁边的 `otter-harbor`，查看意图、示例标记，并下载 zip。
+Otter 的管理后台。签名包列表接生成服务。监控和召回两块先用页面上标明的示例数据，模版正文不在页面上展开。
 
 ```shell
 npm install

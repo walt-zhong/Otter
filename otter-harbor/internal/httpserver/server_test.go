@@ -225,6 +225,46 @@ func TestServeStopsWhenCancelled(t *testing.T) {
 	}
 }
 
+func TestListBundlesNewestFirstWithoutTemplate(t *testing.T) {
+	srv, _ := testServer(t)
+	h := srv.Handler()
+	older := postQuery(t, h, "今天星期几")
+	newer := postQuery(t, h, "买个手机壳")
+	var olderMeta, newerMeta struct {
+		ID string `json:"id"`
+	}
+	_ = json.Unmarshal(older.Body.Bytes(), &olderMeta)
+	_ = json.Unmarshal(newer.Body.Bytes(), &newerMeta)
+
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/v1/bundles", nil))
+	if rec.Code != 200 {
+		t.Fatal(rec.Body.String())
+	}
+	var body struct {
+		Items []CatalogItem `json:"items"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if len(body.Items) != 2 || body.Items[0].ID != newerMeta.ID || body.Items[1].ID != olderMeta.ID {
+		t.Fatalf("%+v", body.Items)
+	}
+	if body.Items[0].Query != "买个手机壳" || body.Items[0].Intent != "shopping.browse" || !body.Items[0].Sample {
+		t.Fatalf("%+v", body.Items[0])
+	}
+	if body.Items[0].SampleLabel != "示例" || body.Items[0].CreatedAt == "" || len(body.Items[0].Files) != 6 {
+		t.Fatalf("%+v", body.Items[0])
+	}
+	if body.Items[1].Intent != "clarify" || body.Items[1].Sample {
+		t.Fatalf("%+v", body.Items[1])
+	}
+	raw := rec.Body.String()
+	if strings.Contains(raw, "$products") || strings.Contains(raw, "signature") || strings.Contains(raw, "layout") {
+		t.Fatal(raw)
+	}
+}
+
 func mustDownload(t *testing.T, srv *Server, id string) []byte {
 	t.Helper()
 	rec := httptest.NewRecorder()

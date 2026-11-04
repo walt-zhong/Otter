@@ -7,7 +7,7 @@
 | `otter-android` | Android SDK 和 Demo |
 | `otter-ios` | iOS SDK 和 Demo |
 | `otter-harbor` | Go 服务。query 进来，签名 zip 出去 |
-| `otter-studio` | React 调试台。提交 query，查看意图，下载包 |
+| `otter-studio` | 模版管理后台。列出签名包，用 query 生成，再下载 |
 
 iOS Demo 的示例模版和图片在 `otter-ios/Demo`。iOS 工程编译 `otter-android` 里的表达式 C++。
 
