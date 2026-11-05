@@ -75,3 +75,13 @@ Otter-owned bridge files:
 Value lookup, size(), and env() follow
 OTAndroid/src/main/kotlin/com/dynamic/otter/expression/ExpressionWrapper.kt.
 On iOS, env("isAndroid") is false and env("isiOS") is true.
+
+========================================================================
+Bouncy Castle
+Copyright (c) 2000-2024 The Legion of the Bouncy Castle Inc.
+https://www.bouncycastle.org
+Licensed under the Bouncy Castle Licence.
+https://www.bouncycastle.org/licence.html
+
+Otter uses org.bouncycastle:bcprov-jdk18on to verify ed25519 signatures
+on template bundles. The classes are not copied into the repository.

@@ -67,5 +67,4 @@ dependencies {
 
     implementation(project(":OTAndroid"))
     implementation(libs.fastjson)
-    debugImplementation(libs.bouncycastle)
 }

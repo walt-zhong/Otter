@@ -11,7 +11,7 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 | 文档 | 内容 |
 | --- | --- |
 | [docs/render-pipeline.md](docs/render-pipeline.md) | 模版怎么被解析、布局、画出来，事件和页面栈怎么走 |
-| [docs/sdk-integration.md](docs/sdk-integration.md) | 业务工程怎么接入：画一页、刷新、多页、权限 |
+| [docs/sdk-integration.md](docs/sdk-integration.md) | 业务工程怎么接入：画一页、刷新、多页、服务端模版包、权限 |
 | [docs/template-format.md](docs/template-format.md) | 写或生成模版时要遵守的 JSON 格式 |
 | [docs/node-types.md](docs/node-types.md) | 十二种节点各自能写哪些字段 |
 | [docs/demo-guide.md](docs/demo-guide.md) | Demo 有哪些页面，以及真机怎么调试生成页 |

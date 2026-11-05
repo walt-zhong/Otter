@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.lottie)
     implementation(libs.fastjson)
+    implementation(libs.bouncycastle)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

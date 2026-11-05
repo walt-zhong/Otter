@@ -9,10 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dynamic.otter.bundle.BundleCenter
+import com.dynamic.otter.bundle.BundleDownload
+import com.dynamic.otter.bundle.BundleFallback
+import com.dynamic.otter.bundle.InstalledBundle
 import com.dynamic.otter.nav.PageStack
-import com.dynamic.otter.utils.AssetsUtils
 import org.json.JSONObject
-import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.max
@@ -65,10 +67,10 @@ class BundleDebugActivity : AppCompatActivity() {
                                 "routes.json",
                                 "debug",
                                 ready.id,
-                                ready.dir
+                                ready.root
                             )
                             placeholder.visibility = View.GONE
-                            showStatus(status, ready.label, error = false)
+                            showStatus(status, statusText(ready), error = ready.fellBack)
                         } catch (error: Exception) {
                             showStatus(status, error.message ?: "这个页面还打不开", error = true)
                         }
@@ -97,28 +99,30 @@ class BundleDebugActivity : AppCompatActivity() {
         ViewCompat.requestApplyInsets(root)
     }
 
-    private fun fetchBundle(base: String, query: String): Ready {
-        val meta = postJson("$base/api/v1/generate", JSONObject().put("query", query).toString())
-        val id = meta.getString("id")
-        val zip = getBytes("$base/api/v1/bundles/$id")
-        val publicKey = resources.openRawResource(R.raw.otter_dev_public).use { it.readBytes() }
-        val files = BundleVerifier.open(zip, publicKey)
-        val dir = File(cacheDir, "otter-bundles/$id")
-        if (dir.exists()) {
-            dir.deleteRecursively()
+    private fun statusText(ready: InstalledBundle): String {
+        if (ready.fellBack) {
+            return "仍显示上次可用的模版"
         }
-        dir.mkdirs()
-        for ((name, body) in files) {
-            val safe = AssetsUtils.containedAssetPath(name) ?: error("路径越界")
-            val out = File(dir, safe)
-            out.parentFile?.mkdirs()
-            out.writeBytes(body)
+        if (ready.sample) {
+            return "示例"
         }
-        val label = if (meta.optBoolean("sample")) "示例" else meta.getString("intent")
-        return Ready(id, dir, label)
+        return ready.intent.ifEmpty { ready.id }
     }
 
-    private class Ready(val id: String, val dir: File, val label: String)
+    private fun fetchBundle(base: String, query: String): InstalledBundle {
+        val publicKey = resources.openRawResource(R.raw.otter_dev_public).use { it.readBytes() }
+        return BundleCenter.load(
+            cacheRoot = cacheDir,
+            slot = "debug",
+            publicKey = publicKey,
+            fallback = BundleFallback.NONE
+        ) {
+            val meta = postJson("$base/api/v1/generate", JSONObject().put("query", query).toString())
+            val id = meta.getString("id")
+            val zip = getBytes("$base/api/v1/bundles/$id")
+            BundleDownload(id, zip, meta.optString("intent", ""), meta.optBoolean("sample"))
+        }
+    }
 
     private fun postJson(url: String, body: String): JSONObject {
         val connection = open(url, "POST")

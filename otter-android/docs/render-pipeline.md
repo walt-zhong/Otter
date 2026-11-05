@@ -32,6 +32,8 @@ flowchart LR
 
 模型、提示词、网络请求不在这个库里。宿主提供容器、数据和「打开某一页」的实现。模版里的点击只能走到事件表登记过的动作。
 
+签名 zip 交给 `BundleCenter`。它在内存里验签并校验模版，通过后写到宿主给的缓存目录，`PageStack` 用这个目录当 `fileRoot`。拉取字节仍由宿主完成。新包不能用时，可以退回这个槽里上一份验过的包。接法见 [sdk-integration.md](sdk-integration.md)。
+
 库的包名是 `com.dynamic.otter`，namespace 是 `com.dynamic.outter`。布局库 `libstretch.so` 只编了 `arm64-v8a`。
 
 ## 代码放在哪
@@ -236,6 +238,7 @@ flowchart TD
 | 图片 | Glide，地址是 `http(s)`、`res:`、`content:` |
 | 动画 | Lottie，`https://` 或 `assets:` |
 | JSON | Fastjson |
+| 模版包验签 | Bouncy Castle ed25519，`bundle.BundleCenter` |
 
 Stretch 是 MIT，表达式引擎是 Apache-2.0，都来自 GaiaX。归属在仓库根目录的 [NOTICE](../NOTICE)。
 
