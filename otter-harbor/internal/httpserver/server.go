@@ -177,6 +177,7 @@ func (s *Server) generate(w http.ResponseWriter, r *http.Request) {
 		"intent":      result.Intent,
 		"sample":      result.Sample,
 		"sampleLabel": result.Label,
+		"source":      result.Source,
 		"hash":        result.Hash,
 		"files":       result.Files,
 	})

@@ -1,3 +1,4 @@
 /ottersrv
 *.exe
 .DS_Store
+.env

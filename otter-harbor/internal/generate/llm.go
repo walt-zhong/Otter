@@ -36,6 +36,13 @@ func (c ChatClient) Complete(ctx context.Context, system, user string) (string, 
 			{"role": "system", "content": system},
 			{"role": "user", "content": user},
 		},
+		"temperature":     0,
+		"max_tokens":      4096,
+		"response_format": map[string]string{"type": "json_object"},
+	}
+	if deepseek(c.BaseURL, c.Model) {
+		// 默认思考会计入 max_tokens，JSON 还没写完就超时。结构化输出关掉思考。
+		payload["thinking"] = map[string]string{"type": "disabled"}
 	}
 	body, err := json.Marshal(payload)
 	if err != nil {
@@ -80,4 +87,9 @@ func (c ChatClient) Complete(ctx context.Context, system, user string) (string, 
 		return "", fmt.Errorf("llm empty")
 	}
 	return parsed.Choices[0].Message.Content, nil
+}
+
+func deepseek(baseURL, model string) bool {
+	text := strings.ToLower(baseURL + " " + model)
+	return strings.Contains(text, "deepseek")
 }

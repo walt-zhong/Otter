@@ -37,13 +37,13 @@ bash ./gradlew :Demo:installDebug
 adb reverse tcp:8080 tcp:8080
 ```
 
-然后在导航页打开「生成」，点「生成」。成功后渲染区出现商品列表，状态是「示例」。Debug 包允许明文 HTTP，所以这个地址不用改成 https。
+然后在导航页打开「生成」，点「生成」。成功后渲染区出现商品列表。没配模型时状态是「离线 · shopping.browse · 示例」。Debug 包允许明文 HTTP，所以这个地址不用改成 https。
 
 这条转发跟着这根 USB 线。拔掉或重新插上之后，再执行一次 `adb reverse`。没转发时，页面显示 `Failed to connect to /127.0.0.1:8080`。
 
 模拟器没有这条转发，地址改成 `http://10.0.2.2:8080`。手机和电脑在同一 Wi-Fi、不插线时，地址改成电脑当前的局域网地址，例如 `http://192.168.1.40:8080`。服务默认听 `:8080`，所有网卡都能进。macOS 上看本机地址可以用 `ipconfig getifaddr en0`。
 
-没有设置 `OTTER_LLM_BASE_URL` 时，服务写出预置示例，不是模型当场生成的模版。封面是 https 图片，手机需要能上网。
+服务端配了 `OTTER_LLM_API_KEY` 之后，同一次生成会先由 DeepSeek 判断意图。购物意图的模版由模型写，状态以「模型 · shopping.browse」开头。说不清要买什么时，状态是「模型 · clarify」，页面仍是内置的澄清页。没配密钥时，服务不访问模型。封面是 https 图片，手机需要能上网。
 
 ## 资源
 

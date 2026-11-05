@@ -21,6 +21,7 @@ import kotlin.math.max
 
 class BundleDebugActivity : AppCompatActivity() {
     private var stack: PageStack? = null
+    private var bundleSource: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,10 +104,21 @@ class BundleDebugActivity : AppCompatActivity() {
         if (ready.fellBack) {
             return "仍显示上次可用的模版"
         }
-        if (ready.sample) {
-            return "示例"
+        val parts = mutableListOf<String>()
+        when (bundleSource) {
+            "model" -> parts.add("模型")
+            "offline" -> parts.add("离线")
         }
-        return ready.intent.ifEmpty { ready.id }
+        if (ready.intent.isNotEmpty()) {
+            parts.add(ready.intent)
+        }
+        if (ready.sample) {
+            parts.add("示例")
+        }
+        if (parts.isEmpty()) {
+            return ready.id
+        }
+        return parts.joinToString(" · ")
     }
 
     private fun fetchBundle(base: String, query: String): InstalledBundle {
@@ -118,6 +130,7 @@ class BundleDebugActivity : AppCompatActivity() {
             fallback = BundleFallback.NONE
         ) {
             val meta = postJson("$base/api/v1/generate", JSONObject().put("query", query).toString())
+            bundleSource = meta.optString("source", "")
             val id = meta.getString("id")
             val zip = getBytes("$base/api/v1/bundles/$id")
             BundleDownload(id, zip, meta.optString("intent", ""), meta.optBoolean("sample"))
@@ -162,7 +175,8 @@ class BundleDebugActivity : AppCompatActivity() {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = method
         connection.connectTimeout = 15_000
-        connection.readTimeout = 20_000
+        // 服务端一次模型调用最多 30 秒，失败会再试一次。这里要盖住整段，否则手机会先提示超时。
+        connection.readTimeout = 70_000
         return connection
     }
 

@@ -30,6 +30,7 @@ func main() {
 			APIKey:  cfg.LLMAPIKey,
 			Model:   cfg.LLMModel,
 		}
+		logger.Info("llm", "base", cfg.LLMBaseURL, "model", cfg.LLMModel)
 	}
 	server := httpserver.New(gen, cfg.Private.Public().(ed25519.PublicKey), logger)
 	srv := &http.Server{

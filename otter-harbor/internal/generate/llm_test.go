@@ -28,7 +28,7 @@ func TestLLMRepairThenSuccess(t *testing.T) {
 			if calls == 2 {
 				files := builtin(intentShopping(), "手机壳")
 				payload, _ := json.Marshal(map[string]json.RawMessage{
-					"routes":         files.Routes,
+					"intent":         json.RawMessage(`"shopping.browse"`),
 					"listTemplate":   files.ListTemplate,
 					"detailTemplate": files.DetailTemplate,
 					"listData":       files.ListData,
@@ -51,8 +51,112 @@ func TestLLMRepairThenSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if calls != 2 || result.Intent != "shopping.browse" || !result.Sample || result.Source != "model" {
+		t.Fatalf("calls %d %+v", calls, result)
+	}
+}
+
+func TestModelIntentOverridesKeywords(t *testing.T) {
+	files := builtin("shopping.browse", "台灯")
+	payload, _ := json.Marshal(map[string]json.RawMessage{
+		"intent":         json.RawMessage(`"shopping.browse"`),
+		"listTemplate":   files.ListTemplate,
+		"detailTemplate": files.DetailTemplate,
+		"listData":       files.ListData,
+		"detailData":     files.DetailData,
+	})
+	body, _ := json.Marshal(map[string]any{
+		"choices": []any{map[string]any{"message": map[string]any{"content": string(payload)}}},
+	})
+	var sawJSON bool
+	client := ChatClient{
+		BaseURL: "https://api.deepseek.com",
+		APIKey:  "test-key",
+		Model:   "deepseek-chat",
+		Client: &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+			if r.URL.String() != "https://api.deepseek.com/chat/completions" {
+				t.Errorf("url %s", r.URL.String())
+			}
+			if r.Header.Get("Authorization") != "Bearer test-key" {
+				t.Errorf("auth")
+			}
+			raw, _ := io.ReadAll(r.Body)
+			var req map[string]any
+			if err := json.Unmarshal(raw, &req); err != nil {
+				t.Fatal(err)
+			}
+			format, _ := req["response_format"].(map[string]any)
+			thinking, _ := req["thinking"].(map[string]any)
+			if format["type"] != "json_object" || req["model"] != "deepseek-chat" || thinking["type"] != "disabled" {
+				t.Fatalf("request %+v", req)
+			}
+			sawJSON = true
+			return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(string(body))), Header: make(http.Header)}, nil
+		})},
+	}
+	svc := &Service{Private: config.DevPrivateKey(), Completer: client}
+	result, err := svc.Generate(context.Background(), "看看屋里的光")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !sawJSON || result.Intent != "shopping.browse" || !result.Sample {
+		t.Fatalf("%+v", result)
+	}
+}
+
+func TestModelClarifySkipsTemplate(t *testing.T) {
+	calls := 0
+	client := ChatClient{
+		BaseURL: "http://llm.test/v1",
+		Model:   "deepseek-chat",
+		Client: &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+			calls++
+			body := `{"choices":[{"message":{"content":"{\"intent\":\"clarify\"}"}}]}`
+			return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(body)), Header: make(http.Header)}, nil
+		})},
+	}
+	svc := &Service{Private: config.DevPrivateKey(), Completer: client}
+	result, err := svc.Generate(context.Background(), "你好呀")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if calls != 1 || result.Intent != "clarify" || result.Sample || result.Source != "model" {
+		t.Fatalf("calls %d %+v", calls, result)
+	}
+}
+
+func TestBuyingQueryIsNotLeftAsClarify(t *testing.T) {
+	calls := 0
+	files := builtin("shopping.browse", "水果")
+	payload, _ := json.Marshal(map[string]json.RawMessage{
+		"intent":         json.RawMessage(`"shopping.browse"`),
+		"listTemplate":   files.ListTemplate,
+		"detailTemplate": files.DetailTemplate,
+		"listData":       files.ListData,
+		"detailData":     files.DetailData,
+	})
+	client := ChatClient{
+		BaseURL: "http://llm.test/v1",
+		Model:   "test",
+		Client: &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+			calls++
+			content := `{"intent":"clarify"}`
+			if calls == 2 {
+				content = string(payload)
+			}
+			body, _ := json.Marshal(map[string]any{
+				"choices": []any{map[string]any{"message": map[string]any{"content": content}}},
+			})
+			return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(string(body))), Header: make(http.Header)}, nil
+		})},
+	}
+	svc := &Service{Private: config.DevPrivateKey(), Completer: client}
+	result, err := svc.Generate(context.Background(), "买点水果")
+	if err != nil {
+		t.Fatal(err)
+	}
 	if calls != 2 || result.Intent != "shopping.browse" || !result.Sample {
-		t.Fatalf("calls %d %+v", calls, result.Intent)
+		t.Fatalf("calls %d %+v", calls, result)
 	}
 }
 

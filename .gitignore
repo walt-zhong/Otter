@@ -2,3 +2,5 @@
 /.idea/
 /.cursor/
 /.agents/
+.env
+**/.env
