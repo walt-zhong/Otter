@@ -22,6 +22,10 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 
 这段是 Demo 在真机上的走查，约 16 秒：首页列表、天气卡、城南的四站，再点进「旧巷咖啡」。文件在 [docs/media/intro.mp4](docs/media/intro.mp4)。播放、权限弹窗和南市底栏见 [docs/demo-guide.md](docs/demo-guide.md)。
 
+[![查询「买蛋炒饭的食材」，模型写出列表并打开隔夜米饭](docs/media/generate-poster.jpg)](docs/media/generate.mp4)
+
+这段是同一台手机上的生成，约 20 秒。查询是「买蛋炒饭的食材」，状态先是「正在生成」，随后是「模型 · shopping.browse · 示例」。渲染区出现蛋炒饭食材，点进「隔夜米饭」。文件在 [docs/media/generate.mp4](docs/media/generate.mp4)。怎么把服务转到手机上见 [docs/demo-guide.md](docs/demo-guide.md)。
+
 ## 动态化在说什么
 
 原生页面通常把界面写进安装包，比如 XML 或 Compose。改一个卡片的结构，就要发一版应用。

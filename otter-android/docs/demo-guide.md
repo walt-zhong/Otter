@@ -45,6 +45,8 @@ adb reverse tcp:8080 tcp:8080
 
 服务端配了 `OTTER_LLM_API_KEY` 之后，同一次生成会先由 DeepSeek 判断意图。购物意图的模版由模型写，状态以「模型 · shopping.browse」开头。说不清要买什么时，状态是「模型 · clarify」，页面仍是内置的澄清页。没配密钥时，服务不访问模型。封面是 https 图片，手机需要能上网。
 
+真机上用查询「买蛋炒饭的食材」走完这一次的录像在 [media/generate.mp4](media/generate.mp4)，约 20 秒：生成、食材列表、再点进「隔夜米饭」。
+
 ## 资源
 
 ```
