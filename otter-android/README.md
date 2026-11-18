@@ -1,6 +1,8 @@
 # Otter
 
-Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 UI。模型或服务只产出一份受约束的 JSON 模版，客户端用原生 `View` 画出来。
+Android SDK。仓库首页在 [README.md](../README.md)：五个端、Demo 录像，以及可以点开的示例 JSON。产品介绍、节点、事件和示例目录以那一页为准。这一页写 Android 怎么编译、接入和画页面。
+
+Otter 给大模型做生成式 UI。模型或服务只产出一份受约束的 JSON 模版，这一端用原生 `View` 画出来。
 
 页面结构和数据分开。结构是 JSON 模版，数据是另一份 JSON。布局使用来自 [GaiaX](https://github.com/alibaba/GaiaX) 的 Flexbox 引擎，`$` 表达式使用来自 GaiaX 的表达式引擎。出处、许可证和本仓库中的对应文件见文末[来源声明](#来源声明)。
 
@@ -20,78 +22,26 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 
 ## 介绍
 
-[![Demo 走查：首页、天气卡、城南](docs/media/intro-poster.jpg)](docs/media/intro.mp4)
+<table>
+<tr>
+<td align="center" width="50%">
+<a href="docs/media/intro.mp4"><img src="docs/media/intro-poster.jpg" width="148" alt="Demo 走查：首页、天气卡、城南"></a>
+</td>
+<td align="center" width="50%">
+<a href="docs/media/generate.mp4"><img src="docs/media/generate-poster.jpg" width="148" alt="查询买蛋炒饭的食材，打开隔夜米饭"></a>
+</td>
+</tr>
+<tr>
+<td align="center"><a href="docs/media/intro.mp4">走查</a> · 16 秒<br>首页、天气卡、城南，再点进「旧巷咖啡」。<a href="docs/demo-guide.md">说明</a></td>
+<td align="center"><a href="docs/media/generate.mp4">生成</a> · 20 秒<br>查询「买蛋炒饭的食材」，点进「隔夜米饭」。<a href="docs/demo-guide.md#查询下发">查询下发</a></td>
+</tr>
+</table>
 
-这段是 Demo 在真机上的走查，约 16 秒：首页列表、天气卡、城南的四站，再点进「旧巷咖啡」。文件在 [docs/media/intro.mp4](docs/media/intro.mp4)。播放、权限弹窗和南市底栏见 [docs/demo-guide.md](docs/demo-guide.md)。
+## 协议说明
 
-[![查询「买蛋炒饭的食材」，模型写出列表并打开隔夜米饭](docs/media/generate-poster.jpg)](docs/media/generate.mp4)
+产品介绍、和其它方案的对照、节点表、事件表，以及可以点开的示例 JSON，写在仓库首页 [README.md](../README.md)。字段以 [docs/template-format.md](docs/template-format.md) 和 [docs/node-types.md](docs/node-types.md) 为准。
 
-这段是同一台手机上的生成，约 20 秒。查询是「买蛋炒饭的食材」，状态先是「正在生成」，随后是「模型 · shopping.browse · 示例」。渲染区出现蛋炒饭食材，点进「隔夜米饭」。文件在 [docs/media/generate.mp4](docs/media/generate.mp4)。怎么把服务转到手机上见 [docs/demo-guide.md](docs/demo-guide.md)。
-
-## 动态化在说什么
-
-原生页面通常把界面写进安装包，比如 XML 或 Compose。改一个卡片的结构，就要发一版应用。
-
-动态化把「界面长什么样」从安装包里拿出来，换成运行时才读到的一份描述。客户端里固定的是渲染器、组件种类和允许的交互。描述换了，页面就换了，应用本身不用重新发版。
-
-常见做法分成三层，Otter 站在后两层之间：
-
-| 层次 | 运行时拿到的是什么 | 客户端负责什么 |
-| --- | --- | --- |
-| 热更新 | 一份可执行代码或脚本包 | 把包跑起来。能力大，也更难审计 |
-| 配置化 / Server-Driven UI | 一份组件树描述，组件种类是客户端已经实现的 | 按协议画出原生界面，数据再填进去 |
-| 生成式 UI | 同一份协议，但是由模型按当轮上下文现写 | 校验这份输出，合法才渲染 |
-
-热更新适合整页业务逻辑一起换。生成式 UI 更适合「这一次该给用户看什么」：天气、行程、消息、播放器，每次的结构和文案都不一样，又不该让模型直接执行代码。
-
-所以生成式 UI 需要一份窄协议。模型只能使用约定好的节点和动作。多出来的字段、不认识的 `type`、指向不存在节点的点击，会在上屏之前被解析器拒绝。
-
-## 这套 SDK 后面用来做什么
-
-Otter 要做的是生成式 UI 的客户端这一端：协议、校验、布局、原生渲染、有限的交互。模型、提示词和模版下发可以换，渲染器保持这一套。
-
-一次完整链路是：
-
-1. 用户的问题、车辆或业务上下文进模型。
-2. 模型按协议写出模版 JSON，需要展示的业务数据可以仍由客户端或服务提供。
-3. `TemplateJsonParser` 校验。未知字段、未知 `type`、悬空的 `onClick` 或 `target` 直接拒绝。
-4. Stretch 按当前视口算出位置，`OTViewTreeCreator` 创建原生 `View`。
-5. 用户点击只触发事件表里的动作。打开哪个页面由宿主在 `ExpansionCenter` 里决定，模型只写页面名。
-
-模版和数据分开，是为了让模型负责结构，业务系统负责事实。例如模版写 `text: "$title"`，标题文本来自数据 JSON，模型不必把每条订单、每条消息都编进界面描述里。
-
-交互收在白名单里：toast、改文案、改选中态、往列表追加、打开已注册的页面、返回。网络请求、页面栈和业务脚本留在宿主里，模版只引用这些已经约定的动作。
-
-Demo 里的天气卡、行程、收件箱、播放器、对话页和液态玻璃，就是这类界面的样子。它们现在读本地 JSON，是为了把协议跑通。接上模型之后，同一批组件用来承接模型刚生成的那一屏。
-
-适合放进 Otter 的界面：
-
-- 对话或助手里的结果卡片。答案不只是一段字，而是一张能点的原生卡片。
-- 随上下文变化的轻页面。同一次会话里，天气、日程、播放器可以是不同模版。
-- 需要一点输入的界面。勾选、单选、开关、输入框和列表追加都在协议内，结果仍留在客户端。
-- 运营位和活动位。同一套渲染器，换 JSON 就换页面。
-- 手机、车机、助手面板这类不同宿主。宿主只提供容器、数据和「打开某页」的实现。
-
-复杂业务流程写在宿主里。Otter 负责这一屏的结构和协议内的操作，自定义脚本、页面栈和网络层由宿主自己实现。
-
-## 和市面上的动态化方案
-
-动态化没有统一形态。差别主要在描述语言有多宽，以及客户端里跑的是脚本还是原生组件。
-
-| 方案 | 描述方式 | 客户端里有什么 | 更适合 |
-| --- | --- | --- | --- |
-| H5 / WebView | HTML、CSS、JS | 浏览器内核 | 活动页、长尾内容。表现力高，滚动、手势和视觉跟原生应用是两套 |
-| React Native、Weex、Hippy | JavaScript 包 | JS 引擎加上一批原生组件 | 整页业务动态发版。能写逻辑，包体和运行时也更重 |
-| Flutter | Dart 界面 | 自绘引擎 | 整应用跨端。动态下发能力弱，不适合当作模型的输出格式 |
-| Lynx | 标记语言和样式 | 自研渲染运行时 | 信息流里的高性能卡片。前端能力完整，协议对模型来说偏宽 |
-| Kuikly | Kotlin 界面 | 跨端运行时 | 工程师用 Kotlin 写跨端页面，并支持动态下发 |
-| GaiaX、DinamicX | 模版加表达式 | 原生 `View`、布局和表达式引擎 | 电商卡片、运营位。和 Otter 同属原生模版引擎，组件和表达式更面向业务方手写 |
-| DivKit | JSON | Android、iOS、Web 各自的渲染器 | 服务端驱动 UI。同样用 JSON 描述界面，跨端更全 |
-| Otter | 收窄后的 JSON | 原生 `View`、Stretch、表达式引擎、事件白名单 | 模型按协议生成卡片和轻页面，客户端先校验再渲染 |
-
-Otter 和 GaiaX、DinamicX、DivKit 同属一类：界面描述交给原生渲染器。Otter 把协议收得更窄，节点种类固定，事件种类固定，解析器拒绝协议外的字段。模型的输出空间就是这一份 schema，不合法的生成停在解析阶段。
-
-H5、React Native、Lynx、Kuikly 更适合已经有前端或跨端团队、需要完整业务逻辑的页面。那些描述语言对模型过宽，生成结果也不容易在上屏前做穷尽校验。
+下面从 Android 的模块和编译开始。
 
 ## 模块
 
@@ -164,46 +114,6 @@ ExpansionCenter.instance.registerPageOpener { context, page ->
 ```
 
 没注册，或 `page` 为空时，点击会 toast「这个页面还打不开」。没挂栈时，`back` 结束当前 `Activity`。
-
-## 节点
-
-每个节点都要有 `type`、`layout.width`、`layout.height`。尺寸是 dp 数字，或 `"fill"` / `"wrap"`。
-
-| type | 作用 |
-| --- | --- |
-| `column` / `row` | 纵向或横向容器，子节点放在 `children`。只有 `column` 可以写 `scroll`。`column`、`row`、`spacer` 可以写 `style.glass` |
-| `text` | 文本，`text` 必填。还可以写 `maxLines`、`ellipsis`、`fontWeight` |
-| `image` | 图片。`src` 可以是 `http(s)` 地址、`res:drawable名`，或以 `$` 开头的表达式。还可以写 `fit`、`placeholder` |
-| `spacer` | 占位或分割线 |
-| `list` | 列表。`data` 是 `$` 表达式，求值结果为对象数组；单项模版写在 `item` |
-| `progress` | 进度条，`from` / `to` 为 0 到 1 |
-| `lottie` | Lottie。网络地址用 `https://`，包内动画用 `assets:`，不要自己加 `.json` |
-| `input` | 输入框，可选 `value`、`hint`、`keyboard`、`maxLength`。`lines` 不写则单行 |
-| `checkbox` / `switch` | 勾选和开关，可选 `checked`、`label` |
-| `radio` | 单选，必填 `group` |
-
-`column` 和 `row` 可以写 `layout.justify`、`layout.align`、`layout.wrap`。任意节点都可以写 `layout.grow`、`layout.padding`、`layout.margin`、`minWidth`、`minHeight`、`maxWidth`、`maxHeight`、`aspectRatio`、`alignSelf`，以及 `style` 里的背景、圆角、边框。`column`、`row`、`spacer` 还可以写 `style.glass`，不要和 `background` 一起写。`column` 的 `res:` 位图比这一列高时，上下拖动只移动背景，这种列不要再写 `scroll`。任何节点都可以写 `visible`（布尔或 `$` 表达式）和 `onChange`。`visible` 为 `false` 时不参与布局。`scroll: true` 的列是视口，子节点在列里滚动。
-
-## 事件
-
-根对象的 `events` 用名字登记动作，节点用 `"onClick": ["事件名"]` 或 `"onChange": ["事件名"]` 引用，按数组顺序执行。
-
-| action | 作用 |
-| --- | --- |
-| `toast` | 弹出 `message` |
-| `setText` | 把 `target` 节点的文案改成 `value`。目标可以是 `text` 或 `input` |
-| `setTextStyle` | 改 `target` 的 `fontSize`、`color`、`text`，至少写一项 |
-| `setChecked` | 设置 `checkbox`、`radio` 或 `switch` 的选中状态。`target` 可以是一个 id，也可以是 id 数组 |
-| `append` | 从输入框取值，追加到 `list` |
-| `update` | 按 `index` 替换 `list` 里的一项。`index` 是非负整数或 `$` 表达式。`item` 是字符串字段 |
-| `remove` | 按 `index` 删掉 `list` 里的一项 |
-| `open` | 打开 `page`。可带 `params`，值可以是字符串、数字、布尔、对象或数组，字符串可以是 `$` 表达式。点在列表项上时，表达式同时看这一项和所在页面，同名字段以这一项为准。挂了页面栈就在当前容器压入下一页；否则把页面名交给 `ExpansionCenter`，不传 `params` |
-| `back` | 挂了页面栈且栈里多于一页时弹出栈顶。可带和 `open` 一样的 `params`。带 `id` 的输入框、勾选、单选、开关会先写进这一页的数据，再求值。从列表项打开的页面，结果写回那一项；否则盖到上一页顶层，并按新数据重画上一页。否则结束当前 `Activity` |
-| `replace` | 字段和 `open` 一样，用 `page` 换掉当前页 |
-| `popTo` | 回到名为 `page` 的那一页。`page` 是页面名或 `$` 表达式，可带和 `open` 一样的 `params` |
-| `host` | 把 `name` 交给宿主。`name` 是标识符或 `$` 表达式，可带和 `open` 一样的 `params` |
-
-`message`、`value`、`text`、`page`、`index`、`name` 都可以写 `$` 表达式。比较和缺省沿用 `"$week != null ? $week : '暂无'"` 这种写法。
 
 ## 权限
 
@@ -300,7 +210,7 @@ val stack = PageStack.attach(
 
 ## Demo 页面
 
-首页列出下面这些入口，路由在 `DemoRoutes`。
+首页列出下面这些入口，路由在 `DemoRoutes`。每份模版和数据可以在仓库首页的 [Demo 示例](../README.md#demo-示例) 点开。
 
 | page | 模版 |
 | --- | --- |
@@ -310,7 +220,7 @@ val stack = PageStack.attach(
 | `weather` | `templates/weather-card-demo/weather-card.json` |
 | `column` `row` `text` `image` `spacer` | 对应基础组件 |
 | `list` `progress` `lottie` `input` `checkbox` `radio` `switch` | 对应组件 |
-| `inbox` `journey` `player` `chat` | 组合场景 |
+| `inbox` `journey` `player` `chat` `glass` | 组合场景 |
 
 播放器页会在模版渲染完成后额外挂上 `PlayerSession`，用来驱动播放状态。
 

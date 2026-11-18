@@ -1,6 +1,6 @@
 # 文档
 
-从这里进入 Otter。协议字段只维护一份，在 `otter-android/docs`。各端的接入和渲染写在各自目录里。
+仓库首页在 [README.md](../README.md)，Demo 录像和可以点开的示例 JSON 也在那里。协议字段只维护一份，在 `otter-android/docs`。各端的接入和渲染写在各自目录里。
 
 ## 仓库
 
