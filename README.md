@@ -1,15 +1,18 @@
 # Otter
 
-这个目录是一个仓库。四个端并列放在下面，一起提交。
+这个目录是一个仓库。五个端并列放在下面，一起提交。
 
 | 目录 | 内容 |
 | --- | --- |
-| `otter-android` | Android SDK 和 Demo |
+| `otter-android` | Android SDK 和 Demo。模版协议也写在这里 |
 | `otter-ios` | iOS SDK 和 Demo |
+| `otter-web` | Web SDK 和 Demo。示例模版在 `otter-web/templates` |
 | `otter-harbor` | Go 服务。query 进来，签名 zip 出去 |
 | `otter-studio` | 模版管理后台。列出签名包，用 query 生成，再下载 |
 
-iOS Demo 的示例模版和图片在 `otter-ios/Demo`。iOS 工程编译 `otter-android` 里的表达式 C++。
+文档从 [docs/README.md](docs/README.md) 进。架构在 [docs/architecture.md](docs/architecture.md)。
+
+iOS Demo 的示例模版和图片在 `otter-ios/Demo`。iOS 工程编译 `otter-android` 里的表达式 C++。Web Demo 的开发服务器在 `http://127.0.0.1:5174`，步骤见 [otter-web/docs/demo-guide.md](otter-web/docs/demo-guide.md)。
 
 协议说明在 `otter-android/docs`：
 

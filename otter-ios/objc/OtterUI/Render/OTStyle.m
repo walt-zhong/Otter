@@ -174,10 +174,15 @@
         view.layer.mask = nil;
     }
     if (borderWidth > 0 && borderColor) {
-        view.layer.borderWidth = borderWidth;
+        // 系统描边以边缘为中心，裁切后只剩外侧一半。加宽一倍并裁切，留下和 Android 一样的内侧整宽。
+        view.layer.borderWidth = borderWidth * 2;
         view.layer.borderColor = borderColor.CGColor;
+        view.clipsToBounds = YES;
     } else if (view.layer.borderWidth > 0 && fields[TemplateKey.ATTR_BORDER_WIDTH] == nil) {
         view.layer.borderWidth = 0;
+        if (!any) {
+            view.clipsToBounds = NO;
+        }
     }
     [OTViewMark bind:view].radii = corners;
 }

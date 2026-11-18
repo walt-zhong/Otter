@@ -25,7 +25,6 @@ import com.dynamic.otter.render.view.basic.capability.IReleaseCapability
 import com.dynamic.otter.render.view.basic.capability.IStyleBindingCapability
 import com.dynamic.otter.render.view.applyUniformCornerOutline
 import com.dynamic.otter.render.view.setTextAlign
-import com.dynamic.otter.render.view.setTextBackground
 import com.dynamic.otter.template.OTColor
 import com.dynamic.otter.template.OTSize
 import com.dynamic.otter.template.StyleConverter
@@ -64,7 +63,6 @@ class Text : AppCompatTextView, IDataBindingCapability, IReleaseCapability,
 
     private fun updateStyleByAttr(attr: TextAttr) {
         applyTextSize(attr.textSize)
-        setTextBackground(StyleConverter.backgroundLinearColor(attr.background))
         val textColor = OTColor.create(attr.textColor)?.value()
         // 因为背景边框的设置是依赖shader的所以设置前应该将shader置空
         paint.shader = null

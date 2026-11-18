@@ -1,0 +1,9 @@
+{
+  "start": "permission",
+  "pages": {
+    "permission": {
+      "template": "templates/permission/permission.json",
+      "data": "templates/permission/mock-data/permission.json"
+    }
+  }
+}

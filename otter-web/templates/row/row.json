@@ -1,0 +1,288 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 8 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "ROW",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "text": "横向容器",
+        "layout": { "width": "fill", "height": 30 },
+        "style": { "color": "#1F1A17", "fontSize": 22 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "text": "type 为 row。children 从左到右排列。",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 12 }
+      },
+      {
+        "type": "list",
+        "id": "catalog",
+        "data": "$sheet",
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": { "width": "fill", "height": "wrap" },
+          "children": [
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "width / height",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "和 column 一样：fill、数字、wrap。下面这行本身是 fill，中间一块是 72。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": 36, "align": "center", "justify": "spaceBetween" },
+                  "style": { "background": "#F6F1EA", "radius": 10 },
+                  "children": [
+                    { "type": "spacer", "layout": { "width": 36, "height": 20 }, "style": { "background": "#1F6F6A", "radius": 6 } },
+                    { "type": "spacer", "layout": { "width": 72, "height": 20 }, "style": { "background": "#C45C26", "radius": 6 } },
+                    {
+                      "type": "row",
+                      "layout": { "width": "wrap", "height": "wrap" },
+                      "style": { "background": "#1F1A17", "radius": 6 },
+                      "children": [
+                        { "type": "text", "text": "wrap", "layout": { "width": 40, "height": 20 }, "style": { "color": "#F3EFE7", "fontSize": 11, "align": "center" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "padding",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "一个数字表示四边相同，也可以分别写 start、end、top、bottom。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                {
+                  "type": "row",
+                  "layout": { "width": "fill", "height": 48, "padding": 12, "align": "center" },
+                  "style": { "background": "#F3E2D4", "radius": 12 },
+                  "children": [
+                    { "type": "text", "text": "padding 12", "layout": { "width": "fill", "height": 24 }, "style": { "background": "#FFFCF8", "radius": 8, "color": "#1F1A17", "fontSize": 12, "align": "center" } }
+                  ]
+                }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "justify",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "主轴是水平方向。取值：start、center、end、spaceBetween、spaceAround、spaceEvenly。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                { "type": "text", "text": "start", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "start", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "center", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "center", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "end", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "end", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "spaceBetween", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "spaceBetween", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "spaceAround", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "spaceAround", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "spaceEvenly", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 32, "justify": "spaceEvenly", "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } },
+                  { "type": "spacer", "layout": { "width": 18, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "align",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "#C45C26", "fontSize": 13 }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": "fill", "height": 4 }
+                },
+                {
+                  "type": "text",
+                  "text": "交叉轴是竖直方向：start、center、end、stretch、baseline。",
+                  "layout": { "width": "fill", "height": 36 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                },
+                { "type": "text", "text": "start", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 48, "align": "start" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 48, "height": 14 }, "style": { "background": "#1F6F6A", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "center", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 48, "align": "center" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 48, "height": 14 }, "style": { "background": "#C45C26", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "end", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 48, "align": "end" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 48, "height": 14 }, "style": { "background": "#1F1A17", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "stretch", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 48, "align": "stretch" }, "style": { "background": "#F6F1EA", "radius": 8 }, "children": [
+                  { "type": "spacer", "layout": { "width": 48, "height": "wrap" }, "style": { "background": "#1F6F6A", "radius": 4 } }
+                ] },
+                { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+                { "type": "text", "text": "baseline", "layout": { "width": "fill", "height": 16 }, "style": { "color": "#8A8178", "fontSize": 11 } },
+                { "type": "row", "layout": { "width": "fill", "height": 40, "align": "baseline" }, "children": [
+                  { "type": "text", "text": "大字", "layout": { "width": 48, "height": 28 }, "style": { "color": "#1F1A17", "fontSize": 20 } },
+                  { "type": "text", "text": "小字", "layout": { "width": 36, "height": 18 }, "style": { "color": "#C45C26", "fontSize": 12 } }
+                ] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "background", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "纯色，或 direction + colors 的渐变。方向同 column。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "row", "layout": { "width": "fill", "height": 36 }, "style": { "background": { "direction": "right", "colors": ["#243044", "#C45C26"] }, "radius": 10 } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "radius / border", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "圆角可以统一，也可以四角分开。border 同时写 color 和 width。", "layout": { "width": "fill", "height": 36 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "row", "layout": { "width": "fill", "height": 48, "align": "center", "justify": "center" }, "style": { "background": "#F3E2D4", "radius": { "topStart": 20, "topEnd": 4, "bottomEnd": 20, "bottomStart": 4 }, "border": { "color": "#C45C26", "width": 2 } } }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+            {
+              "type": "column",
+              "layout": { "width": "fill", "height": "wrap", "padding": 14 },
+              "style": { "background": "#FFFCF8", "radius": 16 },
+              "children": [
+                { "type": "text", "text": "id / onClick", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#C45C26", "fontSize": 13 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+                { "type": "text", "text": "id 给事件定位。onClick 是事件名数组。", "layout": { "width": "fill", "height": 20 }, "style": { "color": "#8A8178", "fontSize": 12 } },
+                { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+                { "type": "row", "id": "row_click", "layout": { "width": "fill", "height": 44, "justify": "center", "align": "center" }, "style": { "background": "#1F1A17", "radius": 12 }, "onClick": ["showClick"], "children": [
+                  { "type": "text", "text": "点这一行", "layout": { "width": 80, "height": 22 }, "style": { "color": "#F3EFE7", "fontSize": 14, "align": "center" } }
+                ] }
+              ]
+            },
+            { "type": "spacer", "layout": { "width": "fill", "height": 16 } }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showClick": { "action": "toast", "message": "点到了 id 为 row_click 的 row" }
+  }
+}

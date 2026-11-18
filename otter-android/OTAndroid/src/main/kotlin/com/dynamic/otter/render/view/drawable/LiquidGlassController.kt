@@ -54,7 +54,7 @@ internal class LiquidGlassController private constructor(
         clearStyle = attr.glassStyle == "clear"
         blurPx = OTSize.create(if (clearStyle) "1" else "8").valueFloat.coerceAtLeast(0f)
         val tint = if (attr.glassTint != null) {
-            parseTint(attr.glassTint)
+            parseTint(attr.glassTint, clearStyle)
         } else if (clearStyle) {
             0x0AFFFFFF
         } else {
@@ -376,11 +376,12 @@ internal class LiquidGlassController private constructor(
             (view as? OTAbsoluteLayout)?.clearSizedCornerClip()
         }
 
-        private fun parseTint(raw: String?): Int {
+        private fun parseTint(raw: String?, clear: Boolean): Int {
+            val fallback = if (clear) 0x0AFFFFFF else 0x2EFFFFFF.toInt()
             if (raw.isNullOrBlank() || raw == "transparent") {
                 return Color.TRANSPARENT
             }
-            return runCatching { Color.parseColor(raw) }.getOrDefault(0x38FFFFFF)
+            return runCatching { Color.parseColor(raw) }.getOrDefault(fallback)
         }
     }
 }

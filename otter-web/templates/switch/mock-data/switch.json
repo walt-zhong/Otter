@@ -1,0 +1,12 @@
+{
+  "sheet": [
+    {
+      "wifi": true,
+      "wifiLabel": "无线网络，来自数据",
+      "muted": false,
+      "mutedLabel": "静音，来自数据",
+      "thumbTint": "#C45C26",
+      "labelColor": "#1F6F6A"
+    }
+  ]
+}

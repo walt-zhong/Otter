@@ -647,7 +647,8 @@ static char OTBindKey;
     CGFloat side = 18;
     _dot.frame = CGRectMake(0, (self.bounds.size.height - side) / 2, side, side);
     _dot.layer.cornerRadius = side / 2;
-    _dot.layer.borderWidth = self.checked ? 5 : 1.5;
+    _dot.layer.borderWidth = self.checked ? 0 : 1.5;
+    _dot.backgroundColor = self.checked ? [UIColor colorWithCGColor:_dot.layer.borderColor] : UIColor.clearColor;
     _label.frame = CGRectMake(side + 8, 0, MAX(self.bounds.size.width - side - 8, 0), self.bounds.size.height);
 }
 
@@ -717,7 +718,7 @@ static char OTBindKey;
     if (self) {
         _from = 0;
         _to = 1;
-        _trackColor = UIColor.grayColor;
+        _trackColor = [UIColor colorWithRed:0x88 / 255.0 green:0x88 / 255.0 blue:0x88 / 255.0 alpha:1];
         _barColor = UIColor.redColor;
         _trackLayer = [CALayer layer];
         _barLayer = [CALayer layer];
@@ -934,6 +935,7 @@ static char OTBindKey;
         return cell;
     }
     view.frame = CGRectMake(0, 0, laid.frame.size.width, laid.frame.size.height);
+    [OTViewTree mirrorItemEnd:view parsed:self.itemTemplate item:data];
     [cell.contentView addSubview:view];
     return cell;
 }

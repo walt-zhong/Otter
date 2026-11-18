@@ -1,0 +1,9 @@
+{
+  "start": "mine",
+  "pages": {
+    "mine": {
+      "template": "templates/market/mine.json",
+      "data": "templates/market/mock-data/mine.json"
+    }
+  }
+}

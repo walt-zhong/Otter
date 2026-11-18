@@ -62,6 +62,34 @@
     return YES;
 }
 
++ (void)mirrorItemEnd:(UIView *)view parsed:(ParsedNode *)parsed item:(JSONObject *)item {
+    NSString *justify = parsed.attrs[TemplateKey.FLEXBOX_ATTR_JUSTIFY_CONTENT];
+    if (![justify hasPrefix:@"$"]) {
+        return;
+    }
+    NSString *resolved = [OTChrome eval:justify data:item];
+    if (![resolved isEqualToString:@"end"]) {
+        return;
+    }
+    OTAbsoluteView *container = [self contentHost:view];
+    if (!container) {
+        return;
+    }
+    CGFloat parentWidth = CGRectGetWidth(view.bounds);
+    if (parentWidth <= 0) {
+        return;
+    }
+    for (UIView *child in container.templateChildren) {
+        CGRect frame = [OTViewMark bind:child].otterFrame;
+        if (frame.size.width <= 0) {
+            continue;
+        }
+        frame.origin.x = parentWidth - frame.origin.x - frame.size.width;
+        [OTViewMark bind:child].otterFrame = frame;
+        child.frame = frame;
+    }
+}
+
 + (void)applyFrames:(UIView *)view laid:(OTLaidOutNode *)laid {
     [OTViewMark bind:view].otterFrame = laid.frame;
     view.frame = laid.frame;
@@ -186,7 +214,7 @@
         OTProgressView *progress = (OTProgressView *)view;
         CGFloat from = [OTChrome eval:fields[TemplateKey.ATTR_VALUE_MIN] ?: @"0" data:scope].doubleValue;
         CGFloat to = [OTChrome eval:fields[TemplateKey.ATTR_VALUE_MAX] ?: @"1" data:scope].doubleValue;
-        progress.trackColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_STROKE_COLOR] data:scope]] ?: UIColor.grayColor;
+        progress.trackColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_STROKE_COLOR] data:scope]] ?: [UIColor colorWithRed:0x88 / 255.0 green:0x88 / 255.0 blue:0x88 / 255.0 alpha:1];
         progress.barColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TRAIL_COLOR] data:scope]] ?: UIColor.redColor;
         [progress bindFrom:from to:to animate:[fields[TemplateKey.ATTR_ANIMATE_ENABLE] isEqualToString:@"true"]];
     } else if ([view isKindOfClass:[OTLottieView class]]) {
@@ -227,11 +255,11 @@
 
 + (void)bindInput:(OTInputView *)input fields:(NSDictionary<NSString *, NSString *> *)fields scope:(JSONObject *)scope scale:(CGFloat)scale {
     input.suppressChange = YES;
-    input.font = [OTFont fontForFields:fields scale:scale];
+    input.font = [OTFont fontForFields:[self merged:fields size:@"14"] scale:scale];
     input.textColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TEXT_COLOR] data:scope]] ?: [OTColorParser color:@"#1F1A17"];
     input.textValue = [OTChrome eval:fields[TemplateKey.ATTR_TEXT] data:scope] ?: @"";
     input.placeholder = [OTChrome eval:fields[TemplateKey.ATTR_HINT] data:scope];
-    UIColor *hintColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_HINT_COLOR] data:scope]];
+    UIColor *hintColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_HINT_COLOR] data:scope]] ?: [OTColorParser color:@"#8A8178"];
     if (input.placeholder && hintColor) {
         input.attributedPlaceholder = [[NSAttributedString alloc] initWithString:input.placeholder attributes:@{NSForegroundColorAttributeName: hintColor}];
     }
@@ -247,7 +275,7 @@
 
 + (void)bindArea:(OTInputArea *)area fields:(NSDictionary<NSString *, NSString *> *)fields scope:(JSONObject *)scope scale:(CGFloat)scale {
     area.suppressChange = YES;
-    area.font = [OTFont fontForFields:fields scale:scale];
+    area.font = [OTFont fontForFields:[self merged:fields size:@"14"] scale:scale];
     area.textColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TEXT_COLOR] data:scope]] ?: [OTColorParser color:@"#1F1A17"];
     area.textValue = [OTChrome eval:fields[TemplateKey.ATTR_TEXT] data:scope] ?: @"";
     NSString *maxLength = fields[TemplateKey.ATTR_MAX_LENGTH];
@@ -309,10 +337,8 @@
     toggle.label.text = [OTChrome eval:fields[TemplateKey.ATTR_TEXT] data:scope] ?: @"";
     toggle.label.font = [OTFont fontForFields:[self merged:fields size:@"14"] scale:scale];
     toggle.label.textColor = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TEXT_COLOR] data:scope]] ?: [OTColorParser color:@"#1F1A17"];
-    UIColor *tint = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TINT] data:scope]];
-    if (tint) {
-        toggle.track.onTintColor = tint;
-    }
+    UIColor *tint = [OTColorParser color:[OTChrome eval:fields[TemplateKey.ATTR_TINT] data:scope]] ?: [OTColorParser color:@"#1F6F6A"];
+    toggle.track.onTintColor = tint;
 }
 
 + (UIEdgeInsets)padding:(NSDictionary<NSString *, NSString *> *)fields scale:(CGFloat)scale {

@@ -1,0 +1,14 @@
+{
+  "cameraStatusText": "还没问过",
+  "cameraShowSettings": false,
+  "microphoneStatusText": "还没问过",
+  "microphoneShowSettings": false,
+  "locationStatusText": "还没问过",
+  "locationShowSettings": false,
+  "photosStatusText": "还没选过",
+  "photosShowSettings": false,
+  "photoSrc": "",
+  "photoVisible": false,
+  "notificationsStatusText": "还没问过",
+  "notificationsShowSettings": false
+}

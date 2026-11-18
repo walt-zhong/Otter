@@ -1,0 +1,25 @@
+{
+  "start": "home",
+  "pages": {
+    "home": {
+      "template": "templates/market/home.json",
+      "data": "templates/market/mock-data/home.json"
+    },
+    "shop": {
+      "template": "templates/market/shop.json",
+      "data": "templates/market/mock-data/shop.json"
+    },
+    "cart": {
+      "template": "templates/market/cart.json",
+      "data": "templates/market/mock-data/cart.json"
+    },
+    "checkout": {
+      "template": "templates/market/checkout.json",
+      "data": "templates/market/mock-data/checkout.json"
+    },
+    "result": {
+      "template": "templates/market/result.json",
+      "data": "templates/market/mock-data/result.json"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "start": "shelf",
+  "pages": {
+    "shelf": {
+      "template": "templates/stack/shelf.json",
+      "data": "templates/stack/mock-data/shelf.json"
+    },
+    "place_coffee": {
+      "template": "templates/stack/place.json",
+      "data": "templates/stack/mock-data/coffee.json"
+    },
+    "place_market": {
+      "template": "templates/stack/place.json",
+      "data": "templates/stack/mock-data/market.json"
+    },
+    "place_book": {
+      "template": "templates/stack/place.json",
+      "data": "templates/stack/mock-data/book.json"
+    },
+    "place_lamp": {
+      "template": "templates/stack/place.json",
+      "data": "templates/stack/mock-data/lamp.json"
+    },
+    "stop": {
+      "template": "templates/stack/stop.json"
+    },
+    "memo": {
+      "template": "templates/stack/memo.json",
+      "data": "templates/stack/mock-data/memo.json"
+    }
+  }
+}

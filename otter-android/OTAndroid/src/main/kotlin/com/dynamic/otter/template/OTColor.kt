@@ -34,17 +34,19 @@ class OTColor private constructor(private val value: Any) {
         }
 
         private fun parseHexColor(color: String): Int? {
-            if (color.startsWith("#")) {
-                return if (color.length == 9) {
-                    val alpha = color.substring(7, color.length)
-                    val rgb = color.substring(1, color.length - 2)
-                    val argb = "#$alpha$rgb"
-                    Color.parseColor(argb)
-                } else {
-                    Color.parseColor(color)
-                }
+            if (!color.startsWith("#")) {
+                return null
             }
-            return null
+            val body = when (color.length) {
+                4 -> color.drop(1).map { "$it$it" }.joinToString("")
+                7, 9 -> color.drop(1)
+                else -> return null
+            }
+            if (body.any { it !in '0'..'9' && it !in 'a'..'f' && it !in 'A'..'F' }) {
+                return null
+            }
+            // #AARRGGBB，和 Color.parseColor、iOS、Web 一样，透明度在前。
+            return runCatching { Color.parseColor("#$body") }.getOrNull()
         }
 
         private fun parseRGBColor(color: String): Int? {

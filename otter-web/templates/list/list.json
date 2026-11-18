@@ -1,0 +1,121 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 12 }
+    },
+    "style": { "background": "#F3EFE7" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "LIST",
+        "layout": { "width": "fill", "height": 16 },
+        "style": { "color": "#C45C26", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "列表",
+        "layout": { "width": "fill", "height": 30 },
+        "style": { "color": "#1F1A17", "fontSize": 22 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 4 } },
+      {
+        "type": "text",
+        "text": "id、data、item 必填。direction 默认 vertical，gap 是间距。grow 让它铺满剩余高度并在内部滚动。",
+        "layout": { "width": "fill", "height": 40 },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "list",
+        "id": "day_list",
+        "data": "$days",
+        "direction": "vertical",
+        "gap": 10,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 68,
+            "padding": { "start": 12, "end": 12 },
+            "align": "center"
+          },
+          "style": { "background": "#FFFCF8", "radius": 16 },
+          "onClick": ["showDay"],
+          "children": [
+            {
+              "type": "image",
+              "src": "$img",
+              "layout": { "width": 44, "height": 44 },
+              "style": { "radius": 12 }
+            },
+            { "type": "spacer", "layout": { "width": 12, "height": 44 } },
+            {
+              "type": "column",
+              "layout": { "width": "wrap", "height": "wrap" },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$title",
+                  "layout": { "width": 200, "height": 22 },
+                  "style": { "color": "#1F1A17", "fontSize": 15 }
+                },
+                { "type": "spacer", "layout": { "width": 200, "height": 4 } },
+                {
+                  "type": "text",
+                  "text": "$note",
+                  "layout": { "width": 200, "height": 18 },
+                  "style": { "color": "#8A8178", "fontSize": 12 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "text",
+        "text": "横向，gap 8，向右滑",
+        "layout": { "width": "fill", "height": 18 },
+        "style": { "color": "#8A8178", "fontSize": 12 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "list",
+        "id": "hour_list",
+        "data": "$hours",
+        "direction": "horizontal",
+        "gap": 8,
+        "layout": { "width": "fill", "height": 64 },
+        "item": {
+          "type": "column",
+          "layout": {
+            "width": 64,
+            "height": "fill",
+            "justify": "center",
+            "align": "center"
+          },
+          "style": { "background": "#1F6F6A", "radius": 14 },
+          "children": [
+            {
+              "type": "text",
+              "text": "$title",
+              "layout": { "width": 56, "height": 20 },
+              "style": { "color": "#F4FBF8", "fontSize": 14, "align": "center" }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "showDay": { "action": "toast", "message": "$title" }
+  }
+}

@@ -1,0 +1,214 @@
+.otter-root,
+.otter-root * {
+  box-sizing: border-box;
+}
+
+.otter-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.otter-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  color: #1f1a17;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.otter-node {
+  position: absolute;
+  overflow: hidden;
+}
+
+.otter-scroll {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.otter-scroll-port {
+  position: relative;
+  width: 100%;
+}
+
+.otter-text {
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.otter-node img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.otter-node input,
+.otter-node textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  resize: none;
+  outline: none;
+}
+
+.otter-node input::placeholder,
+.otter-node textarea::placeholder {
+  color: var(--otter-hint, #8a8178);
+}
+
+.otter-node textarea {
+  line-height: normal;
+}
+
+.otter-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  font: inherit;
+}
+
+.otter-check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 auto;
+  appearance: none;
+  border: 1.5px solid var(--otter-tint, #1f6f6a);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.otter-check input[type="checkbox"] {
+  border-radius: 4px;
+}
+
+.otter-check input[type="radio"] {
+  border-radius: 50%;
+}
+
+.otter-check input[type="checkbox"]:checked {
+  background: var(--otter-tint, #1f6f6a);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4 9.2 7.2 12.4 14 5.6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.otter-check input[type="radio"]:checked {
+  background: var(--otter-tint, #1f6f6a);
+  border-color: var(--otter-tint, #1f6f6a);
+}
+
+.otter-switch-face {
+  position: relative;
+  width: 36px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.otter-switch input {
+  position: absolute;
+  inset: 0;
+  width: 36px;
+  height: 22px;
+  border: 0;
+  border-radius: 11px;
+  background: rgba(31, 26, 23, 0.2);
+}
+
+.otter-switch .otter-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f3efe7;
+  pointer-events: none;
+}
+
+.otter-switch input:checked {
+  background: color-mix(in srgb, var(--otter-tint, #1f6f6a) 40%, transparent);
+}
+
+.otter-switch input:checked + .otter-knob {
+  left: 16px;
+  background: var(--otter-tint, #1f6f6a);
+}
+
+.otter-list.vertical {
+  overflow: auto;
+}
+
+.otter-list.horizontal {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.otter-item {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.otter-progress {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.otter-progress-track,
+.otter-progress-bar {
+  position: absolute;
+}
+
+.otter-progress-track {
+  left: 0;
+  right: 0;
+}
+
+.otter-progress-bar {
+  left: 0;
+  width: 0;
+}
+
+.otter-glass-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.otter-click {
+  cursor: pointer;
+}
+
+.otter-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(31, 26, 23, 0.92);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+  z-index: 50;
+  pointer-events: none;
+}

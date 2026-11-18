@@ -1,0 +1,182 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "result",
+    "scroll": true,
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 16, "bottom": 16 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "image",
+        "src": "res:ic_scene_coast",
+        "layout": { "width": "fill", "height": 180 },
+        "style": { "radius": 16, "fit": "cover" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 20 }
+      },
+      {
+        "type": "text",
+        "text": "支付成功",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "$amount",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8B572A", "fontSize": 22, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "可到店取餐",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 15 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "订单号",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "id": "orderNo",
+        "text": "$orderNo",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 18, "fontWeight": "medium" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 16 }
+      },
+      {
+        "type": "text",
+        "text": "$notificationsStatusText",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 13 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 8 }
+      },
+      {
+        "type": "text",
+        "text": "做好了通知我",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["askNotifications"]
+      },
+      {
+        "type": "text",
+        "text": "去设置里打开通知",
+        "visible": "$notificationsShowSettings",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "margin": { "top": 8 },
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "color": "#8B572A",
+          "fontSize": 14,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["notificationSettings"]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 24 }
+      },
+      {
+        "type": "text",
+        "text": "回到首页",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["goHome"]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 10 }
+      },
+      {
+        "type": "text",
+        "text": "看订单",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 14, "bottom": 14 }
+        },
+        "style": {
+          "background": "#FFFFFF",
+          "radius": 12,
+          "border": { "color": "#E6DDD2", "width": 1 },
+          "color": "#1F1A17",
+          "fontSize": 16,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["openOrders"]
+      }
+    ]
+  },
+  "events": {
+    "goHome": { "action": "popTo", "page": "home" },
+    "askNotifications": {
+      "action": "host",
+      "name": "permissionRequest",
+      "params": { "capability": "notifications" }
+    },
+    "notificationSettings": {
+      "action": "host",
+      "name": "permissionOpenSettings",
+      "params": { "capability": "notifications" }
+    },
+    "openOrders": { "action": "host", "name": "openTab", "params": { "page": "orders" } }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "messages": [
+    {
+      "name": "林夏",
+      "body": "稿子放在共享文件夹了",
+      "time": "09:12",
+      "avatar": "res:ic_ava_a",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "我今晚看完",
+      "time": "09:14",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "林夏",
+      "body": "封面你更喜欢哪一版",
+      "time": "09:16",
+      "avatar": "res:ic_ava_a",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "暖色那张，留白多一点",
+      "time": "09:18",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "林夏",
+      "body": "好，我把标题再收短",
+      "time": "09:21",
+      "avatar": "res:ic_ava_a",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "周屿",
+      "body": "下午的会改到四点",
+      "time": "09:28",
+      "avatar": "res:ic_ava_b",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "收到，我提前十分钟到",
+      "time": "09:30",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "阿禾",
+      "body": "照片导出好了，你看眼色",
+      "time": "10:41",
+      "avatar": "res:ic_ava_d",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "海边那张可以做头图",
+      "time": "10:46",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "陈麦",
+      "body": "车票我买了靠窗的",
+      "time": "11:52",
+      "avatar": "res:ic_ava_f",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "太好了，我带书",
+      "time": "11:55",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "林夏",
+      "body": "目录我按场景重排了一遍",
+      "time": "13:20",
+      "avatar": "res:ic_ava_a",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "聊天这页放在播放后面",
+      "time": "13:24",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "妈妈",
+      "body": "周末回家吃饭吗",
+      "time": "13:40",
+      "avatar": "res:ic_ava_c",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    },
+    {
+      "name": "我",
+      "body": "回，我带水果",
+      "time": "13:44",
+      "avatar": "res:ic_ava_e",
+      "bubble": "#C45C26",
+      "nameColor": "#F6E7C1",
+      "bodyColor": "#FFFFFF",
+      "side": "end"
+    },
+    {
+      "name": "林夏",
+      "body": "那我先把这一版发出去",
+      "time": "15:02",
+      "avatar": "res:ic_ava_a",
+      "bubble": "#FFFCF8",
+      "nameColor": "#8A8178",
+      "bodyColor": "#1F1A17",
+      "side": "start"
+    }
+  ]
+}

@@ -16,6 +16,8 @@ Otter 是一套 Android 动态化渲染 SDK，目标是给大模型做生成式 
 | [docs/node-types.md](docs/node-types.md) | 十二种节点各自能写哪些字段 |
 | [docs/demo-guide.md](docs/demo-guide.md) | Demo 有哪些页面，以及真机怎么调试生成页 |
 
+仓库级的架构和协议索引在 [docs/README.md](../docs/README.md)。Web 端的同一套协议在 [otter-web](../otter-web/README.md)。
+
 ## 介绍
 
 [![Demo 走查：首页、天气卡、城南](docs/media/intro-poster.jpg)](docs/media/intro.mp4)

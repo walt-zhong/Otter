@@ -13,14 +13,12 @@ import androidx.core.content.res.ResourcesCompat
 import com.dynamic.otter.data.OTHelper
 import com.dynamic.otter.render.view.attr.ViewAttr
 import com.dynamic.otter.render.view.basic.Column
-import com.dynamic.otter.render.view.basic.Text
 import com.dynamic.otter.render.view.basic.capability.ICornerRoundConfigCapability
 import com.dynamic.otter.render.view.drawable.ColorGradientDrawable
 import com.dynamic.otter.render.view.drawable.CoverBitmapDrawable
 import com.dynamic.otter.render.view.drawable.PanningBitmapDrawable
 import com.dynamic.otter.render.view.drawable.LinearColorGradientDrawable
 import com.dynamic.otter.render.view.drawable.LiquidGlassController
-import com.dynamic.otter.template.OTLinearColor
 import com.dynamic.otter.template.OTSize
 import com.dynamic.otter.template.StyleConverter
 
@@ -61,9 +59,7 @@ fun View.setBackgroundWithRadius(viewAttr: ViewAttr?) {
     LiquidGlassController.release(this)
     val viewBackground = viewAttr?.background.orEmpty()
     if (viewBackground.startsWith("linear-gradient")) {
-        if (this !is Text) {
-            background = StyleConverter.backgroundLinearColor(viewBackground)?.createDrawable()
-        }
+        background = StyleConverter.backgroundLinearColor(viewBackground)?.createDrawable()
     } else if (OTHelper.isResSrc(viewBackground)) {
         val name = OTHelper.getResSrc(viewBackground)
         background = if (this is Column) {
@@ -98,13 +94,6 @@ private fun loadBackground(view: View, name: String): Drawable? {
         return null
     }
     return ResourcesCompat.getDrawable(view.resources, id, view.context.theme)
-}
-
-fun Text.setTextBackground(backgroundDrawable: OTLinearColor?) {
-    if (backgroundDrawable != null) {
-        this.setTextColor(Color.BLACK) // default Color is black
-        this.paint.shader = backgroundDrawable.createShader(this)
-    }
 }
 
 fun TextView.setTextAlign(alignStr: String) {

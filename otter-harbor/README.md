@@ -8,6 +8,8 @@ go run ./cmd/ottersrv
 
 模版管理后台在并列的 `otter-studio`。`GET /api/v1/bundles` 返回查询、意图和签名信息，不返回模版正文。手机上的调试页在 `otter-android` 的 debug 构建里，导航页的「生成」。手机上的 `127.0.0.1` 是手机自己，USB 连接时先执行 `adb reverse tcp:8080 tcp:8080`，页面地址保持 `http://127.0.0.1:8080`。完整步骤，包括转发失效、模拟器和同一 Wi-Fi，写在 `otter-android` 的 `docs/demo-guide.md`「查询下发」。
 
+Web Demo 在 `otter-web`，导航页同样有「生成」。开发服务器把 `/api` 转到本服务，页面上的地址仍写 `http://127.0.0.1:8080`。步骤见 `otter-web/docs/demo-guide.md`。
+
 没有设置 `OTTER_LLM_API_KEY` 和 `OTTER_LLM_BASE_URL` 时，服务用关键词判断意图，并离线写出示例商品。要让 DeepSeek 判断意图并生成购物模版时：
 
 ```shell

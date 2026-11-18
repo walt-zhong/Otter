@@ -1,0 +1,200 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "page",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 8, "bottom": 12 },
+      "align": "center"
+    },
+    "style": { "background": "#1B1714" },
+    "children": [
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 22, "justify": "center", "align": "center" },
+        "children": [
+          {
+            "type": "text",
+            "id": "playState",
+            "text": "正在播放",
+            "layout": { "width": 64, "height": 18 },
+            "style": { "color": "#C45C26", "fontSize": 12 }
+          },
+          { "type": "spacer", "layout": { "width": 8, "height": 18 } },
+          {
+            "type": "lottie",
+            "id": "meter",
+            "src": "assets:animation/lottie-equalizer",
+            "repeat": "infinite",
+            "mode": "restart",
+            "autoPlay": true,
+            "layout": { "width": 36, "height": 18 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "image",
+        "id": "cover",
+        "src": "res:ic_scene_coast",
+        "layout": { "width": 220, "height": 220 },
+        "style": { "radius": 24 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "text",
+        "id": "trackTitle",
+        "text": "海岸线",
+        "layout": { "width": "fill", "height": 32 },
+        "style": { "color": "#F6F1EA", "fontSize": 24, "align": "center" }
+      },
+      {
+        "type": "text",
+        "id": "trackArtist",
+        "text": "周日乐队",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#A39890", "fontSize": 13, "align": "center" }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "progress",
+        "id": "seek",
+        "layout": { "width": "fill", "height": 28 },
+        "from": 0,
+        "to": 0.36,
+        "animate": false,
+        "style": {
+          "track": "#3A332E",
+          "bar": { "direction": "right", "colors": ["#C45C26", "#F2C14E"] },
+          "radius": 3
+        }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 6 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": "wrap", "justify": "spaceBetween" },
+        "children": [
+          {
+            "type": "text",
+            "id": "elapsed",
+            "text": "1:12",
+            "layout": { "width": 40, "height": 16 },
+            "style": { "color": "#A39890", "fontSize": 11 }
+          },
+          {
+            "type": "text",
+            "id": "duration",
+            "text": "3:20",
+            "layout": { "width": 40, "height": 16 },
+            "style": { "color": "#A39890", "fontSize": 11, "align": "end" }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 12 } },
+      {
+        "type": "row",
+        "layout": { "width": "fill", "height": 64, "justify": "center", "align": "center" },
+        "children": [
+          {
+            "type": "image",
+            "id": "playPrev",
+            "src": "res:ic_player_prev",
+            "layout": { "width": 44, "height": 44 }
+          },
+          { "type": "spacer", "layout": { "width": 28, "height": 44 } },
+          {
+            "type": "image",
+            "id": "playToggle",
+            "src": "res:ic_player_pause",
+            "layout": { "width": 64, "height": 64 }
+          },
+          { "type": "spacer", "layout": { "width": 28, "height": 44 } },
+          {
+            "type": "image",
+            "id": "playNext",
+            "src": "res:ic_player_next",
+            "layout": { "width": 44, "height": 44 }
+          }
+        ]
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 16 } },
+      {
+        "type": "text",
+        "text": "播放队列",
+        "layout": { "width": "fill", "height": 20 },
+        "style": { "color": "#F6F1EA", "fontSize": 14 }
+      },
+      { "type": "spacer", "layout": { "width": "fill", "height": 8 } },
+      {
+        "type": "list",
+        "id": "queue",
+        "data": "$tracks",
+        "direction": "vertical",
+        "gap": 8,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "row",
+          "layout": {
+            "width": "fill",
+            "height": 64,
+            "padding": { "start": 10, "end": 14 },
+            "align": "center"
+          },
+          "style": { "background": "$rowBg", "radius": 14 },
+          "onClick": ["playTrack"],
+          "children": [
+            {
+              "type": "image",
+              "src": "$cover",
+              "layout": { "width": 44, "height": 44 },
+              "style": { "radius": 10 }
+            },
+            { "type": "spacer", "layout": { "width": 12, "height": 44 } },
+            {
+              "type": "column",
+              "layout": { "width": 120, "height": "wrap", "grow": 1 },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$title",
+                  "layout": { "width": "fill", "height": 20 },
+                  "style": { "color": "$titleColor", "fontSize": 14 }
+                },
+                {
+                  "type": "text",
+                  "text": "$artist",
+                  "layout": { "width": "fill", "height": 16 },
+                  "style": { "color": "#A39890", "fontSize": 11 }
+                }
+              ]
+            },
+            {
+              "type": "column",
+              "layout": { "width": 48, "height": "wrap", "align": "end" },
+              "children": [
+                {
+                  "type": "text",
+                  "text": "$mark",
+                  "layout": { "width": 48, "height": 16 },
+                  "style": { "color": "#F2C14E", "fontSize": 11, "align": "end" }
+                },
+                {
+                  "type": "text",
+                  "text": "$length",
+                  "layout": { "width": 48, "height": 16 },
+                  "style": { "color": "#A39890", "fontSize": 11, "align": "end" }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "goBack": { "action": "back" },
+    "playTrack": { "action": "setText", "target": "trackTitle", "value": "$title" }
+  }
+}

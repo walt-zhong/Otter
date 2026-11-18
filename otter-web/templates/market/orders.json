@@ -1,0 +1,157 @@
+{
+  "layout": {
+    "type": "column",
+    "id": "orders",
+    "layout": {
+      "width": "fill",
+      "height": "fill",
+      "padding": { "start": 20, "end": 20, "top": 12, "bottom": 12 }
+    },
+    "style": { "background": "#F6F1EA" },
+    "children": [
+      {
+        "type": "text",
+        "text": "订单",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#1F1A17", "fontSize": 28, "fontWeight": "bold" }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 4 }
+      },
+      {
+        "type": "text",
+        "text": "做好了会从制作中变成可取餐。",
+        "layout": { "width": "fill", "height": "wrap" },
+        "style": { "color": "#8A8178", "fontSize": 14 }
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "text",
+        "text": "刷新状态",
+        "layout": {
+          "width": "fill",
+          "height": "wrap",
+          "padding": { "start": 16, "end": 16, "top": 12, "bottom": 12 }
+        },
+        "style": {
+          "background": "#8B572A",
+          "radius": 12,
+          "color": "#F6F1EA",
+          "fontSize": 15,
+          "align": "center",
+          "fontWeight": "medium"
+        },
+        "onClick": ["refreshOrders"]
+      },
+      {
+        "type": "spacer",
+        "layout": { "width": "fill", "height": 14 }
+      },
+      {
+        "type": "list",
+        "id": "orderList",
+        "data": "$orders",
+        "direction": "vertical",
+        "gap": 12,
+        "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+        "item": {
+          "type": "column",
+          "layout": {
+            "width": "fill",
+            "height": "wrap",
+            "padding": { "start": 14, "end": 14, "top": 14, "bottom": 14 }
+          },
+          "style": {
+            "background": "#FFFFFF",
+            "radius": 16,
+            "border": { "color": "#E6DDD2", "width": 1 }
+          },
+          "children": [
+            {
+              "type": "row",
+              "layout": { "width": "fill", "height": "wrap", "align": "center" },
+              "children": [
+                {
+                  "type": "image",
+                  "src": "$image",
+                  "layout": { "width": 48, "height": 48 },
+                  "style": { "radius": 12, "fit": "cover" }
+                },
+                {
+                  "type": "spacer",
+                  "layout": { "width": 12, "height": 12 }
+                },
+                {
+                  "type": "column",
+                  "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+                  "children": [
+                    {
+                      "type": "row",
+                      "layout": {
+                        "width": "fill",
+                        "height": "wrap",
+                        "align": "center",
+                        "justify": "spaceBetween"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "text": "$shop",
+                          "layout": { "width": "fill", "height": "wrap", "grow": 1 },
+                          "style": { "color": "#1F1A17", "fontSize": 16, "fontWeight": "bold" }
+                        },
+                        {
+                          "type": "text",
+                          "text": "$status",
+                          "layout": { "width": "wrap", "height": "wrap" },
+                          "style": { "color": "#8B572A", "fontSize": 13, "fontWeight": "bold", "align": "end" }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "spacer",
+                      "layout": { "width": "fill", "height": 4 }
+                    },
+                    {
+                      "type": "text",
+                      "text": "$title",
+                      "layout": { "width": "fill", "height": "wrap" },
+                      "style": { "color": "#1F1A17", "fontSize": 14 }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 10 }
+            },
+            {
+              "type": "text",
+              "text": "$statusNote",
+              "layout": { "width": "fill", "height": "wrap" },
+              "style": { "color": "#8A8178", "fontSize": 13 }
+            },
+            {
+              "type": "spacer",
+              "layout": { "width": "fill", "height": 6 }
+            },
+            {
+              "type": "text",
+              "text": "$meta",
+              "layout": { "width": "fill", "height": "wrap" },
+              "style": { "color": "#8A8178", "fontSize": 12 }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": {
+    "refreshOrders": { "action": "host", "name": "refreshStatus" }
+  }
+}

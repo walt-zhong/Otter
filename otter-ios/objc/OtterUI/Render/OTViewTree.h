@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
           template:(OTTemplateContext *)template
              error:(NSError **)error;
 + (void)applyFrames:(UIView *)view laid:(OTLaidOutNode *)laid;
++ (void)mirrorItemEnd:(UIView *)view parsed:(ParsedNode *)parsed item:(nullable JSONObject *)item;
 @end
 
 NS_ASSUME_NONNULL_END

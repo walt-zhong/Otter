@@ -1,0 +1,23 @@
+{
+  "id": "coffee",
+  "name": "南市咖啡",
+  "blurb": "早上的手冲还热着，窗边只留两张桌子。卖完的豆子不会留到明天。",
+  "hours": "每天 08:00-18:00",
+  "phone": "13806581206",
+  "price": "28 元",
+  "image": "res:ic_scene_coffee",
+  "tagA": "手冲",
+  "tagB": "可外带",
+  "showTagB": true,
+  "member": true,
+  "memberPrice": "会员价 24 元",
+  "closed": false,
+  "closedNote": "这家今天不摆摊，明早再来。",
+  "note1": "豆子写在黑板第一行，卖完就擦掉。想喝热的就早一点来，下午三点后靠窗通常还有人。冰的只有美式，单品不做冰。",
+  "note2": "店里不放音乐。电源在墙边那张桌子下面，只有一个。电脑可以打开，电话请到巷口打。想坐久一点，就点一杯热的。",
+  "note3": "外带杯子是灯下杂货烧的，用完可以还回来。会员价到店说一声就行，不用出示卡片。杯子上的釉色和灯是同一炉。",
+  "cameraStatusText": "还没问过",
+  "cameraShowSettings": false,
+  "microphoneStatusText": "还没问过",
+  "microphoneShowSettings": false
+}
